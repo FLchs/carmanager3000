@@ -1,10 +1,14 @@
 {
   "name": "carmanager3000",
-  "module": "index.ts",
   "type": "module",
   "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "oxlint": "^1.18.0"
   },
   "peerDependencies": {
     "typescript": "^5"
