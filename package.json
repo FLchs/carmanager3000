@@ -6,6 +6,12 @@
     "apps/*",
     "packages/*"
   ],
+  "scripts": {
+    "dev": "bun run --filter '*' dev",
+    "db:push": "bun run --filter server db:push",
+    "db:generate": "bun run --filter server db:generate",
+    "db:migrate": "bun run --filter server db:migrate"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "oxlint": "^1.18.0"
