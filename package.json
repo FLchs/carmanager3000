@@ -7,7 +7,7 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "bun run --filter '*' dev",
+    "dev": "bun run --elide-lines=0 --filter '*' dev",
     "db:push": "bun run --filter server db:push",
     "db:generate": "bun run --filter server db:generate",
     "db:migrate": "bun run --filter server db:migrate"
