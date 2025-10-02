@@ -1,19 +1,26 @@
 import { Hono } from "hono";
-import { db, migrateDb } from "./db";
-import { todosTable } from "./db/schemas/todo";
+import { migrateDb } from "./db";
+import { router } from "./routers";
+import { RPCHandler } from "@orpc/server/fetch";
 
 // Ensure database is up to date the server
 migrateDb();
 
 const app = new Hono();
-app
-  .get("/", async (c) => {
-    const todos = await db.select().from(todosTable);
-    return c.json(todos);
-  })
-  .get("/generate", async (c) => {
-    await db.insert(todosTable).values({ name: "test", priority: 10 });
-    return c.json({ ok: true });
+
+const handler = new RPCHandler(router, {});
+
+app.use("/rpc/*", async (c, next) => {
+  const { matched, response } = await handler.handle(c.req.raw, {
+    prefix: "/rpc",
+    context: {}, // Provide initial context if needed
   });
+
+  if (matched) {
+    return c.newResponse(response.body, response);
+  }
+
+  await next();
+});
 
 export default app;

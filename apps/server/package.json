@@ -1,18 +1,27 @@
 {
   "name": "server",
   "scripts": {
-    "dev": "bun run --hot src/index.ts",
+    "dev": "bun run --hot src/index.tsx",
     "db:push": "drizzle-kit push",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
+    "@hono/swagger-ui": "^0.5.2",
+    "@orpc/client": "^1.9.0",
+    "@orpc/openapi": "^1.9.0",
+    "@orpc/server": "^1.9.0",
+    "@orpc/zod": "^1.9.2",
     "drizzle-orm": "^0.44.5",
-    "hono": "^4.9.8"
+    "hono": "^4.9.8",
+    "swagger-ui": "^5.29.0",
+    "swagger-ui-dist": "^5.29.0",
+    "zod": "^4.1.11"
   },
   "devDependencies": {
     "@types/bun": "^1.2.22",
+    "@types/swagger-ui": "^5.21.1",
+    "@types/swagger-ui-dist": "^3.30.6",
     "drizzle-kit": "^0.31.4"
   }
 }
-
