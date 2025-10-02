@@ -49,7 +49,7 @@ const createCar = os
     };
   });
 
-export const carRouter = os.prefix("/cars").router({
+export const cars = os.prefix("/cars").router({
   list: listCars,
   find: findCar,
   create: createCar,
