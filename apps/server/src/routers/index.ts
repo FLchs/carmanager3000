@@ -1,5 +1,5 @@
-import { cars } from "./car";
+import { vehiclesRouter } from "./vehicles";
 
 export const router = {
-  cars,
+  vehicles: vehiclesRouter,
 };
