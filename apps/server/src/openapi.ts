@@ -1,10 +1,11 @@
-import { Hono } from "hono";
-import { router } from "./routers";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
+import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
+import { Hono } from "hono";
 import { serveStatic } from "hono/bun";
 import { absolutePath } from "swagger-ui-dist";
-import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
+
+import { router } from "./routers";
 
 const app = new Hono();
 

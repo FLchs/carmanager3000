@@ -1,10 +1,10 @@
+import { RouterClient } from "@orpc/server";
+import { RPCHandler } from "@orpc/server/fetch";
 import { Hono } from "hono";
+import { cors } from "hono/cors";
+
 import { migrateDb } from "./db";
 import { router } from "./routers";
-import { RPCHandler } from "@orpc/server/fetch";
-import { createORPCClient } from "@orpc/client";
-import { RouterClient } from "@orpc/server";
-import { cors } from "hono/cors";
 
 // Ensure database is up to date the server
 migrateDb();
