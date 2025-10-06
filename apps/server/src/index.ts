@@ -16,17 +16,17 @@ const handler = new RPCHandler(router, {});
 app.use(
   "/*",
   cors({
-    origin: process.env.CORS_ORIGIN || "",
-    allowMethods: ["GET", "POST", "OPTIONS"],
     allowHeaders: ["Content-Type", "Authorization"],
+    allowMethods: ["GET", "POST", "OPTIONS"],
     credentials: true,
+    origin: process.env.CORS_ORIGIN || "",
   }),
 );
 
 app.use("/rpc/*", async (c, next) => {
   const { matched, response } = await handler.handle(c.req.raw, {
-    prefix: "/rpc",
     context: {}, // Provide initial context if needed
+    prefix: "/rpc",
   });
 
   if (matched) {

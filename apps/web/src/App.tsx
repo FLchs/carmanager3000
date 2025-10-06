@@ -1,5 +1,6 @@
-import "./App.css";
 import { useQuery } from "@tanstack/react-query";
+
+import "./App.css";
 import { orpc } from "./lib/orpc";
 
 function App() {

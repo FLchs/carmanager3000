@@ -1,10 +1,10 @@
+import type { Client } from "@cm3k/server";
+
 import { createORPCClient, onError } from "@orpc/client";
 import { RPCLink } from "@orpc/client/fetch";
-import type { Client } from "@cm3k/server";
 import { createTanstackQueryUtils } from "@orpc/tanstack-query";
 
 const link = new RPCLink({
-  url: "http://localhost:3000/rpc",
   headers: () => ({
     authorization: "Bearer token",
   }),
@@ -14,6 +14,7 @@ const link = new RPCLink({
       console.error(error);
     }),
   ],
+  url: "http://localhost:3000/rpc",
 });
 
 // Create a client for your router

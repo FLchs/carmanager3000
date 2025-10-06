@@ -12,9 +12,9 @@ const app = new Hono();
 const handler = new OpenAPIHandler(router, {
   plugins: [
     new OpenAPIReferencePlugin({
+      docsCssUrl: "/docs/static/index.css",
       docsPath: "/",
       docsProvider: "swagger",
-      docsCssUrl: "/docs/static/index.css",
       docsScriptUrl: "/docs/static/swagger.js",
       schemaConverters: [new ZodToJsonSchemaConverter()],
     }),
@@ -24,22 +24,22 @@ const handler = new OpenAPIHandler(router, {
 app.use(
   "/docs/static/index.css",
   serveStatic({
-    root: absolutePath(), // directory
     path: "swagger-ui.css", // file inside that directory
+    root: absolutePath(), // directory
   }),
 );
 app.use(
   "/docs/static/swagger.js",
   serveStatic({
-    root: absolutePath(), // directory
     path: "swagger-ui-bundle.js", // file inside that directory
+    root: absolutePath(), // directory
   }),
 );
 
 app.use("/docs/*", async (c, next) => {
   const { matched, response } = await handler.handle(c.req.raw, {
-    prefix: "/docs",
     context: {}, // Provide initial context if needed
+    prefix: "/docs",
   });
 
   if (matched) {

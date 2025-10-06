@@ -1,2 +1,2 @@
-import { dirname, join } from "path";
-export const rootDir = join(dirname(Bun.main), "../");
+import nodePath from "node:path";
+export const rootDir = nodePath.join(nodePath.dirname(Bun.main), "../");

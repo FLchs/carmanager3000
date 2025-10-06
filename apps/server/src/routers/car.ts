@@ -50,7 +50,7 @@ const createCar = os
   });
 
 export const cars = os.prefix("/cars").router({
-  list: listCars,
-  find: findCar,
   create: createCar,
+  find: findCar,
+  list: listCars,
 });
