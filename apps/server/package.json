@@ -6,7 +6,7 @@
   },
   "scripts": {
     "dev": "bun run --hot src/index.ts",
-    "lint": "bun run eslint --fix",
+    "lint": "bun run eslint",
     "db:push": "drizzle-kit push",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate"
@@ -24,13 +24,11 @@
     "zod": "^4.1.11"
   },
   "devDependencies": {
-    "@eslint/js": "^9.36.0",
+    "@cm3k/eslint": "workspace:*",
     "@types/bun": "^1.2.22",
     "@types/swagger-ui": "^5.21.1",
     "@types/swagger-ui-dist": "^3.30.6",
     "drizzle-kit": "^0.31.4",
-    "eslint": "^9.37.0",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
     "globals": "^16.4.0",
     "prettier": "^3.6.2",
     "typescript-eslint": "^8.45.0"
