@@ -8,13 +8,13 @@
   ],
   "scripts": {
     "dev": "bun run --elide-lines=0 --filter '*' dev",
+    "lint": "bun run --elide-lines=0 --filter '*' lint",
     "db:push": "bun run --filter server db:push",
     "db:generate": "bun run --filter server db:generate",
     "db:migrate": "bun run --filter server db:migrate"
   },
   "devDependencies": {
-    "@types/bun": "latest",
-    "oxlint": "^1.19.0"
+    "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^5.9.2"
