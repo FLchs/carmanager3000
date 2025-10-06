@@ -45,6 +45,24 @@ export const defaultConfig = (extended: Parameters<typeof defineConfig>) =>
         // "import/no-mutable-exports": "error",
         // "import/no-named-default": "error",
         // "react-refresh/only-export-components": ["error"],
+        "perfectionist/sort-objects": [
+          "error",
+          {
+            groups: ["unique", "unknown", ["multiline-member", "metadata"]],
+            customGroups: [
+              {
+                groupName: "unique",
+                selector: "property",
+                elementNamePattern: "^(?:id|name)$",
+              },
+              {
+                groupName: "metadata",
+                selector: "property",
+                elementNamePattern: "^(?:timestamps)$",
+              },
+            ],
+          },
+        ],
         "unicorn/filename-case": ["off"],
         "unicorn/prevent-abbreviations": [
           "off",
