@@ -1,15 +1,14 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-
-import "./App.css";
 import { Suspense } from "react";
 
 import { ErrorZone } from "./components/ErrorZone";
+import Vehicle from "./components/Vehicle";
 import { orpc } from "./lib/orpc";
 
 export default function App() {
   return (
-    <div className="card">
-      <p>Vehicles:</p>
+    <div>
+      <h1 className="text-">Vehicles:</h1>
       <ErrorZone>
         <Suspense fallback={<p>loading...</p>}>
           <VehiclesList />
@@ -25,14 +24,20 @@ function VehiclesList() {
   );
 
   return (
-    <li>
-      {vehicles?.map((vehicle) => {
+    <div className="w-[800px] m-auto">
+      {vehicles.map((vehicle) => {
         return (
-          <ul key={vehicle.id}>
-            {vehicle.id} - {vehicle.name}
-          </ul>
+          <Vehicle
+            brand="Kia"
+            engine="2.0 CVVT"
+            key={vehicle.id}
+            model="Magentis"
+            power={144}
+            trim="MG"
+            year={2008}
+          />
         );
       })}
-    </li>
+    </div>
   );
 }

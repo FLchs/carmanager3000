@@ -15,11 +15,13 @@
     "@tanstack/react-query": "^5.90.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-error-boundary": "^6.0.0"
+    "react-error-boundary": "^6.0.0",
+    "tailwindcss": "^4.1.14"
   },
   "devDependencies": {
     "@cm3k/eslint": "workspace:*",
     "@cm3k/server": "workspace:*",
+    "@tailwindcss/vite": "^4.1.14",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^5.0.4",
