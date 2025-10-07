@@ -1,6 +1,6 @@
 import type { Client } from "@cm3k/server";
 
-import { createORPCClient, onError } from "@orpc/client";
+import { createORPCClient } from "@orpc/client";
 import { RPCLink } from "@orpc/client/fetch";
 import { createTanstackQueryUtils } from "@orpc/tanstack-query";
 import { QueryCache, QueryClient } from "@tanstack/react-query";
@@ -18,13 +18,6 @@ const link = new RPCLink({
   headers: () => ({
     authorization: "Bearer token",
   }),
-  // fetch: <-- provide fetch polyfill fetch if needed
-  // interceptors: [
-  //   onError((error) => {
-  //     console.log("#############");
-  //     console.error(error);
-  //   }),
-  // ],
 });
 
 // Create a client for your router
