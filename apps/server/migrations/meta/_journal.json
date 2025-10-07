@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1759781090411,
+      "tag": "0000_vehicle_table",
+      "breakpoints": true
+    }
+  ]
+}

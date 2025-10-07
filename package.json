@@ -1,0 +1,22 @@
+{
+  "name": "carmanager3000",
+  "type": "module",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "bun run --elide-lines=0 --filter '*' dev",
+    "lint": "bun run --elide-lines=0 --filter '*' lint",
+    "db:push": "bun run --filter @cm3k/server db:push",
+    "db:generate": "bun run --filter @cm3k/server db:generate",
+    "db:migrate": "bun run --filter @cm3k/server db:migrate"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
