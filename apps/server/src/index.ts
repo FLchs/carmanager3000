@@ -1,7 +1,8 @@
-import { RouterClient } from "@orpc/server";
+import { onError, RouterClient } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/fetch";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
+import { logger } from "hono/logger";
 
 import { migrateDb } from "./db";
 import { router } from "./routers";
@@ -11,8 +12,15 @@ migrateDb();
 
 const app = new Hono();
 
-const handler = new RPCHandler(router, {});
+const handler = new RPCHandler(router, {
+  interceptors: [
+    onError((error) => {
+      console.error(JSON.stringify((error as Error).cause));
+    }),
+  ],
+});
 
+app.use(logger());
 app.use(
   "/*",
   cors({
