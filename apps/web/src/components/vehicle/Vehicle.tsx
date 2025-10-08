@@ -1,13 +1,18 @@
-interface Props {
-  brand: string;
-  engine: string;
+import VehicleMenu from "./VehicleMenu";
+
+interface VehicleData {
+  brand: null | string;
+  engine: null | string;
+  id: number;
   model: string;
-  power: number;
-  trim: string;
-  year: number;
+  power: null | number;
+  trim: null | string;
+  year: null | number;
 }
 
-function Vehicle({ brand, engine, model, power, trim, year }: Props) {
+function Vehicle({ vehicle }: { vehicle: VehicleData }) {
+  const { id, brand, engine, model, power, trim, year } = vehicle;
+
   return (
     <div className="rounded-2xl p-4 bg-elevated border-highlight border-1">
       <div>
@@ -16,7 +21,7 @@ function Vehicle({ brand, engine, model, power, trim, year }: Props) {
       </div>
       <div className="flex gap-4 mt-4 justify-between">
         <div>
-          <h3 className="font-bold mb-2 text-base">{model}</h3>
+          <h3 className="font-bold mb-2">{model}</h3>
           <p className="text-muted">
             {brand} {model} {trim} - {year}
           </p>
@@ -24,9 +29,7 @@ function Vehicle({ brand, engine, model, power, trim, year }: Props) {
             {engine} - {power}
           </p>
         </div>
-        <span className="text-muted hover:text-white hover:cursor-pointer h-6">
-          ⠇
-        </span>
+        <VehicleMenu id={id} />
       </div>
     </div>
   );
