@@ -1,21 +1,19 @@
 import { os } from "@orpc/server";
 import { eq } from "drizzle-orm";
-import * as z from "zod";
 
-import { db } from "@/db";
-import { vehiclesTable } from "@/db/schemas/vehicle";
-
-const vehicleSchema = z.object({
-  id: z.coerce.number().min(0),
-  name: z.string(),
-});
+import { db } from "../db";
+import {
+  vehicleInsertSchema,
+  vehicleSchema,
+  vehiclesTable,
+} from "../db/schemas/vehicle";
 
 const listvehicles = os
   .route({
     method: "GET",
     path: "/",
   })
-  .output(z.array(vehicleSchema))
+  // .output(z.array(vehicleSchema))
   .handler(async () => {
     const vehicles = await db.select().from(vehiclesTable);
     return vehicles;
@@ -41,16 +39,31 @@ const createvehicle = os
     method: "POST",
     path: "/",
   })
-  .input(vehicleSchema.pick({ name: true }))
+  .input(
+    vehicleInsertSchema.omit({ id: true, createdAt: true, updatedAt: true }),
+  )
   .handler(async ({ input }) => {
-    await db.insert(vehiclesTable).values({ name: input.name });
+    console.table(input);
+    await db.insert(vehiclesTable).values(input);
     return {
       ok: true,
     };
   });
-
+const deletevehicle = os
+  .route({
+    method: "DELETE",
+    path: "/{id}",
+  })
+  .input(vehicleSchema.pick({ id: true }))
+  .handler(async ({ input }) => {
+    await db.delete(vehiclesTable).where(eq(vehiclesTable.id, input.id));
+    return {
+      ok: true,
+    };
+  });
 export const vehiclesRouter = os.prefix("/vehicles").router({
   create: createvehicle,
+  delete: deletevehicle,
   find: findvehicle,
   list: listvehicles,
 });
