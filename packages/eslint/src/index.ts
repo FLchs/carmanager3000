@@ -63,6 +63,19 @@ export const defaultConfig = (extended: Parameters<typeof defineConfig>) =>
             ],
           },
         ],
+        "perfectionist/sort-jsx-props": [
+          "error",
+          {
+            groups: ["selector", "multiline-prop", "unknown", "shorthand-prop"],
+            customGroups: [
+              {
+                groupName: "selector",
+                elementNamePattern: "^selector+",
+              },
+            ],
+          },
+        ],
+
         "unicorn/filename-case": ["off"],
         "unicorn/prevent-abbreviations": [
           "off",
