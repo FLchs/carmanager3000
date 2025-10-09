@@ -15,7 +15,7 @@ export const Route = createFileRoute("/vehicles")({
 function RouteComponent() {
   const [showNewVehicleForm, setShowNewVehicleForm] = useState(false);
   return (
-    <div>
+    <div className="mt-4">
       <ErrorZone>
         <div className="w-[800px] m-auto flex flex-col gap-4">
           <div className="flex flex-row justify-between">

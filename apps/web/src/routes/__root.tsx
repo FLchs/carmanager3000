@@ -1,19 +1,15 @@
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
+import { createRootRoute, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+
+import Sidebar from "../components/ui/sidebar/Sidebar";
 
 const RootLayout = () => (
   <>
-    <div className="p-2 flex gap-2">
-      <Link className="[&.active]:font-bold" to="/">
-        Home
-      </Link>
-      <Link className="[&.active]:font-bold" to="/vehicles">
-        Vehicles
-      </Link>
+    <div className="flex flex-row gap-6">
+      <Sidebar />
+      <Outlet />
     </div>
-    <hr />
-    <Outlet />
     <TanStackRouterDevtools />
     <ReactQueryDevtools />
   </>
