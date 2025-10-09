@@ -1,23 +1,32 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 
 import { ErrorZone } from "./components/ErrorZone";
+import Button from "./components/ui/Button";
 import Vehicle from "./components/vehicle/Vehicle";
 import VehicleCreateForm from "./components/vehicle/VehicleCreateForm";
 import { orpc } from "./lib/orpc";
 
 export default function App() {
+  const [showNewVehicleForm, setShowNewVehicleForm] = useState(false);
+
   return (
     <div>
       <ReactQueryDevtools />
       <ErrorZone>
         <div className="w-[800px] m-auto flex flex-col gap-4">
-          <h1 className="text-">Vehicles:</h1>
+          <div className="flex flex-row justify-between">
+            <h1 className="font-bold">Vehicles</h1>
+            <Button
+              callback={() => setShowNewVehicleForm(!showNewVehicleForm)}
+              label={showNewVehicleForm ? "Cancel" : "Add"}
+            />
+          </div>
+          {showNewVehicleForm && <VehicleCreateForm />}
           <Suspense fallback={<p>loading...</p>}>
             <VehiclesList />
           </Suspense>
-          <VehicleCreateForm />
         </div>
       </ErrorZone>
     </div>
