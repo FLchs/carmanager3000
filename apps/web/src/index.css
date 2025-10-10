@@ -2,10 +2,25 @@
 
 @theme {
   --color-*: initial;
-  --color-surface: hsl(0 0 0);
-  --color-elevated: hsl(0 0 10);
-  --color-highlight: hsl(0 0 20);
-  --color-base: hsl(0 0 95); /* base text colors */
-  --color-muted: hsl(0 0 70); /* muted text color */
+  /* --color-surface: hsl(0 0 0); */
+  /* --color-elevated: hsl(0 0 10); */
+  /* --color-highlight: hsl(0 0 20); */
+  /* --color-base: hsl(0 0 95); /* base text colors */
+  /* --color-muted: hsl(0 0 70); /* muted text color */
+
+  --color-bg-dark: hsl(0 0% 0%);
+  --color-bg: hsl(0 0% 5%);
+  --color-bg-light: hsl(0 0% 10%);
+  --color-text: hsl(0 0% 95%);
+  --color-text-muted: hsl(0 0% 70%);
+  --color-border: hsl(0 0% 20%);
+  --color-highlight: hsl(0 0% 30%);
+
+  /* --color-bg-dark: hsl(0 0% 90%); */
+  /* --color-bg: hsl(0 0% 95%); */
+  /* --color-bg-light: hsl(0 0% 100%); */
+  /* --color-text: hsl(0 0% 5%); */
+  /* --color-text-muted: hsl(0 0% 30%); */
+
 }
 

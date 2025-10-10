@@ -9,9 +9,11 @@ export default function NumberField({ label }: { label: string }) {
 
   return (
     <div className="grid">
-      <label htmlFor={field.name}>{label}</label>
+      <label className="text-text-muted" htmlFor={field.name}>
+        {label}
+      </label>
       <input
-        className="bg-highlight rounded-lg p-2 border-surface border-1 outline-0"
+        className="bg-bg-light rounded-lg p-2 border-border text-text-muted border-1 outline-0"
         id={field.name}
         onBlur={field.handleBlur}
         onChange={(e) => field.handleChange(e.target.value)}

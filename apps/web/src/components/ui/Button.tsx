@@ -1,18 +1,17 @@
+import type { ComponentProps } from "react";
+
 type Props = {
   callback?: () => Promise<void> | void;
-  label: string;
-  type?: HTMLButtonElement["type"];
 };
 
-function Button({ callback, label, type = "button" }: Props) {
+function Button({ callback, ...props }: ComponentProps<"button"> & Props) {
   return (
     <button
-      className="bg-elevated border-highlight border-1 hover:bg-surface hover:cursor-pointer rounded-lg py-2 px-4"
+      {...props}
+      className="rounded-lg px-4 py-2 bg-bg border-border border-1 text-text hover:bg-bg-light hover:cursor-pointer"
       onClick={callback}
-      type={type}
-    >
-      {label}
-    </button>
+      type={props.type ?? "button"}
+    />
   );
 }
 

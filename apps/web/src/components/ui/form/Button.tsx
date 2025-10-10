@@ -1,4 +1,5 @@
 import { useFormContext } from "../../../contexts/form-context";
+import Button from "../Button";
 
 export function SubscribeButton({
   label,
@@ -11,13 +12,9 @@ export function SubscribeButton({
   return (
     <form.Subscribe selector={(state) => state.isSubmitting}>
       {(isSubmitting) => (
-        <button
-          className="bg-highlight justify-self-start px-4 py-2 rounded-lg hover:bg-elevated hover:border-highlight border-1 hover:cursor-pointer border-surface"
-          disabled={isSubmitting}
-          type={type}
-        >
+        <Button disabled={isSubmitting} type={type}>
           {label}
-        </button>
+        </Button>
       )}
     </form.Subscribe>
   );

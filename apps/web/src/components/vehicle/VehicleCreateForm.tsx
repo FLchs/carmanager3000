@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { useAppForm } from "../../hooks/useForm";
 import { orpc } from "../../lib/orpc";
+import Card from "../ui/Card";
 
 function VehicleCreateForm() {
   const client = useQueryClient();
@@ -32,7 +33,7 @@ function VehicleCreateForm() {
   });
 
   return (
-    <div className="rounded-2xl p-4 bg-elevated border-highlight border-1">
+    <Card>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -69,7 +70,7 @@ function VehicleCreateForm() {
           <form.SubscribeButton label="Submit" type="submit" />
         </form.AppForm>
       </form>
-    </div>
+    </Card>
   );
 }
 

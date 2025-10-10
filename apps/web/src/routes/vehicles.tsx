@@ -20,10 +20,9 @@ function RouteComponent() {
         <div className="w-[800px] m-auto flex flex-col gap-4">
           <div className="flex flex-row justify-between">
             <h1 className="font-bold">Vehicles</h1>
-            <Button
-              callback={() => setShowNewVehicleForm(!showNewVehicleForm)}
-              label={showNewVehicleForm ? "Cancel" : "Add"}
-            />
+            <Button callback={() => setShowNewVehicleForm(!showNewVehicleForm)}>
+              {showNewVehicleForm ? "Cancel" : "Add"}
+            </Button>
           </div>
           {showNewVehicleForm && <VehicleCreateForm />}
           <Suspense fallback={<p>loading...</p>}>

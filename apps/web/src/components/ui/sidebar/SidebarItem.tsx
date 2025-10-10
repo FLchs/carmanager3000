@@ -15,7 +15,7 @@ const BasicLinkComponent = ({
       ref={ref}
       {...props}
       className={
-        "block px-3 py-2 [&[data-status=active]]:font-bold [&[data-status=active]]:bg-surface rounded-lg"
+        "px-3 py-2 [&[data-status=active]]:font-bold [&[data-status=active]]:bg-surface rounded-lg flex flex-row gap-4 items-center"
       }
     />
   );
