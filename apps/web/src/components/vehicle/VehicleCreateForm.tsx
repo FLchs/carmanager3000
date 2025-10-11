@@ -4,7 +4,7 @@ import { useAppForm } from "../../hooks/useForm";
 import { orpc } from "../../lib/orpc";
 import Card from "../ui/Card";
 
-function VehicleCreateForm() {
+function VehicleCreateForm({ cancel }: { cancel: () => void }) {
   const client = useQueryClient();
 
   const createVehicleMutation = useMutation(
@@ -67,7 +67,16 @@ function VehicleCreateForm() {
           name="year"
         />
         <form.AppForm>
-          <form.SubscribeButton label="Submit" type="submit" />
+          <div className="flex flex-row gap-4">
+            <form.SubscribeButton type="submit">Save</form.SubscribeButton>
+            <form.SubscribeButton
+              callback={cancel}
+              type="button"
+              variant="secondary_outline"
+            >
+              Cancel
+            </form.SubscribeButton>
+          </div>
         </form.AppForm>
       </form>
     </Card>

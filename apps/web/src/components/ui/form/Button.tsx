@@ -1,21 +1,15 @@
+import type { ComponentProps } from "react";
+
 import { useFormContext } from "../../../contexts/form-context";
 import Button from "../Button";
 
-export function SubscribeButton({
-  label,
-  type = "button",
-}: {
-  label: string;
-  type?: HTMLButtonElement["type"];
-}) {
+type FormButtonProps = ComponentProps<typeof Button>;
+
+export function SubscribeButton(props: FormButtonProps) {
   const form = useFormContext();
   return (
     <form.Subscribe selector={(state) => state.isSubmitting}>
-      {(isSubmitting) => (
-        <Button disabled={isSubmitting} type={type}>
-          {label}
-        </Button>
-      )}
+      {(isSubmitting) => <Button disabled={isSubmitting} {...props} />}
     </form.Subscribe>
   );
 }

@@ -20,11 +20,18 @@ function RouteComponent() {
         <div className="w-[800px] m-auto flex flex-col gap-4">
           <div className="flex flex-row justify-between">
             <h1 className="font-bold">Vehicles</h1>
-            <Button callback={() => setShowNewVehicleForm(!showNewVehicleForm)}>
-              {showNewVehicleForm ? "Cancel" : "Add"}
-            </Button>
+            {!showNewVehicleForm && (
+              <Button
+                callback={() => setShowNewVehicleForm(!showNewVehicleForm)}
+                variant="primary_outline"
+              >
+                Add
+              </Button>
+            )}
           </div>
-          {showNewVehicleForm && <VehicleCreateForm />}
+          {showNewVehicleForm && (
+            <VehicleCreateForm cancel={() => setShowNewVehicleForm(false)} />
+          )}
           <Suspense fallback={<p>loading...</p>}>
             <VehiclesList />
           </Suspense>

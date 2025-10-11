@@ -9,12 +9,19 @@
   /* --color-muted: hsl(0 0 70); /* muted text color */
 
   --color-bg-dark: hsl(0 0% 0%);
-  --color-bg: hsl(0 0% 5%);
-  --color-bg-light: hsl(0 0% 10%);
+  --color-bg: hsl(0 0% 10%);
+  --color-bg-light: hsl(0 0% 20%);
   --color-text: hsl(0 0% 95%);
   --color-text-muted: hsl(0 0% 70%);
   --color-border: hsl(0 0% 20%);
   --color-highlight: hsl(0 0% 30%);
+
+  --color-primary: hsl(269, 100%, 56%);
+  --color-primary-dark: hsl(269, 100%, 46%);
+
+
+  /* --color-secondary:  	hsl(181, 79%, 54%); */
+  /* --color-secondary-dark:  	hsl(181, 79%, 44%); */
 
   /* --color-bg-dark: hsl(0 0% 90%); */
   /* --color-bg: hsl(0 0% 95%); */

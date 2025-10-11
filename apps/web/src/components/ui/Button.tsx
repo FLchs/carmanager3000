@@ -1,14 +1,27 @@
 import type { ComponentProps } from "react";
 
-type Props = {
-  callback?: () => Promise<void> | void;
+const variants = {
+  primary: "bg-primary hover:bg-primary-dark border-border  text-text",
+  secondary: "bg-secondary hover:bg-secondary-dark border-border  text-text",
+  secondary_outline: "border-border  text-text hover:bg-bg-light bg-bg",
+  primary_outline:
+    "border-primary hover:border-primary-dark hover:text-text hover:bg-primary-dark bg-bg text-primary",
 };
 
-function Button({ callback, ...props }: ComponentProps<"button"> & Props) {
+type Props = {
+  callback?: () => Promise<void> | void;
+  variant?: keyof typeof variants;
+};
+
+function Button({
+  callback,
+  variant = "primary",
+  ...props
+}: ComponentProps<"button"> & Props) {
   return (
     <button
       {...props}
-      className="rounded-lg px-4 py-2 bg-bg border-border border-1 text-text hover:bg-bg-light hover:cursor-pointer"
+      className={`rounded-lg px-4 py-1.5 border-1   hover:cursor-pointer ${variants[variant]} `}
       onClick={callback}
       type={props.type ?? "button"}
     />
