@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Pen, Trash } from "lucide-react";
 
 import { orpc } from "../../lib/orpc";
 import Menu from "../ui/Menu";
@@ -19,7 +20,20 @@ function VehicleMenu({ id }: { id: number }) {
   return (
     <Menu
       items={[
-        { callback: () => deleteMutation.mutate({ id }), label: "delete" },
+        <span
+          className="flex items-center gap-4"
+          key={1}
+          onClick={() => console.log(id)}
+        >
+          <Pen size={14} /> Edit
+        </span>,
+        <span
+          className="flex items-center gap-4"
+          key={1}
+          onClick={() => deleteMutation.mutate({ id })}
+        >
+          <Trash size={14} /> Delete
+        </span>,
       ]}
     />
   );

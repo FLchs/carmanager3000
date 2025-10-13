@@ -1,38 +1,32 @@
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 
 import { useClickOutside } from "../../hooks/useClickOutside";
 
-type Item = {
-  callback: () => Promise<void> | void;
-  label: string;
-};
-
-function Menu({ items }: { items: Item[] }) {
+function Menu({ items }: { items: ReactNode[] }) {
   const [visible, setVisible] = useState(false);
 
   const ref = useClickOutside(() => setVisible(false));
   return (
     <div ref={ref}>
       <span
-        className="text-muted hover:text-white hover:cursor-pointer h-6"
+        className="text-text-muted hover:text-white hover:cursor-pointer h-6"
         onClick={() => setVisible(!visible)}
       >
         ⠇
       </span>
       {visible && (
-        <div className="absolute bg-elevated border-highlight border-1 rounded flex flex-col gap-1">
+        <div className="absolute bg-bg border-border border-1 rounded flex flex-col gap-1 text-text-muted">
           {items.map((item) => {
             return (
-              <span
+              <div
                 onClick={() => {
                   setVisible(false);
-                  item.callback();
                 }}
-                className="hover:bg-surface w-full px-2 hover:cursor-pointer"
-                key={item.label}
+                className="hover:bg-bg-light w-full px-4 py-2 hover:cursor-pointer hover:text-text"
+                key={Math.random()}
               >
-                {item.label}
-              </span>
+                {item}
+              </div>
             );
           })}
         </div>
