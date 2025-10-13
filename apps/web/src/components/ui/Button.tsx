@@ -21,7 +21,7 @@ function Button({
   return (
     <button
       {...props}
-      className={`rounded-lg px-4 py-1.5 border-1   hover:cursor-pointer ${variants[variant]} `}
+      className={`rounded-lg px-4 py-1.5 border-1 hover:cursor-pointer ${variants[variant]} font-semibold `}
       onClick={callback}
       type={props.type ?? "button"}
     />
