@@ -1,3 +1,5 @@
+import { Link } from "@tanstack/react-router";
+
 import Card from "../ui/Card";
 import VehicleMenu from "./VehicleMenu";
 
@@ -18,7 +20,9 @@ function Vehicle({ vehicle }: { vehicle: VehicleData }) {
     <Card>
       <div>
         <img className="h-12 absolute" src="/kia-logo.png" />
-        <img className="w-full" src="/kia-magentis.jpg" />
+        <Link params={{ vehicleId: id.toString() }} to="/vehicles/$vehicleId">
+          <img className="w-full" src="/kia-magentis.jpg" />
+        </Link>
       </div>
       <div className="flex gap-4 mt-4 justify-between">
         <div>

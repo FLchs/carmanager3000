@@ -6,7 +6,7 @@ import Sidebar from "../components/ui/sidebar/Sidebar";
 
 const RootLayout = () => (
   <>
-    <div className="flex flex-row gap-6">
+    <div className="flex flex-row">
       <Sidebar />
       <Outlet />
     </div>

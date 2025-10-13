@@ -2,20 +2,20 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { Suspense, useState } from "react";
 
-import { ErrorZone } from "../components/ErrorZone";
-import Button from "../components/ui/Button";
-import Vehicle from "../components/vehicle/Vehicle";
-import VehicleCreateForm from "../components/vehicle/VehicleCreateForm";
-import { orpc } from "../lib/orpc";
+import { ErrorZone } from "@/components/ErrorZone";
+import Button from "@/components/ui/Button";
+import Vehicle from "@/components/vehicle/Vehicle";
+import VehicleCreateForm from "@/components/vehicle/VehicleCreateForm";
+import { orpc } from "@/lib/orpc";
 
-export const Route = createFileRoute("/vehicles")({
+export const Route = createFileRoute("/vehicles/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
   const [showNewVehicleForm, setShowNewVehicleForm] = useState(false);
   return (
-    <div className="mt-4">
+    <div className="p-4">
       <ErrorZone>
         <div className="w-[800px] m-auto flex flex-col gap-4">
           <div className="flex flex-row justify-between">
