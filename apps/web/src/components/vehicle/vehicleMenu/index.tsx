@@ -1,0 +1,69 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
+import { Pen, Trash } from "lucide-react";
+import { useCallback, useRef, useState } from "react";
+
+import PopoverContent from "@/components/ui/Popover";
+import { orpc } from "@/lib/orpc";
+
+import Content from "./Content";
+
+export default function VehicleMenu({ id }: { id: number }) {
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const [open, setOpen] = useState(false);
+
+  const toggle = useCallback(() => setOpen((v) => !v), []);
+
+  const client = useQueryClient();
+  const navigate = useNavigate();
+
+  const deleteMutation = useMutation(
+    orpc.vehicles.delete.mutationOptions({
+      onSuccess: async () => {
+        await client.invalidateQueries({
+          queryKey: orpc.vehicles.list.key(),
+        });
+      },
+    }),
+  );
+
+  return (
+    <div>
+      <button
+        className="text-text-muted hover:text-white cursor-pointer"
+        onClick={toggle}
+        ref={btnRef}
+        type="button"
+      >
+        ⠇
+      </button>
+      {open && (
+        <PopoverContent anchorRef={btnRef} onClose={() => setOpen(false)}>
+          <Content
+            items={[
+              <span
+                onClick={() =>
+                  navigate({
+                    params: { id: id.toString() },
+                    to: "/vehicles/edit/$id",
+                  })
+                }
+                className="flex items-center gap-4"
+                key={1}
+              >
+                <Pen size={14} /> Edit
+              </span>,
+              <span
+                className="flex items-center gap-4"
+                key={1}
+                onClick={() => deleteMutation.mutate({ id })}
+              >
+                <Trash size={14} /> Delete
+              </span>,
+            ]}
+          />
+        </PopoverContent>
+      )}
+    </div>
+  );
+}
