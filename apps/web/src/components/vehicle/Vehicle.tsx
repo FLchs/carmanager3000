@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 
 import Card from "../ui/Card";
-import VehicleMenu from "./VehicleMenu";
+import VehicleMenu from "./vehicleMenu";
 
 interface VehicleData {
   brand: null | string;
