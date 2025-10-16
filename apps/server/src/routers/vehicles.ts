@@ -49,6 +49,24 @@ const createvehicle = os
       ok: true,
     };
   });
+
+const editvehicle = os
+  .route({
+    method: "PUT",
+    path: "/{id}",
+  })
+  .input(vehicleInsertSchema.omit({ createdAt: true, updatedAt: true }))
+  .handler(async ({ input }) => {
+    const { id, ...data } = input;
+    if (id == undefined) {
+      return { status: 404 };
+    }
+    await db.update(vehiclesTable).set(data).where(eq(vehiclesTable.id, id));
+    return {
+      ok: true,
+    };
+  });
+
 const deletevehicle = os
   .route({
     method: "DELETE",
@@ -64,6 +82,7 @@ const deletevehicle = os
 export const vehiclesRouter = os.prefix("/vehicles").router({
   create: createvehicle,
   delete: deletevehicle,
+  edit: editvehicle,
   find: findvehicle,
   list: listvehicles,
 });
