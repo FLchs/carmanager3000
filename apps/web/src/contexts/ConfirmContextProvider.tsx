@@ -8,8 +8,6 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 
-import Button from "@/components/ui/Button";
-import Card from "@/components/ui/Card";
 import Dialog from "@/components/ui/Dialog";
 
 import { ConfirmContext, defaultFunction, type Props } from "./ConfirmContext";

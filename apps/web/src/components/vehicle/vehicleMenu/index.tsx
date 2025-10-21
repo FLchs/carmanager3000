@@ -4,6 +4,7 @@ import { Pen, Trash } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
 
 import PopoverContent from "@/components/ui/Popover";
+import { useDialog } from "@/hooks/useConfirm";
 import { orpc } from "@/lib/orpc";
 
 import Content from "./Content";
@@ -11,6 +12,7 @@ import Content from "./Content";
 export default function VehicleMenu({ id }: { id: number }) {
   const btnRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
+  const { confirm } = useDialog();
 
   const toggle = useCallback(() => setOpen((v) => !v), []);
 
@@ -26,6 +28,14 @@ export default function VehicleMenu({ id }: { id: number }) {
       },
     }),
   );
+
+  const onDelete = useCallback(async () => {
+    if (
+      await confirm({ title: "Voulez-vous vraiment supprimer ce vehicule ?" })
+    ) {
+      deleteMutation.mutate({ id });
+    }
+  }, [confirm, deleteMutation, id]);
 
   return (
     <div>
@@ -56,7 +66,7 @@ export default function VehicleMenu({ id }: { id: number }) {
               <span
                 className="flex items-center gap-4"
                 key={1}
-                onClick={() => deleteMutation.mutate({ id })}
+                onClick={onDelete}
               >
                 <Trash size={14} /> Delete
               </span>,
