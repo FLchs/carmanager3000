@@ -23,7 +23,7 @@ export const Route = createFileRoute("/vehicles/$vehicleId")({
 function RouteComponent() {
   const { vehicleId } = Route.useParams();
   const {
-    data: { id, brand, engine, model, power, trim, year },
+    data: { id, brand, engine, maintenanceLog, model, power, trim, year },
   } = useSuspenseQuery(
     orpc.vehicles.find.queryOptions({ input: { id: Number(vehicleId) } }),
   );
@@ -102,17 +102,8 @@ function RouteComponent() {
               </h2>
               <div className="bg-bg border-1 border-border rounded-lg">
                 <Table
-                  rows={[
-                    {
-                      id: Math.random(),
-                      date: "2025-05-27",
-                      intervenant: "François",
-                      mileage: 120_000,
-                      note: "Castrol",
-                      type: "Oil change",
-                    },
-                  ]}
-                  headers={["Date", "Mileage", "Type", "Intervenant", "Note"]}
+                  headers={["Date", "Mileage", "Note", "Type"]}
+                  rows={maintenanceLog}
                 />
               </div>
             </section>

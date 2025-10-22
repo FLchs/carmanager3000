@@ -1,6 +1,10 @@
 type Props = {
   headers: string[];
-  rows: Array<Record<string, number | string> & { id: number | string }>;
+  rows: Array<
+    Record<string, Date | null | number | string | undefined> & {
+      id: number | string;
+    }
+  >;
 };
 
 export const Table = ({ headers, rows }: Props) => {
@@ -26,7 +30,7 @@ export const Table = ({ headers, rows }: Props) => {
               {Object.entries(data).map(([key, value]) => {
                 return (
                   <td className="py-2 px-4" key={key}>
-                    {value}
+                    {value instanceof Date ? value?.toLocaleString() : value}
                   </td>
                 );
               })}
