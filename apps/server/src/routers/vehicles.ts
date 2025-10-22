@@ -5,8 +5,9 @@ import { db } from "../db";
 import {
   vehicleInsertSchema,
   vehicleSchema,
-  vehiclesTable,
-} from "../db/schemas/vehicle";
+  vehicleWithLogSchema,
+} from "../db/schemas/validation";
+import { vehiclesTable } from "../db/schemas/vehicle";
 
 const listvehicles = os
   .route({
@@ -19,19 +20,43 @@ const listvehicles = os
     return vehicles;
   });
 
+// const findVehicleOutputSchema = z.object({
+//   maintenanceLog: z.array(maintenanceLogSelectSchema).default([]), // always an array
+//   vehicle: vehicleSchema, // keep vehicle nested
+// });
+
 const findvehicle = os
   .route({
     method: "GET",
     path: "/{id}",
   })
   .input(vehicleSchema.pick({ id: true }))
-  .output(vehicleSchema)
+  .output(vehicleWithLogSchema)
   .handler(async ({ input }) => {
-    const [vehicle] = await db
-      .select()
-      .from(vehiclesTable)
-      .where(eq(vehiclesTable.id, input.id));
-    return vehicle;
+    // const [row] = await db2.query.vehiclesTable.findMany({
+    //   where: (vehiclesTable, { eq }) => eq(vehiclesTable.id, input.id),
+    //   with: { maintenanceLog: true },
+    // });
+    //
+
+    // await db.insert(maintenanceLogTable).values({
+    //   date: new Date(),
+    //   mileage: 123_098,
+    //   note: "Used Castrol",
+    //   type: "Oil change",
+    //   vehicleId: input.id,
+    // });
+
+    const row = await db.query.vehiclesTable.findFirst({
+      where: (vehiclesTable, { eq }) => eq(vehiclesTable.id, input.id),
+      with: {
+        maintenanceLog: true,
+      },
+    });
+
+    if (row == undefined) throw new Error("wbi");
+
+    return row;
   });
 
 const createvehicle = os
