@@ -13,7 +13,7 @@ export default function TextField({ label }: { label: string }) {
         {label}
       </label>
       <input
-        className="bg-bg-light rounded-lg p-2 border-border border-1 outline-0 text-text-muted"
+        className="bg-bg-light border-border text-text-muted rounded-lg border-1 p-2 outline-0"
         id={field.name}
         onBlur={field.handleBlur}
         onChange={(e) => field.handleChange(e.target.value)}

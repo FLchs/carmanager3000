@@ -19,14 +19,14 @@ function Vehicle({ vehicle }: { vehicle: VehicleData }) {
   return (
     <Card>
       <div>
-        <img className="h-12 absolute" src="/kia-logo.png" />
+        <img className="absolute h-12" src="/kia-logo.png" />
         <Link params={{ vehicleId: id.toString() }} to="/vehicles/$vehicleId">
           <img className="w-full" src="/kia-magentis.jpg" />
         </Link>
       </div>
-      <div className="flex gap-4 mt-4 justify-between">
+      <div className="mt-4 flex justify-between gap-4">
         <div>
-          <h3 className="font-bold text-text mb-2">{model}</h3>
+          <h3 className="text-text mb-2 font-bold">{model}</h3>
           <p className="text-text-muted">
             {brand} {model} {trim} - {year}
           </p>

@@ -27,7 +27,7 @@ function RouteComponent() {
           <ArrowLeftCircleIcon /> vehicles
         </Link>
       </div>
-      <section className="p-4 max-w-[800px]">
+      <section className="max-w-[800px] p-4">
         <EditVehicleForm
           onCancel={() =>
             navigate({ params: { vehicleId: id }, to: "/vehicles/$vehicleId" })

@@ -13,11 +13,11 @@ type Props = {
 
 function Dialog({ onCancel, onConfirm, ref, title }: Props) {
   return (
-    <dialog className="m-auto backdrop:bg-transparent bg-transparent" ref={ref}>
+    <dialog className="m-auto bg-transparent backdrop:bg-transparent" ref={ref}>
       <Card>
         <div className="flex flex-col gap-4">
           {title}
-          <div className="flex flex-row gap-4 justify-end">
+          <div className="flex flex-row justify-end gap-4">
             <Button callback={onCancel} variant="secondary_outline">
               Cancel
             </Button>

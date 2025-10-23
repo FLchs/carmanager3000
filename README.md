@@ -1,4 +1,5 @@
 # carmanager3000
 
-## Logos 
+## Logos
+
 https://avto-dev.github.io/vehicle-logotypes/

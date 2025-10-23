@@ -4,7 +4,7 @@ import { SidebarItem } from "./SidebarItem";
 
 function Sidebar() {
   return (
-    <div className="flex flex-col gap-2 bg-elevated min-w-44 h-screen p-2 border-r-1 border-highlight">
+    <div className="bg-elevated border-highlight flex h-screen min-w-44 flex-col gap-2 border-r-1 p-2">
       <SidebarItem to="/">
         <Home size={18} /> Home
       </SidebarItem>

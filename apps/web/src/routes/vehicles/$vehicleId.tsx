@@ -37,7 +37,7 @@ function RouteComponent() {
 
   return (
     <div className="text-text w-full">
-      <div className="bg-bg w-full p-4 flex flex-row justify-between align-middle items-center">
+      <div className="bg-bg flex w-full flex-row items-center justify-between p-4 align-middle">
         <Link className="block" to="/vehicles">
           <ArrowLeftCircleIcon className="inline" /> vehicles
         </Link>
@@ -52,19 +52,19 @@ function RouteComponent() {
       </div>
       <ErrorZone>
         <Suspense fallback={<p>loading...</p>}>
-          <main className="flex flex-col p-4 gap-6">
+          <main className="flex flex-col gap-6 p-4">
             <header className="m-auto">
-              <div className="flex mt-4 flex-row items-center gap-8">
+              <div className="mt-4 flex flex-row items-center gap-8">
                 <img className="h-24" src="/kia-logo.png" />
                 <div>
-                  <h1 className="font-bold text-text mb-2 text-4xl">
+                  <h1 className="text-text mb-2 text-4xl font-bold">
                     {brand} {model}
                   </h1>
                 </div>
               </div>
             </header>
             <section>
-              <h2 className="text-xl font-bold text-text col-span-2 mb-4">
+              <h2 className="text-text col-span-2 mb-4 text-xl font-bold">
                 Vehicle informations
               </h2>
               <div className="grid grid-cols-2 gap-4">
@@ -78,10 +78,10 @@ function RouteComponent() {
               </div>
             </section>
             <section className="hidden">
-              <h2 className="text-xl text-text col-span-2 mb-4 font-bold">
+              <h2 className="text-text col-span-2 mb-4 text-xl font-bold">
                 Upcoming maintenance
               </h2>
-              <div className="bg-bg border-1 border-border rounded-lg">
+              <div className="bg-bg border-border rounded-lg border-1">
                 <Table
                   rows={[
                     {
@@ -97,10 +97,10 @@ function RouteComponent() {
               </div>
             </section>
             <section>
-              <h2 className="text-xl text-text col-span-2 mb-4 font-bold">
+              <h2 className="text-text col-span-2 mb-4 text-xl font-bold">
                 Maintenance log
               </h2>
-              <div className="bg-bg border-1 border-border rounded-lg">
+              <div className="bg-bg border-border rounded-lg border-1">
                 <Table
                   headers={["Date", "Mileage", "Note", "Type"]}
                   rows={maintenanceLog}

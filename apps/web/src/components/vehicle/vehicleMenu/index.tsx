@@ -40,7 +40,7 @@ export default function VehicleMenu({ id }: { id: number }) {
   return (
     <div>
       <button
-        className="text-text-muted hover:text-white cursor-pointer"
+        className="text-text-muted cursor-pointer hover:text-white"
         onClick={toggle}
         ref={btnRef}
         type="button"

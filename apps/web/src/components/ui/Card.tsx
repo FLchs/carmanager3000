@@ -4,7 +4,7 @@ function Card(props: ComponentProps<"div">) {
   return (
     <div
       {...props}
-      className="rounded-2xl p-4 bg-bg border-border border-1 text-text"
+      className="bg-bg border-border text-text rounded-2xl border-1 p-4"
     />
   );
 }
