@@ -28,3 +28,29 @@
   /* --color-text: hsl(0 0% 5%); */
   /* --color-text-muted: hsl(0 0% 30%); */
 }
+
+@layer components {
+  dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0); /* Start transparent */
+    transition: background-color 0.3s ease-in-out;
+  }
+
+  dialog[open]::backdrop {
+    background-color: rgba(0, 0, 0, 0.5); /* Fade to semi-transparent black */
+  }
+}
+
+
+dialog {
+  opacity: 0;
+  transition: opacity 150ms cubic-bezier(0.35, 0, 0.2, 1);
+  box-shadow: 0 0 0 100vmax rgba(0, 0, 0, .8);
+}
+
+dialog.active {
+  opacity: 1;
+}
+
+dialog::backdrop {
+  display: none;
+}
