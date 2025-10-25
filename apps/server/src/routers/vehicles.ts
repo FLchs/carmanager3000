@@ -14,16 +14,10 @@ const listvehicles = os
     method: "GET",
     path: "/",
   })
-  // .output(z.array(vehicleSchema))
   .handler(async () => {
     const vehicles = await db.select().from(vehiclesTable);
     return vehicles;
   });
-
-// const findVehicleOutputSchema = z.object({
-//   maintenanceLog: z.array(maintenanceLogSelectSchema).default([]), // always an array
-//   vehicle: vehicleSchema, // keep vehicle nested
-// });
 
 const findvehicle = os
   .route({
@@ -33,24 +27,32 @@ const findvehicle = os
   .input(vehicleSchema.pick({ id: true }))
   .output(vehicleWithLogSchema)
   .handler(async ({ input }) => {
-    // const [row] = await db2.query.vehiclesTable.findMany({
-    //   where: (vehiclesTable, { eq }) => eq(vehiclesTable.id, input.id),
-    //   with: { maintenanceLog: true },
-    // });
-    //
-
-    // await db.insert(maintenanceLogTable).values({
-    //   date: new Date(),
-    //   mileage: 123_098,
-    //   note: "Used Castrol",
-    //   type: "Oil change",
-    //   vehicleId: input.id,
-    // });
+    await new Promise((resolve) => {
+      setTimeout(() => resolve(true), 1000);
+    });
 
     const row = await db.query.vehiclesTable.findFirst({
       where: (vehiclesTable, { eq }) => eq(vehiclesTable.id, input.id),
+      columns: {
+        id: true,
+        brand: true,
+        description: true,
+        engine: true,
+        model: true,
+        power: true,
+        trim: true,
+        year: true,
+      },
       with: {
-        maintenanceLog: true,
+        maintenanceLog: {
+          columns: {
+            id: true,
+            date: true,
+            mileage: true,
+            note: true,
+            type: true,
+          },
+        },
       },
     });
 
@@ -104,6 +106,7 @@ const deletevehicle = os
       ok: true,
     };
   });
+
 export const vehiclesRouter = os.prefix("/vehicles").router({
   create: createvehicle,
   delete: deletevehicle,
