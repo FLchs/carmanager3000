@@ -24,13 +24,15 @@ export const Table = ({ headers, rows }: Props) => {
           const { id, ...data } = row;
           return (
             <tr
-              className="border-border hover:bg-bg-dark border-b last:border-0"
+              className={`border-border hover:bg-bg-dark border-b last:border-0 ${id === 0 && "text-text-muted"}`}
               key={id}
             >
               {Object.entries(data).map(([key, value]) => {
                 return (
                   <td className="px-4 py-2" key={key}>
-                    {value instanceof Date ? value?.toLocaleString() : value}
+                    {value instanceof Date
+                      ? `${value.getFullYear()}-${value.getMonth() + 1}-${value.getDate()}`
+                      : value}
                   </td>
                 );
               })}
