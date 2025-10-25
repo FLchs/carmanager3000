@@ -8,6 +8,7 @@ import Button from "@/components/ui/Button";
 import InfoCard from "@/components/ui/InfoCard";
 import InfoCardItem from "@/components/ui/InfoCard/InfoCardItem";
 import { Table } from "@/components/ui/table/Table";
+import MaintenanceLogTable from "@/components/vehicle/MaintenanceLogTable";
 import { useDialog } from "@/hooks/useConfirm";
 import { orpc } from "@/lib/orpc";
 
@@ -23,7 +24,7 @@ export const Route = createFileRoute("/vehicles/$vehicleId")({
 function RouteComponent() {
   const { vehicleId } = Route.useParams();
   const {
-    data: { id, brand, engine, maintenanceLog, model, power, trim, year },
+    data: { id, brand, engine, model, power, trim, year },
   } = useSuspenseQuery(
     orpc.vehicles.find.queryOptions({ input: { id: Number(vehicleId) } }),
   );
@@ -31,7 +32,7 @@ function RouteComponent() {
   const { confirm } = useDialog();
   const handleDelete = useCallback(async () => {
     if (await confirm({ title: `Delete ${model} from the database ?` })) {
-      console.log("DELETED NIGGA");
+      console.log("DELETED");
     }
   }, [confirm, model]);
 
@@ -101,10 +102,9 @@ function RouteComponent() {
                 Maintenance log
               </h2>
               <div className="bg-bg border-border rounded-lg border-1">
-                <Table
-                  headers={["Date", "Mileage", "Note", "Type"]}
-                  rows={maintenanceLog}
-                />
+                <Suspense fallback={<p>Loading...</p>}>
+                  <MaintenanceLogTable id={id} />
+                </Suspense>
               </div>
             </section>
           </main>
