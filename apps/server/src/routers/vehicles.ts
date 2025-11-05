@@ -1,22 +1,25 @@
+import {
+  createVehicle,
+  getVehicle,
+  listVehicle,
+  removeVehicle,
+  updateVehicle,
+} from "#core/vehicle/service";
 import { vehicleInsertSchema } from "#db/schemas/validation";
 import { os } from "@orpc/server";
-import { eq } from "drizzle-orm";
 
-import { db } from "../db";
 import { vehicleSchema, vehicleWithLogSchema } from "../db/schemas/validation";
-import { vehiclesTable } from "../db/schemas/vehicle";
 
-const listvehicles = os
+const list = os
   .route({
     method: "GET",
     path: "/",
   })
   .handler(async () => {
-    const vehicles = await db.select().from(vehiclesTable);
-    return vehicles;
+    return listVehicle();
   });
 
-const findvehicle = os
+const get = os
   .route({
     method: "GET",
     path: "/{id}",
@@ -24,90 +27,52 @@ const findvehicle = os
   .input(vehicleSchema.pick({ id: true }))
   .output(vehicleWithLogSchema)
   .handler(async ({ input }) => {
-    await new Promise((resolve) => {
-      setTimeout(() => resolve(true), 1000);
-    });
-
-    const row = await db.query.vehiclesTable.findFirst({
-      where: (vehiclesTable, { eq }) => eq(vehiclesTable.id, input.id),
-      columns: {
-        id: true,
-        brand: true,
-        description: true,
-        engine: true,
-        model: true,
-        power: true,
-        trim: true,
-        year: true,
-      },
-      with: {
-        maintenanceLog: {
-          columns: {
-            id: true,
-            date: true,
-            mileage: true,
-            note: true,
-            type: true,
-          },
-        },
-      },
-    });
-
-    if (row == undefined) throw new Error("wbi");
-
-    return row;
+    return await getVehicle(input.id);
   });
 
-const createvehicle = os
+const create = os
   .route({
     method: "POST",
     path: "/",
   })
-  .input(
-    vehicleInsertSchema.omit({ id: true, createdAt: true, updatedAt: true }),
-  )
+  .input(vehicleInsertSchema.omit({ id: true }))
   .handler(async ({ input }) => {
-    console.table(input);
-    await db.insert(vehiclesTable).values(input);
+    await createVehicle(input);
     return {
       ok: true,
     };
   });
 
-const editvehicle = os
+const update = os
   .route({
     method: "PUT",
     path: "/{id}",
   })
-  .input(vehicleInsertSchema.omit({ createdAt: true, updatedAt: true }))
+  .input(vehicleInsertSchema)
   .handler(async ({ input }) => {
-    const { id, ...data } = input;
-    if (id == undefined) {
-      return { status: 404 };
-    }
-    await db.update(vehiclesTable).set(data).where(eq(vehiclesTable.id, id));
+    await updateVehicle(input);
     return {
       ok: true,
     };
   });
 
-const deletevehicle = os
+const remove = os
   .route({
     method: "DELETE",
     path: "/{id}",
   })
   .input(vehicleSchema.pick({ id: true }))
   .handler(async ({ input }) => {
-    await db.delete(vehiclesTable).where(eq(vehiclesTable.id, input.id));
+    await removeVehicle(input.id);
     return {
       ok: true,
     };
   });
 
 export const vehiclesRouter = os.prefix("/vehicles").router({
-  create: createvehicle,
-  delete: deletevehicle,
-  edit: editvehicle,
-  find: findvehicle,
-  list: listvehicles,
+  create,
+  get,
+  list,
+  remove,
+  update,
 });

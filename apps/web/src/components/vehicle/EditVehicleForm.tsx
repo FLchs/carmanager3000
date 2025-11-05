@@ -25,10 +25,10 @@ function EditVehicleForm({
   const client = useQueryClient();
 
   const editVehicleMutation = useMutation(
-    orpc.vehicles.edit.mutationOptions({
+    orpc.vehicles.update.mutationOptions({
       onSuccess: async () => {
         await client.invalidateQueries({
-          queryKey: orpc.vehicles.find.key(),
+          queryKey: orpc.vehicles.get.key(),
         });
         onSuccess();
       },

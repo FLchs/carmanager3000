@@ -16,7 +16,7 @@ export const Route = createFileRoute("/vehicles/$vehicleId")({
   component: RouteComponent,
   loader: async ({ context: { queryClient }, params: { vehicleId } }) => {
     return queryClient.ensureQueryData(
-      orpc.vehicles.find.queryOptions({ input: { id: Number(vehicleId) } }),
+      orpc.vehicles.get.queryOptions({ input: { id: Number(vehicleId) } }),
     );
   },
 });
@@ -26,7 +26,7 @@ function RouteComponent() {
   const {
     data: { id, brand, engine, model, power, trim, year },
   } = useSuspenseQuery(
-    orpc.vehicles.find.queryOptions({ input: { id: Number(vehicleId) } }),
+    orpc.vehicles.get.queryOptions({ input: { id: Number(vehicleId) } }),
   );
 
   const { confirm } = useDialog();

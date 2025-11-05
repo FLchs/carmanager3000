@@ -39,4 +39,4 @@ export const vehicleWithLogSchema = createSelectSchema(vehiclesTable)
 export const vehicleInsertSchema = createInsertSchema(vehiclesTable, {
   brand: (schema) => schema.min(1),
   model: (schema) => schema.min(1),
-});
+}).omit({ createdAt: true, updatedAt: true });

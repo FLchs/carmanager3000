@@ -9,7 +9,7 @@ export const Route = createFileRoute("/vehicles/edit/$id")({
   component: RouteComponent,
   loader: async ({ context: { queryClient }, params: { id } }) => {
     return queryClient.ensureQueryData(
-      orpc.vehicles.find.queryOptions({ input: { id: Number(id) } }),
+      orpc.vehicles.get.queryOptions({ input: { id: Number(id) } }),
     );
   },
 });
@@ -18,7 +18,7 @@ function RouteComponent() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
   const { data: vehicle } = useSuspenseQuery(
-    orpc.vehicles.find.queryOptions({ input: { id: Number(id) } }),
+    orpc.vehicles.get.queryOptions({ input: { id: Number(id) } }),
   );
   return (
     <div className="text-text w-full">
