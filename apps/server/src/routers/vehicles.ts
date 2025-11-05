@@ -1,12 +1,9 @@
+import { vehicleInsertSchema } from "#db/schemas/validation";
 import { os } from "@orpc/server";
 import { eq } from "drizzle-orm";
 
 import { db } from "../db";
-import {
-  vehicleInsertSchema,
-  vehicleSchema,
-  vehicleWithLogSchema,
-} from "../db/schemas/validation";
+import { vehicleSchema, vehicleWithLogSchema } from "../db/schemas/validation";
 import { vehiclesTable } from "../db/schemas/vehicle";
 
 const listvehicles = os

@@ -1,6 +1,9 @@
 {
   "name": "@cm3k/server",
   "type": "module",
+  "imports": {
+    "#*": "./src/*.ts"
+  },
   "exports": {
     ".": "./src/index.ts"
   },

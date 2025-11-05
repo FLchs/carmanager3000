@@ -1,13 +1,8 @@
+import { db } from "#db/index";
+import { maintenanceLogTable } from "#db/schemas/maintenanceLog";
+import { maintenanceLogSelectSchema } from "#db/schemas/validation";
 import { os } from "@orpc/server";
 import * as z from "zod/v4";
-
-import { maintenanceLogTable } from "@/db/schemas/maintenanceLog";
-
-import { db } from "../db";
-import {
-  maintenanceLogSelectSchema,
-  mlInsertSchema,
-} from "../db/schemas/validation";
 
 const findVehicleMaintenancelogs = os
   .route({
