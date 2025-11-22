@@ -8,7 +8,7 @@ import Button from "@/components/ui/Button";
 import InfoCard from "@/components/ui/InfoCard";
 import InfoCardItem from "@/components/ui/InfoCard/InfoCardItem";
 import { Table } from "@/components/ui/table/Table";
-import MaintenanceLogTable from "@/components/vehicle/MaintenanceLogTable";
+import OperationTable from "@/components/vehicle/OperationsTable";
 import { useDialog } from "@/hooks/useConfirm";
 import { orpc } from "@/lib/orpc";
 
@@ -103,7 +103,7 @@ function RouteComponent() {
               </h2>
               <div className="bg-bg border-border rounded-lg border-1">
                 <Suspense fallback={<p>Loading...</p>}>
-                  <MaintenanceLogTable id={id} />
+                  <OperationTable id={id} />
                 </Suspense>
               </div>
             </section>

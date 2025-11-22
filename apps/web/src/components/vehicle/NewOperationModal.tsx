@@ -4,7 +4,7 @@ import { useAppForm } from "@/hooks/useForm";
 import { orpc } from "@/lib/orpc";
 
 import Modal from "../ui/Modal";
-function NewLogModal({
+export default function NewOperationModal({
   id,
   onClose,
   visible,
@@ -16,18 +16,25 @@ function NewLogModal({
   const client = useQueryClient();
 
   const createVehicleMutation = useMutation(
-    orpc.vehicles.logs.create.mutationOptions({
+    orpc.vehicles.operations.create.mutationOptions({
       onError: async () => {
         void client.invalidateQueries({
-          queryKey: orpc.vehicles.find.key(),
+          queryKey: orpc.vehicles.get.key(),
         });
       },
       onMutate: async (log, context) => {
         try {
           onClose();
-          const tempItem = { id: 0, ...log.body };
+          const tempItem = {
+            id: 0,
+            createdAt: "",
+            updatedAt: "",
+            ...log,
+          };
           context.client.setQueryData(
-            orpc.vehicles.logs.find.queryKey({ input: { id: Number(id) } }),
+            orpc.operations.list.queryKey({
+              input: { query: { vehicleId: Number(id) } },
+            }),
             (old) => old && [...old, tempItem],
           );
         } catch (error) {
@@ -37,7 +44,7 @@ function NewLogModal({
       onSuccess: async () => {
         form.reset();
         void client.invalidateQueries({
-          queryKey: orpc.vehicles.logs.find.key(),
+          queryKey: orpc.operations.list.key(),
         });
       },
     }),
@@ -51,7 +58,7 @@ function NewLogModal({
       type: "",
     },
     onSubmit: async ({ value }) => {
-      createVehicleMutation.mutate({ body: value, params: { id } });
+      createVehicleMutation.mutate({ vehicleId: Number(id), ...value });
     },
   });
 
@@ -101,5 +108,3 @@ function NewLogModal({
     </Modal>
   );
 }
-
-export default NewLogModal;
