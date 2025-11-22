@@ -1,6 +1,7 @@
-import { vehiclesRouter as vr2 } from "./maintenance";
+import { operationsRouter } from "./operations";
 import { vehiclesRouter } from "./vehicles";
 
 export const router = {
-  vehicles: { ...vehiclesRouter, ...vr2 },
+  operations: operationsRouter,
+  vehicles: vehiclesRouter,
 };

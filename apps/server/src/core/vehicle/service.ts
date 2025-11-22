@@ -1,17 +1,18 @@
 import { db } from "#db/index";
-import { vehicleInsertSchema } from "#db/schemas/validation";
-import { vehiclesTable } from "#db/schemas/vehicle";
+import { vehicles } from "#db/schemas/vehicle";
 import { eq } from "drizzle-orm";
 import { z } from "zod/v4";
 
+import { vehicleInsertSchema } from "./validation";
+
 export const listVehicle = async () => {
-  const vehicles = await db.select().from(vehiclesTable);
-  return vehicles;
+  const vehiclesList = await db.select().from(vehicles);
+  return vehiclesList;
 };
 
 export const getVehicle = async (id: number) => {
-  const row = await db.query.vehiclesTable.findFirst({
-    where: (vehiclesTable, { eq }) => eq(vehiclesTable.id, id),
+  const row = await db.query.vehicles.findFirst({
+    where: (vehicles, { eq }) => eq(vehicles.id, id),
     columns: {
       id: true,
       brand: true,
@@ -23,7 +24,7 @@ export const getVehicle = async (id: number) => {
       year: true,
     },
     with: {
-      maintenanceLog: {
+      operations: {
         columns: {
           id: true,
           date: true,
@@ -36,7 +37,6 @@ export const getVehicle = async (id: number) => {
   });
 
   if (row == undefined) throw new Error("wbi");
-
   return row;
 };
 
@@ -44,7 +44,7 @@ export const createVehicle = async (
   input: z.infer<typeof vehicleInsertSchema>,
 ) => {
   console.table(input);
-  await db.insert(vehiclesTable).values(input);
+  await db.insert(vehicles).values(input);
   return {
     ok: true,
   };
@@ -57,14 +57,14 @@ export const updateVehicle = async (
   if (id == undefined) {
     return { status: 404 };
   }
-  await db.update(vehiclesTable).set(data).where(eq(vehiclesTable.id, id));
+  await db.update(vehicles).set(data).where(eq(vehicles.id, id));
   return {
     ok: true,
   };
 };
 
 export const removeVehicle = async (id: number) => {
-  await db.delete(vehiclesTable).where(eq(vehiclesTable.id, id));
+  await db.delete(vehicles).where(eq(vehicles.id, id));
   return {
     ok: true,
   };
