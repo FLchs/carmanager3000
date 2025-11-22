@@ -1,16 +1,16 @@
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 import { timestamps } from "../helpers/timestamps";
-import { vehiclesTable } from "./vehicle";
+import { vehicles } from "./vehicle";
 
-export const maintenanceLogTable = sqliteTable("maintenanceLog", {
+export const operations = sqliteTable("operations", {
   id: integer().primaryKey({ autoIncrement: true }),
   date: integer({ mode: "timestamp" }),
   mileage: integer(),
   note: text(),
   type: text(),
-  vehicleId: integer("owner_id")
+  vehicleId: integer("vehicle_id")
     .notNull()
-    .references(() => vehiclesTable.id),
+    .references(() => vehicles.id),
   ...timestamps,
 });
