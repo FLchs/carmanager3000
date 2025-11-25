@@ -1,10 +1,12 @@
 import { vehicles } from "#db/schemas/vehicle";
 import { createSchemaFactory } from "drizzle-zod";
 
+// TODO: replace with custom made schemas that could be used both sides
+
 const { createInsertSchema, createSelectSchema } = createSchemaFactory({
   coerce: {
     // date: true,
-    // number: true,
+    number: true,
   },
 });
 
