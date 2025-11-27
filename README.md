@@ -5,6 +5,8 @@ Car Manager brings all your fleet information together: Vehicle details, mainten
 Stay on top of every oil change and tire rotation with smart reminders.
 When it’s time to sell, export professional reports that give buyers confidence.
 
+![GitHub top language](https://img.shields.io/github/languages/top/FLchs/carmanager3000) ![GitHub License](https://img.shields.io/github/license/FLchs/carmanager3000)
+
 ## Development
 
 <details open>
