@@ -11,7 +11,7 @@ When it’s time to sell, export professional reports that give buyers confidenc
 <summary>
 Pre-requisites
 </summary> <br />
-    Car Manager 3000 is using [https://https://bun.com/](Bun) as package manager and runtime.
+    Car Manager 3000 is using [Bun](https://https://bun.com/) as package manager and runtime.
     To start developing you will need:
 
 ###
