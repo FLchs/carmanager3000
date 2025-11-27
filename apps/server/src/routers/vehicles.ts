@@ -8,10 +8,10 @@ import {
   updateVehicle,
 } from "#core/vehicle/service";
 import { vehicleInsertSchema, vehicleSchema } from "#core/vehicle/validation";
-import { os } from "@orpc/server";
+import o from "#lib/orpc";
 import { z } from "zod/v4";
 
-const list = os
+const list = o
   .route({
     method: "GET",
     path: "/",
@@ -20,7 +20,7 @@ const list = os
     return listVehicle();
   });
 
-const get = os
+const get = o
   .route({
     method: "GET",
     path: "/{id}",
@@ -31,7 +31,7 @@ const get = os
     return await getVehicle(input.id);
   });
 
-const create = os
+const create = o
   .route({
     method: "POST",
     path: "/",
@@ -44,7 +44,7 @@ const create = os
     };
   });
 
-const update = os
+const update = o
   .route({
     method: "PUT",
     path: "/{id}",
@@ -57,7 +57,7 @@ const update = os
     };
   });
 
-const remove = os
+const remove = o
   .route({
     method: "DELETE",
     path: "/{id}",
@@ -71,7 +71,7 @@ const remove = os
   });
 
 const operations = {
-  create: os
+  create: o
     .route({
       inputStructure: "detailed",
       method: "POST",
@@ -84,7 +84,7 @@ const operations = {
         ok: true,
       };
     }),
-  list: os
+  list: o
     .route({
       inputStructure: "detailed",
       method: "GET",
@@ -98,7 +98,7 @@ const operations = {
     }),
 };
 
-export const vehiclesRouter = os.prefix("/vehicles").router({
+export const vehiclesRouter = o.prefix("/vehicles").router({
   create,
   get,
   list,
