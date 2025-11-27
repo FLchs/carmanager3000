@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "bun run --hot src/index.ts",
     "lint": "bun run eslint",
+    "typecheck": "tsc --noEmit",
     "db:push": "drizzle-kit push",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate"
