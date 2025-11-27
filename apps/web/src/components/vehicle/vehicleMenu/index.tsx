@@ -20,7 +20,7 @@ export default function VehicleMenu({ id }: { id: number }) {
   const navigate = useNavigate();
 
   const deleteMutation = useMutation(
-    orpc.vehicles.delete.mutationOptions({
+    orpc.vehicles.remove.mutationOptions({
       onSuccess: async () => {
         await client.invalidateQueries({
           queryKey: orpc.vehicles.list.key(),

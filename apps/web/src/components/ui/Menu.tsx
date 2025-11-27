@@ -1,5 +1,4 @@
-import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
-import { createPortal } from "react-dom";
+import { type ReactNode } from "react";
 
 export default function Menu({ items }: { items: ReactNode[] }) {
   return (

@@ -1,7 +1,7 @@
 import {
   onError,
   ORPCError,
-  RouterClient,
+  type RouterClient,
   ValidationError,
 } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/fetch";
