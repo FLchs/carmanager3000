@@ -1,5 +1,17 @@
 # carmanager3000
 
-## Logos
+![Car manager logo](cm3k.png)
 
-https://avto-dev.github.io/vehicle-logotypes/
+To install dependencies:
+
+```sh
+bun install
+```
+
+To run:
+
+```sh
+bun run dev
+```
+
+Open <http://localhost:5173> in your browser.
