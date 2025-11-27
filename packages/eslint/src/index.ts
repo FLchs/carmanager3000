@@ -46,15 +46,15 @@ export const defaultConfig = (extended: Parameters<typeof defineConfig>) =>
         // "import/no-named-default": "error",
         // "react-refresh/only-export-components": ["error"],
         "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
-        "@typescript-eslint/no-unused-vars": [
-          "error",
-          {
-            argsIgnorePattern: "^_", // Ignore unused function arguments
-            varsIgnorePattern: "^_", // Ignore unused variables
-            caughtErrorsIgnorePattern: "^_", // Ignore unused catch clause parameters
-            ignoreRestSiblings: true, //  Ignore unused properties when using object destructuring
-          },
-        ],
+        // "typescript-eslint/no-unused-vars": [
+        //   "error",
+        //   {
+        //     argsIgnorePattern: "^_", // Ignore unused function arguments
+        //     varsIgnorePattern: "^_", // Ignore unused variables
+        //     caughtErrorsIgnorePattern: "^_", // Ignore unused catch clause parameters
+        //     ignoreRestSiblings: true, //  Ignore unused properties when using object destructuring
+        //   },
+        // ],
         "perfectionist/sort-objects": [
           "error",
           {
