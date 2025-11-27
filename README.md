@@ -7,6 +7,20 @@ When it’s time to sell, export professional reports that give buyers confidenc
 
 ## Development
 
+<details open>
+<summary>
+Pre-requisites
+</summary> <br />
+    Car Manager 3000 is using [https://https://bun.com/](Bun) as package manager and runtime.
+    To start developing you will need:
+
+###
+
+- Git
+- Bun
+
+</details>
+
 To install dependencies:
 
 ```sh
