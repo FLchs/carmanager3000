@@ -1,5 +1,12 @@
-import { createOperation, listOperations } from "#core/operation/service";
-import { operationInsertSchema } from "#core/operation/validation";
+import {
+  createOperation,
+  listOperations,
+  removeOperation,
+} from "#core/operation/service";
+import {
+  operationInsertSchema,
+  operationSchema,
+} from "#core/operation/validation";
 import {
   createVehicle,
   getVehicle,
@@ -95,6 +102,18 @@ const operations = {
     )
     .handler(async ({ input }) => {
       return await listOperations(input.params.vehicleId);
+    }),
+  remove: o
+    .route({
+      method: "DELETE",
+      path: "/{id}",
+    })
+    .input(operationSchema.pick({ id: true }))
+    .handler(async ({ input }) => {
+      await removeOperation(input.id);
+      return {
+        ok: true,
+      };
     }),
 };
 
