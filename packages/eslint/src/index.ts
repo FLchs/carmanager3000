@@ -29,8 +29,25 @@ export const defaultConfig = (extended: Parameters<typeof defineConfig>) =>
         },
       },
       plugins: {
+        "@typescript-eslint": tseslint.plugin,
         import: importLite,
         // "react-hooks": reactHooks,
+      },
+    },
+    // Separate config for config files - without strict TypeScript project service
+    {
+      files: ["eslint.config.*"],
+      languageOptions: {
+        globals: { ...globals.node },
+        parserOptions: {
+          projectService: {
+            allowDefaultProject: ["eslint.config.*"],
+          },
+          tsconfigRootDir: import.meta.dirname,
+        },
+      },
+      plugins: {
+        "@typescript-eslint": tseslint.plugin,
       },
     },
     eslintPluginUnicorn.configs.recommended,
@@ -38,6 +55,9 @@ export const defaultConfig = (extended: Parameters<typeof defineConfig>) =>
     importLite.configs.recommended,
     perfectionist.configs["recommended-natural"],
     {
+      plugins: {
+        "@typescript-eslint": tseslint.plugin,
+      },
       rules: {
         // "import/consistent-type-specifier-style": ["error", "top-level"],
         // "import/first": "error",
@@ -45,16 +65,16 @@ export const defaultConfig = (extended: Parameters<typeof defineConfig>) =>
         // "import/no-mutable-exports": "error",
         // "import/no-named-default": "error",
         // "react-refresh/only-export-components": ["error"],
-        "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
-        // "typescript-eslint/no-unused-vars": [
-        //   "error",
-        //   {
-        //     argsIgnorePattern: "^_", // Ignore unused function arguments
-        //     varsIgnorePattern: "^_", // Ignore unused variables
-        //     caughtErrorsIgnorePattern: "^_", // Ignore unused catch clause parameters
-        //     ignoreRestSiblings: true, //  Ignore unused properties when using object destructuring
-        //   },
-        // ],
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": [
+          "error",
+          {
+            argsIgnorePattern: "^_", // Ignore unused function arguments
+            varsIgnorePattern: "^_", // Ignore unused variables
+            caughtErrorsIgnorePattern: "^_", // Ignore unused catch clause parameters
+            ignoreRestSiblings: true, //  Ignore unused properties when using object destructuring
+          },
+        ],
         "perfectionist/sort-objects": [
           "error",
           {
