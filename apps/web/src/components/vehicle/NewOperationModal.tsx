@@ -23,28 +23,24 @@ export default function NewOperationModal({
         });
       },
       onMutate: async (log, context) => {
-        try {
-          onClose();
-          const tempItem = {
-            id: 0,
-            createdAt: "",
-            updatedAt: "",
-            ...log,
-          };
-          context.client.setQueryData(
-            orpc.operations.list.queryKey({
-              input: { query: { vehicleId: Number(id) } },
-            }),
-            (old) => old && [...old, tempItem],
-          );
-        } catch (error) {
-          console.error("Optimistic update failed:", error);
-        }
+        onClose();
+        const tempItem = {
+          id: 0,
+          createdAt: "",
+          updatedAt: "",
+          ...log,
+        };
+        context.client.setQueryData(
+          orpc.operations.list.queryKey({
+            input: { query: { vehicleId: Number(id) } },
+          }),
+          (old) => old && [...old, tempItem],
+        );
       },
       onSuccess: async () => {
         form.reset();
         void client.invalidateQueries({
-          queryKey: orpc.operations.list.key(),
+          queryKey: orpc.vehicles.operations.key()
         });
       },
     }),
