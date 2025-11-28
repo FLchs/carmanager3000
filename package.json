@@ -8,7 +8,9 @@
   ],
   "scripts": {
     "dev": "bun run --elide-lines=0 --filter '*' dev",
-    "lint": "bun run --elide-lines=0 --filter '*' lint",
+    "lint": "bun run --filter '*' lint",
+    "typecheck": "bun run --filter '*' typecheck",
+    "test": "bun run --elide-lines=0 --filter '*' test",
     "db:push": "bun run --filter @cm3k/server db:push",
     "db:generate": "bun run --filter @cm3k/server db:generate",
     "db:migrate": "bun run --filter @cm3k/server db:migrate"

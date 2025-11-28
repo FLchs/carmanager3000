@@ -25,5 +25,5 @@
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false
   },
-    "include": ["src/**/*.ts", "eslint.config.ts"]
+  "include": ["src/**/*.ts", "eslint.config.ts"]
 }

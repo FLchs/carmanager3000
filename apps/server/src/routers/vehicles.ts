@@ -1,56 +1,127 @@
-import { os } from "@orpc/server";
-import { eq } from "drizzle-orm";
-import * as z from "zod";
+import {
+  createOperation,
+  listOperations,
+  removeOperation,
+} from "#core/operation/service";
+import {
+  operationInsertSchema,
+  operationSchema,
+} from "#core/operation/validation";
+import {
+  createVehicle,
+  getVehicle,
+  listVehicle,
+  removeVehicle,
+  updateVehicle,
+} from "#core/vehicle/service";
+import { vehicleInsertSchema, vehicleSchema } from "#core/vehicle/validation";
+import o from "#lib/orpc";
+import { z } from "zod/v4";
 
-import { db } from "@/db";
-import { vehiclesTable } from "@/db/schemas/vehicle";
-
-const vehicleSchema = z.object({
-  id: z.coerce.number().min(0),
-  name: z.string(),
-});
-
-const listvehicles = os
+const list = o
   .route({
     method: "GET",
     path: "/",
   })
-  .output(z.array(vehicleSchema))
   .handler(async () => {
-    const vehicles = await db.select().from(vehiclesTable);
-    return vehicles;
+    return listVehicle();
   });
 
-const findvehicle = os
+const get = o
   .route({
     method: "GET",
     path: "/{id}",
   })
   .input(vehicleSchema.pick({ id: true }))
-  .output(vehicleSchema)
+  // .output(vehicleWithLogSchema)
   .handler(async ({ input }) => {
-    const [vehicle] = await db
-      .select()
-      .from(vehiclesTable)
-      .where(eq(vehiclesTable.id, input.id));
-    return vehicle;
+    return await getVehicle(input.id);
   });
 
-const createvehicle = os
+const create = o
   .route({
     method: "POST",
     path: "/",
   })
-  .input(vehicleSchema.pick({ name: true }))
+  .input(vehicleInsertSchema.omit({ id: true }))
   .handler(async ({ input }) => {
-    await db.insert(vehiclesTable).values({ name: input.name });
+    await createVehicle(input);
     return {
       ok: true,
     };
   });
 
-export const vehiclesRouter = os.prefix("/vehicles").router({
-  create: createvehicle,
-  find: findvehicle,
-  list: listvehicles,
+const update = o
+  .route({
+    method: "PUT",
+    path: "/{id}",
+  })
+  .input(vehicleInsertSchema)
+  .handler(async ({ input }) => {
+    await updateVehicle(input);
+    return {
+      ok: true,
+    };
+  });
+
+const remove = o
+  .route({
+    method: "DELETE",
+    path: "/{id}",
+  })
+  .input(vehicleSchema.pick({ id: true }))
+  .handler(async ({ input }) => {
+    await removeVehicle(input.id);
+    return {
+      ok: true,
+    };
+  });
+
+const operations = {
+  create: o
+    .route({
+      inputStructure: "detailed",
+      method: "POST",
+      path: "/{id}",
+    })
+    .input(operationInsertSchema)
+    .handler(async ({ input }) => {
+      await createOperation(input);
+      return {
+        ok: true,
+      };
+    }),
+  list: o
+    .route({
+      inputStructure: "detailed",
+      method: "GET",
+      path: "/{vehicleId}/operations",
+    })
+    .input(
+      z.object({ params: z.object({ vehicleId: z.coerce.number<number>() }) }),
+    )
+    .handler(async ({ input }) => {
+      return await listOperations(input.params.vehicleId);
+    }),
+  remove: o
+    .route({
+      method: "DELETE",
+      path: "/{id}",
+    })
+    .input(operationSchema.pick({ id: true }))
+    .handler(async ({ input }) => {
+      await removeOperation(input.id);
+      return {
+        ok: true,
+      };
+    }),
+};
+
+export const vehiclesRouter = o.prefix("/vehicles").router({
+  create,
+  get,
+  list,
+  operations,
+  remove,
+  update,
 });

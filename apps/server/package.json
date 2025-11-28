@@ -1,12 +1,16 @@
 {
   "name": "@cm3k/server",
   "type": "module",
+  "imports": {
+    "#*": "./src/*.ts"
+  },
   "exports": {
     ".": "./src/index.ts"
   },
   "scripts": {
     "dev": "bun run --hot src/index.ts",
     "lint": "bun run eslint",
+    "typecheck": "tsc --noEmit",
     "db:push": "drizzle-kit push",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate"
@@ -18,6 +22,7 @@
     "@orpc/server": "^1.9.0",
     "@orpc/zod": "^1.9.2",
     "drizzle-orm": "^0.44.5",
+    "drizzle-zod": "^0.8.3",
     "hono": "^4.9.8",
     "swagger-ui": "^5.29.0",
     "swagger-ui-dist": "^5.29.0",
