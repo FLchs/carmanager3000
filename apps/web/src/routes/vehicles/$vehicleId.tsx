@@ -7,7 +7,6 @@ import { ErrorZone } from "@/components/ErrorZone";
 import Button from "@/components/ui/Button";
 import InfoCard from "@/components/ui/InfoCard";
 import InfoCardItem from "@/components/ui/InfoCard/InfoCardItem";
-import { Table } from "@/components/ui/table/Table";
 import OperationTable from "@/components/vehicle/OperationsTable";
 import { useDialog } from "@/hooks/useConfirm";
 import { orpc } from "@/lib/orpc";
@@ -83,18 +82,6 @@ function RouteComponent() {
                 Upcoming maintenance
               </h2>
               <div className="bg-bg border-border rounded-lg border-1">
-                <Table
-                  rows={[
-                    {
-                      id: Math.random(),
-                      date: "2025-05-27",
-                      mileage: 120_000,
-                      note: "Castrol",
-                      type: "Oil change",
-                    },
-                  ]}
-                  headers={["Date", "Mileage", "Type", "Note"]}
-                />
               </div>
             </section>
             <section>
