@@ -31,7 +31,7 @@ export default function VehicleMenu({ id }: { id: number }) {
 
   const onDelete = useCallback(async () => {
     if (
-      await confirm({ title: "Voulez-vous vraiment supprimer ce vehicule ?" })
+      await confirm({ title: "Do you really want to delete this vehicle ?" })
     ) {
       deleteMutation.mutate({ id });
     }
