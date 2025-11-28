@@ -37,16 +37,19 @@ function ConfirmDialogWithContext() {
     new Promise((resolve) => {
       setTitle(params?.title ?? "Are you sure ?");
       dialogRef.current?.showModal();
+      dialogRef.current?.classList.add("active");
       resolveRef.current = resolve;
     });
 
   const onConfirm = useCallback(() => {
     resolveRef.current?.(true);
+    dialogRef.current?.classList.remove("active");
     dialogRef.current?.close();
   }, []);
 
   const onCancel = useCallback(() => {
     resolveRef.current?.(false);
+    dialogRef.current?.classList.remove("active");
     dialogRef.current?.close();
   }, []);
 
