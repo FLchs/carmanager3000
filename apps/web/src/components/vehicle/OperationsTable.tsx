@@ -7,8 +7,9 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { ArrowDownWideNarrow, ArrowUpWideNarrow, LoaderCircleIcon, X } from "lucide-react";
-import { Suspense, useMemo, useState } from "react";
+import { Suspense, useCallback, useMemo, useState } from "react";
 
+import { useDialog } from "@/hooks/useConfirm";
 import { orpc } from "@/lib/orpc";
 
 import Button from "../ui/Button";
@@ -43,6 +44,7 @@ function OperationTable({ id }: { id: number }) {
       input: { params: { vehicleId: id } },
     }),
   );
+  const { confirm } = useDialog();
 
   const { mutate: deleteOperation } = useMutation(orpc.vehicles.operations.remove.mutationOptions({
     onError: async () => {
@@ -66,6 +68,15 @@ function OperationTable({ id }: { id: number }) {
       });
     }
   }))
+
+  const onDelete = useCallback(async (id: number) => {
+    if (
+      await confirm({ title: "Do you really want to delete this operation ?" })
+    ) {
+      deleteOperation({ id });
+    }
+  }, [confirm, deleteOperation]);
+
 
   const columnHelper = createColumnHelper<typeof data[number]>()
 
@@ -94,11 +105,12 @@ function OperationTable({ id }: { id: number }) {
     }),
     columnHelper.accessor('id', {
       id: "delete",
-      cell: info => <span className="cursor-pointer" onClick={() => deleteOperation({ id: info.getValue() })}><X /></span>,
-      enableSorting: false
+      cell: info => <span className="cursor-pointer" onClick={() => onDelete(info.getValue())}><X /></span>,
+      enableSorting: false,
+      header: ""
     }),
 
-  ], [columnHelper, deleteOperation])
+  ], [columnHelper, onDelete])
 
   const table = useReactTable({
     columns,
