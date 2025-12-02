@@ -1,15 +1,16 @@
 import { isDefinedError } from "@orpc/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
+import { openapi } from "@/lib/openapi";
+
 import { useAppForm } from "../../hooks/useForm";
-import { orpc } from "../../lib/orpc";
 import Card from "../ui/Card";
 
 function VehicleCreateForm({ cancel }: { cancel: () => void }) {
   const client = useQueryClient();
 
   const createVehicleMutation = useMutation(
-    orpc.vehicles.create.mutationOptions({
+    openapi.vehicles.create.mutationOptions({
       onError: (error) => {
         if (isDefinedError(error) && error.code === "INPUT_VALIDATION_FAILED") {
           form.setErrorMap({
@@ -22,7 +23,7 @@ function VehicleCreateForm({ cancel }: { cancel: () => void }) {
       onSuccess: async () => {
         form.reset();
         await client.invalidateQueries({
-          queryKey: orpc.vehicles.list.key(),
+          queryKey: openapi.vehicles.list.key(),
         });
       },
     }),

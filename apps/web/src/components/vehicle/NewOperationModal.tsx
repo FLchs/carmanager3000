@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { useAppForm } from "@/hooks/useForm";
-import { orpc } from "@/lib/orpc";
+import { openapi } from "@/lib/openapi";
 
 import Modal from "../ui/Modal";
 export default function NewOperationModal({
@@ -16,10 +16,10 @@ export default function NewOperationModal({
   const client = useQueryClient();
 
   const createVehicleMutation = useMutation(
-    orpc.vehicles.operations.create.mutationOptions({
+    openapi.vehicles.operations.create.mutationOptions({
       onError: async () => {
         void client.invalidateQueries({
-          queryKey: orpc.vehicles.get.key(),
+          queryKey: openapi.vehicles.get.key(),
         });
       },
       onMutate: async (log, context) => {
@@ -31,7 +31,7 @@ export default function NewOperationModal({
           ...log,
         };
         context.client.setQueryData(
-          orpc.operations.list.queryKey({
+          openapi.operations.list.queryKey({
             input: { query: { vehicleId: Number(id) } },
           }),
           (old) => old && [...old, tempItem],
@@ -40,7 +40,7 @@ export default function NewOperationModal({
       onSuccess: async () => {
         form.reset();
         void client.invalidateQueries({
-          queryKey: orpc.vehicles.operations.key()
+          queryKey: openapi.vehicles.operations.key()
         });
       },
     }),

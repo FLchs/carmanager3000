@@ -5,7 +5,7 @@ import { useCallback, useRef, useState } from "react";
 
 import PopoverContent from "@/components/ui/Popover";
 import { useDialog } from "@/hooks/useConfirm";
-import { orpc } from "@/lib/orpc";
+import { openapi } from "@/lib/openapi";
 
 import Content from "./Content";
 
@@ -20,10 +20,10 @@ export default function VehicleMenu({ id }: { id: number }) {
   const navigate = useNavigate();
 
   const deleteMutation = useMutation(
-    orpc.vehicles.remove.mutationOptions({
+    openapi.vehicles.remove.mutationOptions({
       onSuccess: async () => {
         await client.invalidateQueries({
-          queryKey: orpc.vehicles.list.key(),
+          queryKey: openapi.vehicles.list.key(),
         });
       },
     }),

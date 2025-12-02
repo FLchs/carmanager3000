@@ -1,9 +1,8 @@
 import { db } from "#db/index";
 import { vehicles } from "#db/schemas/vehicle";
+import { createVehicleSchema, updateVehicleSchema } from "@cm3k/validation";
 import { eq } from "drizzle-orm";
 import { z } from "zod/v4";
-
-import { vehicleInsertSchema } from "./validation";
 
 export const listVehicle = async () => {
   const vehiclesList = await db.select().from(vehicles);
@@ -41,7 +40,7 @@ export const getVehicle = async (id: number) => {
 };
 
 export const createVehicle = async (
-  input: z.infer<typeof vehicleInsertSchema>,
+  input: z.infer<typeof createVehicleSchema>,
 ) => {
   console.table(input);
   await db.insert(vehicles).values(input);
@@ -51,7 +50,7 @@ export const createVehicle = async (
 };
 
 export const updateVehicle = async (
-  input: z.infer<typeof vehicleInsertSchema>,
+  input: z.infer<typeof updateVehicleSchema>,
 ) => {
   const { id, ...data } = input;
   if (id == undefined) {

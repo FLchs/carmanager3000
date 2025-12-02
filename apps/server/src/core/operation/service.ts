@@ -1,15 +1,18 @@
 import { db } from "#db/index";
 import { operations } from "#db/schemas/operations";
+import { createOperationSchema, operationSchema } from "@cm3k/validation";
 import { eq } from "drizzle-orm";
 import * as z from "zod/v4";
 
-import { operationInsertSchema, operationSchema } from "./validation";
-
 export const listOperations = async (vehicleId?: number) => {
-  console.log(vehicleId);
-  const test = await db.query.operations.findMany();
-  console.table(test);
   const operationsList = await db.query.operations.findMany({
+    columns: {
+      id: true,
+      date: true,
+      mileage: true,
+      note: true,
+      type: true,
+    },
     where: vehicleId
       ? (operations, { eq }) => eq(operations.vehicleId, vehicleId)
       : undefined,
@@ -25,7 +28,7 @@ export const getOperation = async (id: number) => {
 };
 
 export const createOperation = async (
-  input: z.infer<typeof operationInsertSchema>,
+  input: z.infer<typeof createOperationSchema>,
 ) => {
   console.table(input);
   await db.insert(operations).values(input);
@@ -38,10 +41,7 @@ export const updateOperation = async (
   input: z.infer<typeof operationSchema>,
 ) => {
   console.table(input);
-  await db
-    .update(operations)
-    .set(input)
-    .where(eq(operations.id, input.id));
+  await db.update(operations).set(input).where(eq(operations.id, input.id));
   return {
     ok: true,
   };
