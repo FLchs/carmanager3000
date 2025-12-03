@@ -6,6 +6,7 @@ import {
   getVehicleSchema,
   listOperationsSchema,
   createOperationSchema,
+  updateVehicleSchema,
 } from "@cm3k/validation";
 
 // Success response schema for mutations
@@ -40,8 +41,9 @@ const update = oc
   .route({
     method: "PUT",
     path: "/{id}",
+    inputStructure: "detailed",
   })
-  .input(vehicleSchema)
+  .input(z.object({ body: updateVehicleSchema, params: { id: z.string() } }))
   .output(successSchema);
 
 const remove = oc
