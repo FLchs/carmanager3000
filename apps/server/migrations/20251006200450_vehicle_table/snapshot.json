@@ -1,0 +1,74 @@
+{
+  "dialect": "sqlite",
+  "id": "1c528b9f-98e8-4f0e-a842-43c4f308d92d",
+  "prevIds": [
+    "00000000-0000-0000-0000-000000000000"
+  ],
+  "version": "7",
+  "ddl": [
+    {
+      "name": "vehicle",
+      "entityType": "tables"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": true,
+      "default": null,
+      "generated": null,
+      "name": "id",
+      "table": "vehicle",
+      "entityType": "columns"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "vehicle_pk",
+      "table": "vehicle",
+      "entityType": "pks"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "name",
+      "table": "vehicle",
+      "entityType": "columns"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "description",
+      "table": "vehicle",
+      "entityType": "columns"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "(CURRENT_TIMESTAMP)",
+      "generated": null,
+      "name": "created_at",
+      "table": "vehicle",
+      "entityType": "columns"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "(CURRENT_TIMESTAMP)",
+      "generated": null,
+      "name": "updated_at",
+      "table": "vehicle",
+      "entityType": "columns"
+    }
+  ],
+  "renames": []
+}

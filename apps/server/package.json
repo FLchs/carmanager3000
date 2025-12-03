@@ -11,6 +11,7 @@
     "dev": "bun run --hot src/index.ts",
     "openapi": "bun run --hot src/openapi.ts",
     "lint": "oxlint",
+    "test": "bun run vitest",
     "typecheck": "tsc --noEmit",
     "db:push": "drizzle-kit push",
     "db:generate": "drizzle-kit generate",
@@ -20,11 +21,13 @@
     "@cm3k/contract": "workspace:*",
     "@cm3k/validation": "workspace:*",
     "@hono/swagger-ui": "^0.5.2",
+    "@libsql/client": "^0.15.15",
     "@orpc/client": "^1.12.2",
     "@orpc/openapi": "^1.12.2",
     "@orpc/server": "^1.12.2",
     "@orpc/zod": "^1.12.2",
-    "drizzle-orm": "^0.44.7",
+    "drizzle-orm": "^1.0.0-beta.2-b782ae1",
+    "drizzle-seed": "^1.0.0-beta.2-b782ae1",
     "drizzle-zod": "^0.8.3",
     "hono": "^4.10.7",
     "swagger-ui": "^5.30.3",
@@ -36,7 +39,11 @@
     "@types/swagger-ui": "^5.21.1",
     "@types/swagger-ui-dist": "^3.30.6",
     "oxlint": "^1.31.0",
-    "drizzle-kit": "^0.31.7",
-    "globals": "^16.5.0"
+    "@vitest/ui": "^4.0.15",
+    "drizzle-kit": "^1.0.0-beta.2-b782ae1",
+    "eslint": "^9.39.1",
+    "globals": "^16.5.0",
+    "prettier": "^3.7.3",
+    "vitest": "^4.0.14"
   }
 }
