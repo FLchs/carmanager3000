@@ -27,7 +27,7 @@ const create = o.vehicles.create.handler(async ({ input }) => {
 });
 
 const update = o.vehicles.update.handler(async ({ input }) => {
-  await updateVehicle(input);
+  await updateVehicle(input.params.id, input.body);
   return {
     ok: true,
   };
