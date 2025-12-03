@@ -43,7 +43,12 @@ const update = oc
     path: "/{id}",
     inputStructure: "detailed",
   })
-  .input(z.object({ body: updateVehicleSchema, params: { id: z.string() } }))
+  .input(
+    z.object({
+      body: updateVehicleSchema,
+      params: z.object({ id: z.coerce.number<number>() }),
+    }),
+  )
   .output(successSchema);
 
 const remove = oc
