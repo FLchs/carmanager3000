@@ -6,6 +6,7 @@ import * as z from "zod/v4";
 
 export const listOperations = async (vehicleId?: number) => {
   const operationsList = await db.query.operations.findMany({
+    where: { vehicleId },
     columns: {
       id: true,
       date: true,
@@ -20,7 +21,7 @@ export const listOperations = async (vehicleId?: number) => {
 
 export const getOperation = async (id: number) => {
   const operation = await db.query.operations.findFirst({
-    where: eq(operations.id, id),
+    where: { id },
   });
   return operation;
 };
