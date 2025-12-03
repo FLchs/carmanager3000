@@ -11,7 +11,7 @@ export const listVehicle = async () => {
 
 export const getVehicle = async (id: number) => {
   const row = await db.query.vehicles.findFirst({
-    where: (vehicles, { eq }) => eq(vehicles.id, id),
+    where: { id },
     columns: {
       id: true,
       brand: true,
