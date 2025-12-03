@@ -8,7 +8,13 @@ import { migrate } from "drizzle-orm/libsql/migrator";
 import { reset, seed } from "drizzle-seed";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { getVehicle, listVehicle } from "./service";
+import {
+  createVehicle,
+  getVehicle,
+  listVehicle,
+  removeVehicle,
+  updateVehicle,
+} from "./service";
 
 vi.mock("#db/index", () => {
   const rawDb = drizzle({
@@ -76,6 +82,65 @@ describe("Vehicles service test", () => {
       expect(getVehicleSchema.safeParse(result).error).toBeUndefined();
     });
 
+    it.todo("returns the correct error type if not found");
+  });
+
+  describe("create", async () => {
+    it("create a vehicle", async () => {
+      const result = await createVehicle({
+        brand: "Kia",
+        description: "A luxuous yet slow sedan",
+        engine: "2.0L CVVT",
+        model: "Magentis",
+        power: 144,
+        trim: "MG",
+        year: 2008,
+      });
+      expect(result).toStrictEqual({ ok: true });
+    });
+    it("does not create a vehicle if a property is missing", async () => {
+      await expect(
+        // @ts-expect-error missing property on purpose
+        createVehicle({
+          description: "A luxuous yet slow sedan",
+          engine: "2.0L CVVT",
+          model: "Magentis",
+          power: 144,
+          trim: "MG",
+          year: 2008,
+        }),
+      ).rejects.toThrowError();
+    });
+  });
+
+  describe("update", async () => {
+    it("update a vehicle", async () => {
+      await seed(dbModule.db, { operations, vehicles }).refine(() => ({
+        vehicles: {
+          columns: {},
+          count: 1,
+          with: {
+            operations: 10,
+          },
+        },
+      }));
+      const result = await updateVehicle(1, { brand: "Kia" });
+      expect(result).toStrictEqual({ ok: true });
+      const updatedVehicle = await dbModule.db.query.vehicles.findFirst({
+        where: { id: 1 },
+      });
+      expect(updatedVehicle?.brand).toStrictEqual("Kia");
+    });
+    it.todo("returns the correct error type if not found");
+  });
+
+  describe("delete", () => {
+    it("remove a vehicle", async () => {
+      await seed(dbModule.db, { vehicles }, { count: 2 });
+      await removeVehicle(1);
+      const result = await listVehicle();
+      expect(result).toHaveLength(1);
+    });
     it.todo("returns the correct error type if not found");
   });
 });
