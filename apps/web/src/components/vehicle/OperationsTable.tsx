@@ -10,7 +10,7 @@ import { ArrowDownWideNarrow, ArrowUpWideNarrow, LoaderCircleIcon, X } from "luc
 import { Suspense, useCallback, useMemo, useState } from "react";
 
 import { useDialog } from "@/hooks/useConfirm";
-import { orpc } from "@/lib/orpc";
+import { openapi } from "@/lib/openapi";
 
 import Button from "../ui/Button";
 import NewOperationModal from "./NewOperationModal";
@@ -40,21 +40,21 @@ function MaintenanceLogTable({ id }: { id: number }) {
 function OperationTable({ id }: { id: number }) {
   const client = useQueryClient()
   const { data } = useSuspenseQuery(
-    orpc.vehicles.operations.list.queryOptions({
+    openapi.vehicles.operations.list.queryOptions({
       input: { params: { vehicleId: id } },
     }),
   );
   const { confirm } = useDialog();
 
-  const { mutate: deleteOperation } = useMutation(orpc.vehicles.operations.remove.mutationOptions({
+  const { mutate: deleteOperation } = useMutation(openapi.vehicles.operations.remove.mutationOptions({
     onError: async () => {
       void client.invalidateQueries({
-        queryKey: orpc.vehicles.get.key(),
+        queryKey: openapi.vehicles.get.key(),
       });
     },
     onMutate: async (log, context) => {
       context.client.setQueryData(
-        orpc.vehicles.operations.list.queryKey({
+        openapi.vehicles.operations.list.queryKey({
           input: { params: { vehicleId: Number(id) } },
         }),
         (old) => {
@@ -64,7 +64,7 @@ function OperationTable({ id }: { id: number }) {
     },
     onSuccess: () => {
       void client.invalidateQueries({
-        queryKey: orpc.vehicles.operations.key()
+        queryKey: openapi.vehicles.operations.key()
       });
     }
   }))
@@ -99,7 +99,8 @@ function OperationTable({ id }: { id: number }) {
         const value = row.getValue()
         if (!value)
           return ""
-        return `${value.getFullYear()}-${value.getMonth() + 1}-${value.getDate()}`
+        const date = new Date(value)
+        return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
       }
 
     }),

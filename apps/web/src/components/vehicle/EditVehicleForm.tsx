@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
+import { openapi } from "@/lib/openapi";
+
 import { useAppForm } from "../../hooks/useForm";
-import { orpc } from "../../lib/orpc";
 
 interface VehicleData {
   brand: string;
@@ -25,10 +26,10 @@ function EditVehicleForm({
   const client = useQueryClient();
 
   const editVehicleMutation = useMutation(
-    orpc.vehicles.update.mutationOptions({
+    openapi.vehicles.update.mutationOptions({
       onSuccess: async () => {
         await client.invalidateQueries({
-          queryKey: orpc.vehicles.get.key(),
+          queryKey: openapi.vehicles.get.key(),
         });
         onSuccess();
       },

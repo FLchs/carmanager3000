@@ -1,0 +1,23 @@
+{
+  "name": "@cm3k/contract",
+  "type": "module",
+  "imports": {
+    "#*": "./src/*.ts"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "module": "index.ts",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@cm3k/validation": "workspace:*",
+    "@orpc/contract": "^1.11.3",
+    "zod": "^4.1.13"
+  }
+}

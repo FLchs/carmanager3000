@@ -9,13 +9,13 @@ import InfoCard from "@/components/ui/InfoCard";
 import InfoCardItem from "@/components/ui/InfoCard/InfoCardItem";
 import OperationTable from "@/components/vehicle/OperationsTable";
 import { useDialog } from "@/hooks/useConfirm";
-import { orpc } from "@/lib/orpc";
+import { openapi } from "@/lib/openapi";
 
 export const Route = createFileRoute("/vehicles/$vehicleId")({
   component: RouteComponent,
   loader: async ({ context: { queryClient }, params: { vehicleId } }) => {
     return queryClient.ensureQueryData(
-      orpc.vehicles.get.queryOptions({ input: { id: Number(vehicleId) } }),
+      openapi.vehicles.get.queryOptions({ input: { id: Number(vehicleId) } }),
     );
   },
 });
@@ -25,7 +25,7 @@ function RouteComponent() {
   const {
     data: { id, brand, engine, model, power, trim, year },
   } = useSuspenseQuery(
-    orpc.vehicles.get.queryOptions({ input: { id: Number(vehicleId) } }),
+    openapi.vehicles.get.queryOptions({ input: { id: Number(vehicleId) } }),
   );
 
   const { confirm } = useDialog();
