@@ -50,13 +50,13 @@ export const createVehicle = async (
 };
 
 export const updateVehicle = async (
+  id: number,
   input: z.infer<typeof updateVehicleSchema>,
 ) => {
-  const { id, ...data } = input;
   if (id == undefined) {
     return { status: 404 };
   }
-  await db.update(vehicles).set(data).where(eq(vehicles.id, id));
+  await db.update(vehicles).set(input).where(eq(vehicles.id, id));
   return {
     ok: true,
   };
