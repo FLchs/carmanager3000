@@ -17,7 +17,7 @@ export const createVehicleSchema = vehicleSchema.omit({
   id: true,
 });
 
-export const updateVehicleSchema = vehicleSchema.omit({});
+export const updateVehicleSchema = vehicleSchema.partial().omit({ id: true });
 
 export const getVehicleSchema = vehicleSchema.extend({
   operations: listOperationsSchema,

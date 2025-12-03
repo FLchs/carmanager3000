@@ -3,6 +3,7 @@ import {
   getVehicleSchema,
   listOperationsSchema,
   createOperationSchema,
+  updateVehicleSchema,
 } from "@cm3k/validation";
 import { oc } from "@orpc/contract";
 import { z } from "zod/v4";
@@ -39,8 +40,9 @@ const update = oc
   .route({
     method: "PUT",
     path: "/{id}",
+    inputStructure: "detailed",
   })
-  .input(vehicleSchema)
+  .input(z.object({ body: updateVehicleSchema, params: { id: z.string() } }))
   .output(successSchema);
 
 const remove = oc
