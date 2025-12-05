@@ -42,6 +42,7 @@ export const getVehicle = async (id: number) => {
 export const createVehicle = async (input: z.infer<typeof createVehicleSchema>) => {
   console.table(input);
   await db.insert(vehicles).values(input);
+  // TODO: return correct error
   return {
     ok: true,
   };

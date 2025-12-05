@@ -8,13 +8,7 @@ import { migrate } from "drizzle-orm/libsql/migrator";
 import { reset, seed } from "drizzle-seed";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
-import {
-  createVehicle,
-  getVehicle,
-  listVehicle,
-  removeVehicle,
-  updateVehicle,
-} from "./service";
+import { createVehicle, getVehicle, listVehicle, removeVehicle, updateVehicle } from "./service";
 
 vi.mock("#db/index", () => {
   const rawDb = drizzle({
@@ -54,7 +48,7 @@ describe("Vehicles service test", () => {
     });
   });
 
-  describe("get", async () => {
+  describe("get", () => {
     it("returns a vehicle with operations", async () => {
       await seed(dbModule.db, { operations, vehicles }).refine(() => ({
         vehicles: {
@@ -85,7 +79,7 @@ describe("Vehicles service test", () => {
     it.todo("returns the correct error type if not found");
   });
 
-  describe("create", async () => {
+  describe("create", () => {
     it("create a vehicle", async () => {
       const result = await createVehicle({
         brand: "Kia",
@@ -109,11 +103,11 @@ describe("Vehicles service test", () => {
           trim: "MG",
           year: 2008,
         }),
-      ).rejects.toThrowError();
+      ).rejects.toThrow(/Failed query/);
     });
   });
 
-  describe("update", async () => {
+  describe("update", () => {
     it("update a vehicle", async () => {
       await seed(dbModule.db, { operations, vehicles }).refine(() => ({
         vehicles: {
