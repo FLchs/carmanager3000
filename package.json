@@ -17,7 +17,8 @@
     "db:migrate": "bun run --filter @cm3k/server db:migrate"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "oxfmt": "^0.16.0"
   },
   "peerDependencies": {
     "typescript": "^5.9.3"
