@@ -1,15 +1,16 @@
 import { isDefinedError } from "@orpc/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
+import { openapi } from "@/lib/openapi";
+
 import { useAppForm } from "../../hooks/useForm";
-import { orpc } from "../../lib/orpc";
 import Card from "../ui/Card";
 
 function VehicleCreateForm({ cancel }: { cancel: () => void }) {
   const client = useQueryClient();
 
   const createVehicleMutation = useMutation(
-    orpc.vehicles.create.mutationOptions({
+    openapi.vehicles.create.mutationOptions({
       onError: (error) => {
         if (isDefinedError(error) && error.code === "INPUT_VALIDATION_FAILED") {
           form.setErrorMap({
@@ -22,7 +23,7 @@ function VehicleCreateForm({ cancel }: { cancel: () => void }) {
       onSuccess: async () => {
         form.reset();
         await client.invalidateQueries({
-          queryKey: orpc.vehicles.list.key(),
+          queryKey: openapi.vehicles.list.key(),
         });
       },
     }),
@@ -52,38 +53,16 @@ function VehicleCreateForm({ cancel }: { cancel: () => void }) {
         }}
         className="grid gap-4"
       >
-        <form.AppField
-          children={(field) => <field.TextField label="Brand" />}
-          name="brand"
-        />
-        <form.AppField
-          children={(field) => <field.TextField label="Model" />}
-          name="model"
-        />
-        <form.AppField
-          children={(field) => <field.TextField label="Trim" />}
-          name="trim"
-        />
-        <form.AppField
-          children={(field) => <field.TextField label="Engine" />}
-          name="engine"
-        />
-        <form.AppField
-          children={(field) => <field.NumberField label="Power" />}
-          name="power"
-        />
-        <form.AppField
-          children={(field) => <field.NumberField label="Year" />}
-          name="year"
-        />
+        <form.AppField children={(field) => <field.TextField label="Brand" />} name="brand" />
+        <form.AppField children={(field) => <field.TextField label="Model" />} name="model" />
+        <form.AppField children={(field) => <field.TextField label="Trim" />} name="trim" />
+        <form.AppField children={(field) => <field.TextField label="Engine" />} name="engine" />
+        <form.AppField children={(field) => <field.NumberField label="Power" />} name="power" />
+        <form.AppField children={(field) => <field.NumberField label="Year" />} name="year" />
         <form.AppForm>
           <div className="flex flex-row gap-4">
             <form.SubscribeButton type="submit">Save</form.SubscribeButton>
-            <form.SubscribeButton
-              callback={cancel}
-              type="button"
-              variant="secondary_outline"
-            >
+            <form.SubscribeButton callback={cancel} type="button" variant="secondary_outline">
               Cancel
             </form.SubscribeButton>
           </div>

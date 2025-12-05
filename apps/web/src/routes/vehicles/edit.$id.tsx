@@ -3,13 +3,13 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeftCircleIcon } from "lucide-react";
 
 import EditVehicleForm from "@/components/vehicle/EditVehicleForm";
-import { orpc } from "@/lib/orpc";
+import { openapi } from "@/lib/openapi";
 
 export const Route = createFileRoute("/vehicles/edit/$id")({
   component: RouteComponent,
   loader: async ({ context: { queryClient }, params: { id } }) => {
     return queryClient.ensureQueryData(
-      orpc.vehicles.get.queryOptions({ input: { id: Number(id) } }),
+      openapi.vehicles.get.queryOptions({ input: { id: Number(id) } }),
     );
   },
 });
@@ -18,7 +18,7 @@ function RouteComponent() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
   const { data: vehicle } = useSuspenseQuery(
-    orpc.vehicles.get.queryOptions({ input: { id: Number(id) } }),
+    openapi.vehicles.get.queryOptions({ input: { id: Number(id) } }),
   );
   return (
     <div className="text-text w-full">
@@ -29,12 +29,8 @@ function RouteComponent() {
       </div>
       <section className="max-w-[800px] p-4">
         <EditVehicleForm
-          onCancel={() =>
-            navigate({ params: { vehicleId: id }, to: "/vehicles/$vehicleId" })
-          }
-          onSuccess={() =>
-            navigate({ params: { vehicleId: id }, to: "/vehicles/$vehicleId" })
-          }
+          onCancel={() => navigate({ params: { vehicleId: id }, to: "/vehicles/$vehicleId" })}
+          onSuccess={() => navigate({ params: { vehicleId: id }, to: "/vehicles/$vehicleId" })}
           vehicle={vehicle}
         />
       </section>

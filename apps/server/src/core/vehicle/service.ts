@@ -1,9 +1,8 @@
 import { db } from "#db/index";
 import { vehicles } from "#db/schemas/vehicle";
+import { createVehicleSchema, updateVehicleSchema } from "@cm3k/validation";
 import { eq } from "drizzle-orm";
 import { z } from "zod/v4";
-
-import { vehicleInsertSchema } from "./validation";
 
 export const listVehicle = async () => {
   const vehiclesList = await db.select().from(vehicles);
@@ -12,7 +11,7 @@ export const listVehicle = async () => {
 
 export const getVehicle = async (id: number) => {
   const row = await db.query.vehicles.findFirst({
-    where: (vehicles, { eq }) => eq(vehicles.id, id),
+    where: { id },
     columns: {
       id: true,
       brand: true,
@@ -40,9 +39,7 @@ export const getVehicle = async (id: number) => {
   return row;
 };
 
-export const createVehicle = async (
-  input: z.infer<typeof vehicleInsertSchema>,
-) => {
+export const createVehicle = async (input: z.infer<typeof createVehicleSchema>) => {
   console.table(input);
   await db.insert(vehicles).values(input);
   return {
@@ -50,14 +47,11 @@ export const createVehicle = async (
   };
 };
 
-export const updateVehicle = async (
-  input: z.infer<typeof vehicleInsertSchema>,
-) => {
-  const { id, ...data } = input;
+export const updateVehicle = async (id: number, input: z.infer<typeof updateVehicleSchema>) => {
   if (id == undefined) {
     return { status: 404 };
   }
-  await db.update(vehicles).set(data).where(eq(vehicles.id, id));
+  await db.update(vehicles).set(input).where(eq(vehicles.id, id));
   return {
     ok: true,
   };

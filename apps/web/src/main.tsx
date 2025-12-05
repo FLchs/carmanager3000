@@ -6,7 +6,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
 import { ConfirmProvider } from "./contexts/ConfirmContextProvider.tsx";
-import { queryClient } from "./lib/orpc.ts";
+import { openApiQueryClient } from "./lib/openapi";
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 
@@ -19,7 +19,7 @@ const router = createRouter({
   routeTree,
   scrollRestoration: true,
   context: {
-    queryClient,
+    queryClient: openApiQueryClient,
   },
 });
 
@@ -33,7 +33,7 @@ declare module "@tanstack/react-router" {
 createRoot(document.querySelector("#root")!).render(
   <StrictMode>
     <ConfirmProvider>
-      <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={openApiQueryClient}>
         <RouterProvider router={router} />
       </QueryClientProvider>
     </ConfirmProvider>

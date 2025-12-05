@@ -6,7 +6,7 @@ import { ErrorZone } from "@/components/ErrorZone";
 import Button from "@/components/ui/Button";
 import Vehicle from "@/components/vehicle/Vehicle";
 import VehicleCreateForm from "@/components/vehicle/VehicleCreateForm";
-import { orpc } from "@/lib/orpc";
+import { openapi } from "@/lib/openapi";
 
 export const Route = createFileRoute("/vehicles/")({
   component: RouteComponent,
@@ -29,9 +29,7 @@ function RouteComponent() {
               </Button>
             )}
           </div>
-          {showNewVehicleForm && (
-            <VehicleCreateForm cancel={() => setShowNewVehicleForm(false)} />
-          )}
+          {showNewVehicleForm && <VehicleCreateForm cancel={() => setShowNewVehicleForm(false)} />}
           <Suspense fallback={<p>loading...</p>}>
             <VehiclesList />
           </Suspense>
@@ -43,7 +41,7 @@ function RouteComponent() {
 
 function VehiclesList() {
   const { data: vehicles } = useSuspenseQuery(
-    orpc.vehicles.list.queryOptions({ staleTime: 60 * 1000 }),
+    openapi.vehicles.list.queryOptions({ staleTime: 60 * 1000 }),
   );
 
   return (
