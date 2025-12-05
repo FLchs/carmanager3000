@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "bun run --elide-lines=0 --filter '*' dev",
     "lint": "bun run --filter '*' lint",
+    "format": "oxfmt",
     "typecheck": "bun run --filter '*' typecheck",
     "test": "bun run --elide-lines=0 --filter '*' test",
     "db:push": "bun run --filter @cm3k/server db:push",
@@ -16,7 +17,9 @@
     "db:migrate": "bun run --filter @cm3k/server db:migrate"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "oxfmt": "^0.16.0",
+    "oxlint": "^1.31.0"
   },
   "peerDependencies": {
     "typescript": "^5.9.3"

@@ -6,7 +6,7 @@ import { ErrorZone } from "@/components/ErrorZone";
 import Button from "@/components/ui/Button";
 import Vehicle from "@/components/vehicle/Vehicle";
 import VehicleCreateForm from "@/components/vehicle/VehicleCreateForm";
-import { openapi } from "@/lib/openapi"
+import { openapi } from "@/lib/openapi";
 
 export const Route = createFileRoute("/vehicles/")({
   component: RouteComponent,
@@ -29,9 +29,7 @@ function RouteComponent() {
               </Button>
             )}
           </div>
-          {showNewVehicleForm && (
-            <VehicleCreateForm cancel={() => setShowNewVehicleForm(false)} />
-          )}
+          {showNewVehicleForm && <VehicleCreateForm cancel={() => setShowNewVehicleForm(false)} />}
           <Suspense fallback={<p>loading...</p>}>
             <VehiclesList />
           </Suspense>

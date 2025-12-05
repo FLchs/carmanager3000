@@ -13,11 +13,7 @@ type Props = {
   variant?: keyof typeof variants;
 };
 
-function Button({
-  callback,
-  variant = "primary",
-  ...props
-}: ComponentProps<"button"> & Props) {
+function Button({ callback, variant = "primary", ...props }: ComponentProps<"button"> & Props) {
   return (
     <button
       {...props}

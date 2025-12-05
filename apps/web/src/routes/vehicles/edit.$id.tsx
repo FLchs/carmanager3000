@@ -29,12 +29,8 @@ function RouteComponent() {
       </div>
       <section className="max-w-[800px] p-4">
         <EditVehicleForm
-          onCancel={() =>
-            navigate({ params: { vehicleId: id }, to: "/vehicles/$vehicleId" })
-          }
-          onSuccess={() =>
-            navigate({ params: { vehicleId: id }, to: "/vehicles/$vehicleId" })
-          }
+          onCancel={() => navigate({ params: { vehicleId: id }, to: "/vehicles/$vehicleId" })}
+          onSuccess={() => navigate({ params: { vehicleId: id }, to: "/vehicles/$vehicleId" })}
           vehicle={vehicle}
         />
       </section>

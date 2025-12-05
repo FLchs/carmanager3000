@@ -1,4 +1,5 @@
 import * as z from "zod/v4";
+
 import { listOperationsSchema } from "./operations";
 
 export const vehicleSchema = z.object({

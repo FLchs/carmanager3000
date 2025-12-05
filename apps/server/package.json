@@ -10,20 +10,20 @@
   "scripts": {
     "dev": "bun run --hot src/index.ts",
     "openapi": "bun run --hot src/openapi.ts",
-    "lint": "bun run eslint",
+    "lint": "oxlint",
     "typecheck": "tsc --noEmit",
     "db:push": "drizzle-kit push",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
+    "@cm3k/contract": "workspace:*",
+    "@cm3k/validation": "workspace:*",
     "@hono/swagger-ui": "^0.5.2",
     "@orpc/client": "^1.12.2",
     "@orpc/openapi": "^1.12.2",
     "@orpc/server": "^1.12.2",
     "@orpc/zod": "^1.12.2",
-    "@cm3k/contract": "workspace:*",
-    "@cm3k/validation": "workspace:*",
     "drizzle-orm": "^0.44.7",
     "drizzle-zod": "^0.8.3",
     "hono": "^4.10.7",
@@ -32,13 +32,11 @@
     "zod": "^4.1.13"
   },
   "devDependencies": {
-    "@cm3k/eslint": "workspace:*",
     "@types/bun": "^1.3.3",
     "@types/swagger-ui": "^5.21.1",
     "@types/swagger-ui-dist": "^3.30.6",
+    "oxlint": "^1.31.0",
     "drizzle-kit": "^0.31.7",
-    "eslint": "^9.39.1",
-    "globals": "^16.5.0",
-    "prettier": "^3.7.3"
+    "globals": "^16.5.0"
   }
 }

@@ -40,7 +40,7 @@ export default function NewOperationModal({
       onSuccess: async () => {
         form.reset();
         void client.invalidateQueries({
-          queryKey: openapi.vehicles.operations.key()
+          queryKey: openapi.vehicles.operations.key(),
         });
       },
     }),
@@ -71,30 +71,17 @@ export default function NewOperationModal({
           }}
           className="grid gap-4"
         >
-          <form.AppField
-            children={(field) => <field.DateField label="Date" />}
-            name="date"
-          />
+          <form.AppField children={(field) => <field.DateField label="Date" />} name="date" />
           <form.AppField
             children={(field) => <field.NumberField label="Mileage" />}
             name="mileage"
           />
-          <form.AppField
-            children={(field) => <field.TextField label="Note" />}
-            name="note"
-          />
-          <form.AppField
-            children={(field) => <field.TextField label="Type" />}
-            name="type"
-          />
+          <form.AppField children={(field) => <field.TextField label="Note" />} name="note" />
+          <form.AppField children={(field) => <field.TextField label="Type" />} name="type" />
           <form.AppForm>
             <div className="flex flex-row gap-4">
               <form.SubscribeButton type="submit">Save</form.SubscribeButton>
-              <form.SubscribeButton
-                callback={onClose}
-                type="button"
-                variant="secondary_outline"
-              >
+              <form.SubscribeButton callback={onClose} type="button" variant="secondary_outline">
                 Cancel
               </form.SubscribeButton>
             </div>

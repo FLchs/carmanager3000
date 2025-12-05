@@ -1,8 +1,4 @@
-import {
-  createOperation,
-  listOperations,
-  removeOperation,
-} from "#core/operation/service";
+import { createOperation, listOperations, removeOperation } from "#core/operation/service";
 import {
   createVehicle,
   getVehicle,

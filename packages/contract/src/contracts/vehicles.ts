@@ -1,12 +1,11 @@
-import { z } from "zod/v4";
-import { oc } from "@orpc/contract";
-
 import {
   vehicleSchema,
   getVehicleSchema,
   listOperationsSchema,
   createOperationSchema,
 } from "@cm3k/validation";
+import { oc } from "@orpc/contract";
+import { z } from "zod/v4";
 
 // Success response schema for mutations
 const successSchema = z.object({
@@ -73,9 +72,7 @@ const operations = {
       method: "GET",
       path: "/{vehicleId}/operations",
     })
-    .input(
-      z.object({ params: z.object({ vehicleId: z.coerce.number<number>() }) }),
-    )
+    .input(z.object({ params: z.object({ vehicleId: z.coerce.number<number>() }) }))
     .output(listOperationsSchema),
   remove: oc
     .route({
