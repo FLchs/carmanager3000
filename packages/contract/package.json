@@ -7,10 +7,16 @@
   "exports": {
     ".": "./src/index.ts"
   },
+  "scripts": {
+    "lint": "oxlint",
+    "format": "oxfmt"
+  },
   "module": "index.ts",
   "private": true,
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "oxfmt": "^0.16.0",
+    "oxlint": "^1.31.0"
   },
   "peerDependencies": {
     "typescript": "^5"
