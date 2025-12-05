@@ -1,7 +1,7 @@
 
 ![Car manager logo](cm3k.png)
 
-Car Manager brings all your fleet information together: Vehicle details, maintenance history, documents, and fuel usage.
+Car Manager brings all your fleet information together: vehicle details, maintenance history, documents, and fuel usage.
 Stay on top of every oil change and tire rotation with smart reminders.
 When it’s time to sell, export professional reports that give buyers confidence.
 
