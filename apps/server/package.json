@@ -17,13 +17,13 @@
     "db:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
+    "@cm3k/contract": "workspace:*",
+    "@cm3k/validation": "workspace:*",
     "@hono/swagger-ui": "^0.5.2",
     "@orpc/client": "^1.12.2",
     "@orpc/openapi": "^1.12.2",
     "@orpc/server": "^1.12.2",
     "@orpc/zod": "^1.12.2",
-    "@cm3k/contract": "workspace:*",
-    "@cm3k/validation": "workspace:*",
     "drizzle-orm": "^0.44.7",
     "drizzle-zod": "^0.8.3",
     "hono": "^4.10.7",

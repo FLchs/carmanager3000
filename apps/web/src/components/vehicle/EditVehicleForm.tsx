@@ -12,6 +12,7 @@ interface VehicleData {
   power: null | number;
   trim: null | string;
   year: null | number;
+  description: null | string;
 }
 
 function EditVehicleForm({

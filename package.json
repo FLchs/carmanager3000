@@ -18,7 +18,8 @@
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "oxfmt": "^0.16.0"
+    "oxfmt": "^0.16.0",
+    "oxlint": "^1.31.0"
   },
   "peerDependencies": {
     "typescript": "^5.9.3"
