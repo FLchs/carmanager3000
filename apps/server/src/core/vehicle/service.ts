@@ -11,7 +11,7 @@ export const listVehicle = async () => {
 
 export const getVehicle = async (id: number) => {
   const row = await db.query.vehicles.findFirst({
-    where: (vehicles, { eq }) => eq(vehicles.id, id),
+    where: { id },
     columns: {
       id: true,
       brand: true,
@@ -52,7 +52,7 @@ export const updateVehicle = async (input: z.infer<typeof updateVehicleSchema>) 
   if (id == undefined) {
     return { status: 404 };
   }
-  await db.update(vehicles).set(data).where(eq(vehicles.id, id));
+  await db.update(vehicles).set(input).where(eq(vehicles.id, id));
   return {
     ok: true,
   };
