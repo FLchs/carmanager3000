@@ -14,7 +14,6 @@ export const listOperations = async (vehicleId?: number) => {
       note: true,
       type: true,
     },
-    where: vehicleId ? (operations, { eq }) => eq(operations.vehicleId, vehicleId) : undefined,
   });
   return operationsList;
 };
