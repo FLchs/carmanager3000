@@ -18,4 +18,6 @@ export const getOperationSchema = operationSchema.omit({
   vehicleId: true,
 });
 
+export const updateOperationSchema = operationSchema.partial().omit({ id: true });
+
 export const listOperationsSchema = z.array(getOperationSchema);

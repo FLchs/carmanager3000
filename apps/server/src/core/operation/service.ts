@@ -1,6 +1,6 @@
 import { db } from "#db/index";
 import { operations } from "#db/schemas/operations";
-import { createOperationSchema, operationSchema } from "@cm3k/validation";
+import { createOperationSchema, updateOperationSchema } from "@cm3k/validation";
 import { eq } from "drizzle-orm";
 import * as z from "zod/v4";
 
@@ -33,9 +33,12 @@ export const createOperation = async (input: z.infer<typeof createOperationSchem
   };
 };
 
-export const updateOperation = async (input: z.infer<typeof operationSchema>) => {
+export const updateOperation = async (id: number, input: z.infer<typeof updateOperationSchema>) => {
+  if (id == undefined) {
+    return { status: 404 };
+  }
   console.table(input);
-  await db.update(operations).set(input).where(eq(operations.id, input.id));
+  await db.update(operations).set(input).where(eq(operations.id, id));
   return {
     ok: true,
   };
