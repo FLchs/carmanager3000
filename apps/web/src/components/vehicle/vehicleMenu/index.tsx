@@ -30,9 +30,7 @@ export default function VehicleMenu({ id }: { id: number }) {
   );
 
   const onDelete = useCallback(async () => {
-    if (
-      await confirm({ title: "Do you really want to delete this vehicle ?" })
-    ) {
+    if (await confirm({ title: "Do you really want to delete this vehicle ?" })) {
       deleteMutation.mutate({ id });
     }
   }, [confirm, deleteMutation, id]);
@@ -63,11 +61,7 @@ export default function VehicleMenu({ id }: { id: number }) {
               >
                 <Pen size={14} /> Edit
               </span>,
-              <span
-                className="flex items-center gap-4"
-                key={1}
-                onClick={onDelete}
-              >
+              <span className="flex items-center gap-4" key={1} onClick={onDelete}>
                 <Trash size={14} /> Delete
               </span>,
             ]}

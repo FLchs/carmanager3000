@@ -1,11 +1,4 @@
-import {
-  type PropsWithChildren,
-  use,
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { type PropsWithChildren, use, useCallback, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import Dialog from "@/components/ui/Dialog";
@@ -54,12 +47,7 @@ function ConfirmDialogWithContext() {
   }, []);
 
   return createPortal(
-    <Dialog
-      onCancel={onCancel}
-      onConfirm={onConfirm}
-      ref={dialogRef}
-      title={title}
-    />,
+    <Dialog onCancel={onCancel} onConfirm={onConfirm} ref={dialogRef} title={title} />,
     document.body,
   );
 }

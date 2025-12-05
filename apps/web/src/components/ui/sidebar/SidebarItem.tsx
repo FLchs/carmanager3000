@@ -23,8 +23,6 @@ const BasicLinkComponent = ({
 
 const CreatedLinkComponent = createLink(BasicLinkComponent);
 
-export const SidebarItem: LinkComponent<typeof BasicLinkComponent> = (
-  props,
-) => {
+export const SidebarItem: LinkComponent<typeof BasicLinkComponent> = (props) => {
   return <CreatedLinkComponent preload={"intent"} {...props} />;
 };

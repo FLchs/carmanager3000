@@ -1,10 +1,4 @@
-function InfoCardItem({
-  name,
-  value,
-}: {
-  name: string;
-  value?: null | number | string;
-}) {
+function InfoCardItem({ name, value }: { name: string; value?: null | number | string }) {
   return (
     <div>
       <dt className="text-text-muted">{name}</dt>

@@ -13,9 +13,7 @@ export const listOperations = async (vehicleId?: number) => {
       note: true,
       type: true,
     },
-    where: vehicleId
-      ? (operations, { eq }) => eq(operations.vehicleId, vehicleId)
-      : undefined,
+    where: vehicleId ? (operations, { eq }) => eq(operations.vehicleId, vehicleId) : undefined,
   });
   return operationsList;
 };
@@ -27,9 +25,7 @@ export const getOperation = async (id: number) => {
   return operation;
 };
 
-export const createOperation = async (
-  input: z.infer<typeof createOperationSchema>,
-) => {
+export const createOperation = async (input: z.infer<typeof createOperationSchema>) => {
   console.table(input);
   await db.insert(operations).values(input);
   return {
@@ -37,9 +33,7 @@ export const createOperation = async (
   };
 };
 
-export const updateOperation = async (
-  input: z.infer<typeof operationSchema>,
-) => {
+export const updateOperation = async (input: z.infer<typeof operationSchema>) => {
   console.table(input);
   await db.update(operations).set(input).where(eq(operations.id, input.id));
   return {

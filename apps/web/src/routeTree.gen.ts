@@ -8,102 +8,97 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as VehiclesIndexRouteImport } from './routes/vehicles/index'
-import { Route as VehiclesVehicleIdRouteImport } from './routes/vehicles/$vehicleId'
-import { Route as VehiclesEditIdRouteImport } from './routes/vehicles/edit.$id'
+import { Route as rootRouteImport } from "./routes/__root";
+import { Route as IndexRouteImport } from "./routes/index";
+import { Route as VehiclesVehicleIdRouteImport } from "./routes/vehicles/$vehicleId";
+import { Route as VehiclesEditIdRouteImport } from "./routes/vehicles/edit.$id";
+import { Route as VehiclesIndexRouteImport } from "./routes/vehicles/index";
 
 const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const VehiclesIndexRoute = VehiclesIndexRouteImport.update({
-  id: '/vehicles/',
-  path: '/vehicles/',
+  id: "/vehicles/",
+  path: "/vehicles/",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const VehiclesVehicleIdRoute = VehiclesVehicleIdRouteImport.update({
-  id: '/vehicles/$vehicleId',
-  path: '/vehicles/$vehicleId',
+  id: "/vehicles/$vehicleId",
+  path: "/vehicles/$vehicleId",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const VehiclesEditIdRoute = VehiclesEditIdRouteImport.update({
-  id: '/vehicles/edit/$id',
-  path: '/vehicles/edit/$id',
+  id: "/vehicles/edit/$id",
+  path: "/vehicles/edit/$id",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/vehicles/$vehicleId': typeof VehiclesVehicleIdRoute
-  '/vehicles': typeof VehiclesIndexRoute
-  '/vehicles/edit/$id': typeof VehiclesEditIdRoute
+  "/": typeof IndexRoute;
+  "/vehicles/$vehicleId": typeof VehiclesVehicleIdRoute;
+  "/vehicles": typeof VehiclesIndexRoute;
+  "/vehicles/edit/$id": typeof VehiclesEditIdRoute;
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/vehicles/$vehicleId': typeof VehiclesVehicleIdRoute
-  '/vehicles': typeof VehiclesIndexRoute
-  '/vehicles/edit/$id': typeof VehiclesEditIdRoute
+  "/": typeof IndexRoute;
+  "/vehicles/$vehicleId": typeof VehiclesVehicleIdRoute;
+  "/vehicles": typeof VehiclesIndexRoute;
+  "/vehicles/edit/$id": typeof VehiclesEditIdRoute;
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/vehicles/$vehicleId': typeof VehiclesVehicleIdRoute
-  '/vehicles/': typeof VehiclesIndexRoute
-  '/vehicles/edit/$id': typeof VehiclesEditIdRoute
+  __root__: typeof rootRouteImport;
+  "/": typeof IndexRoute;
+  "/vehicles/$vehicleId": typeof VehiclesVehicleIdRoute;
+  "/vehicles/": typeof VehiclesIndexRoute;
+  "/vehicles/edit/$id": typeof VehiclesEditIdRoute;
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/vehicles/$vehicleId' | '/vehicles' | '/vehicles/edit/$id'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/vehicles/$vehicleId' | '/vehicles' | '/vehicles/edit/$id'
-  id:
-    | '__root__'
-    | '/'
-    | '/vehicles/$vehicleId'
-    | '/vehicles/'
-    | '/vehicles/edit/$id'
-  fileRoutesById: FileRoutesById
+  fileRoutesByFullPath: FileRoutesByFullPath;
+  fullPaths: "/" | "/vehicles/$vehicleId" | "/vehicles" | "/vehicles/edit/$id";
+  fileRoutesByTo: FileRoutesByTo;
+  to: "/" | "/vehicles/$vehicleId" | "/vehicles" | "/vehicles/edit/$id";
+  id: "__root__" | "/" | "/vehicles/$vehicleId" | "/vehicles/" | "/vehicles/edit/$id";
+  fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  VehiclesVehicleIdRoute: typeof VehiclesVehicleIdRoute
-  VehiclesIndexRoute: typeof VehiclesIndexRoute
-  VehiclesEditIdRoute: typeof VehiclesEditIdRoute
+  IndexRoute: typeof IndexRoute;
+  VehiclesVehicleIdRoute: typeof VehiclesVehicleIdRoute;
+  VehiclesIndexRoute: typeof VehiclesIndexRoute;
+  VehiclesEditIdRoute: typeof VehiclesEditIdRoute;
 }
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/vehicles/': {
-      id: '/vehicles/'
-      path: '/vehicles'
-      fullPath: '/vehicles'
-      preLoaderRoute: typeof VehiclesIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/vehicles/$vehicleId': {
-      id: '/vehicles/$vehicleId'
-      path: '/vehicles/$vehicleId'
-      fullPath: '/vehicles/$vehicleId'
-      preLoaderRoute: typeof VehiclesVehicleIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/vehicles/edit/$id': {
-      id: '/vehicles/edit/$id'
-      path: '/vehicles/edit/$id'
-      fullPath: '/vehicles/edit/$id'
-      preLoaderRoute: typeof VehiclesEditIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+    "/": {
+      id: "/";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof IndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/vehicles/": {
+      id: "/vehicles/";
+      path: "/vehicles";
+      fullPath: "/vehicles";
+      preLoaderRoute: typeof VehiclesIndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/vehicles/$vehicleId": {
+      id: "/vehicles/$vehicleId";
+      path: "/vehicles/$vehicleId";
+      fullPath: "/vehicles/$vehicleId";
+      preLoaderRoute: typeof VehiclesVehicleIdRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/vehicles/edit/$id": {
+      id: "/vehicles/edit/$id";
+      path: "/vehicles/edit/$id";
+      fullPath: "/vehicles/edit/$id";
+      preLoaderRoute: typeof VehiclesEditIdRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
   }
 }
 
@@ -112,7 +107,7 @@ const rootRouteChildren: RootRouteChildren = {
   VehiclesVehicleIdRoute: VehiclesVehicleIdRoute,
   VehiclesIndexRoute: VehiclesIndexRoute,
   VehiclesEditIdRoute: VehiclesEditIdRoute,
-}
+};
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  ._addFileTypes<FileRouteTypes>();

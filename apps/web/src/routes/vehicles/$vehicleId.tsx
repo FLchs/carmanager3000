@@ -24,9 +24,7 @@ function RouteComponent() {
   const { vehicleId } = Route.useParams();
   const {
     data: { id, brand, engine, model, power, trim, year },
-  } = useSuspenseQuery(
-    openapi.vehicles.get.queryOptions({ input: { id: Number(vehicleId) } }),
-  );
+  } = useSuspenseQuery(openapi.vehicles.get.queryOptions({ input: { id: Number(vehicleId) } }));
 
   const { confirm } = useDialog();
   const handleDelete = useCallback(async () => {
@@ -64,9 +62,7 @@ function RouteComponent() {
               </div>
             </header>
             <section>
-              <h2 className="text-text col-span-2 mb-4 text-xl font-bold">
-                Vehicle informations
-              </h2>
+              <h2 className="text-text col-span-2 mb-4 text-xl font-bold">Vehicle informations</h2>
               <div className="grid grid-cols-2 gap-4">
                 <InfoCard>
                   <InfoCardItem name="Registration year" value={year} />
@@ -78,16 +74,11 @@ function RouteComponent() {
               </div>
             </section>
             <section className="hidden">
-              <h2 className="text-text col-span-2 mb-4 text-xl font-bold">
-                Upcoming maintenance
-              </h2>
-              <div className="bg-bg border-border rounded-lg border-1">
-              </div>
+              <h2 className="text-text col-span-2 mb-4 text-xl font-bold">Upcoming maintenance</h2>
+              <div className="bg-bg border-border rounded-lg border-1"></div>
             </section>
             <section>
-              <h2 className="text-text col-span-2 mb-4 text-xl font-bold">
-                Maintenance log
-              </h2>
+              <h2 className="text-text col-span-2 mb-4 text-xl font-bold">Maintenance log</h2>
               <div className="bg-bg border-border rounded-lg border-1">
                 <Suspense fallback={<p>Loading...</p>}>
                   <OperationTable id={id} />

@@ -39,9 +39,7 @@ export const getVehicle = async (id: number) => {
   return row;
 };
 
-export const createVehicle = async (
-  input: z.infer<typeof createVehicleSchema>,
-) => {
+export const createVehicle = async (input: z.infer<typeof createVehicleSchema>) => {
   console.table(input);
   await db.insert(vehicles).values(input);
   return {
@@ -49,9 +47,7 @@ export const createVehicle = async (
   };
 };
 
-export const updateVehicle = async (
-  input: z.infer<typeof updateVehicleSchema>,
-) => {
+export const updateVehicle = async (input: z.infer<typeof updateVehicleSchema>) => {
   const { id, ...data } = input;
   if (id == undefined) {
     return { status: 404 };

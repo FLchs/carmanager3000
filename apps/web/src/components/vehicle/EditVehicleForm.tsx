@@ -54,38 +54,16 @@ function EditVehicleForm({
       }}
       className="grid gap-4"
     >
-      <form.AppField
-        children={(field) => <field.TextField label="Brand" />}
-        name="brand"
-      />
-      <form.AppField
-        children={(field) => <field.TextField label="Model" />}
-        name="model"
-      />
-      <form.AppField
-        children={(field) => <field.TextField label="Trim" />}
-        name="trim"
-      />
-      <form.AppField
-        children={(field) => <field.TextField label="Engine" />}
-        name="engine"
-      />
-      <form.AppField
-        children={(field) => <field.NumberField label="Power" />}
-        name="power"
-      />
-      <form.AppField
-        children={(field) => <field.NumberField label="Year" />}
-        name="year"
-      />
+      <form.AppField children={(field) => <field.TextField label="Brand" />} name="brand" />
+      <form.AppField children={(field) => <field.TextField label="Model" />} name="model" />
+      <form.AppField children={(field) => <field.TextField label="Trim" />} name="trim" />
+      <form.AppField children={(field) => <field.TextField label="Engine" />} name="engine" />
+      <form.AppField children={(field) => <field.NumberField label="Power" />} name="power" />
+      <form.AppField children={(field) => <field.NumberField label="Year" />} name="year" />
       <form.AppForm>
         <div className="flex flex-row gap-4">
           <form.SubscribeButton type="submit">Save</form.SubscribeButton>
-          <form.SubscribeButton
-            callback={onCancel}
-            type="button"
-            variant="secondary_outline"
-          >
+          <form.SubscribeButton callback={onCancel} type="button" variant="secondary_outline">
             Cancel
           </form.SubscribeButton>
         </div>
