@@ -37,10 +37,6 @@ describe("/vehicles", () => {
       spy = vi.spyOn(operationService, "createOperation").mockResolvedValue({ ok: true });
     });
 
-    beforeEach(() => {
-      vi.resetAllMocks();
-    });
-
     const mockOperation = {
       type: "maintenance",
       date: new Date("2024-03-15"),

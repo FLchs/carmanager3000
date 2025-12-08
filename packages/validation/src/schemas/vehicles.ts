@@ -6,12 +6,12 @@ import { listOperationsSchema } from "./operations";
 export const vehicleSchema = z.object({
   id: z.coerce.number(),
   brand: z.string(),
-  description: z.string().optional(),
-  engine: z.string().optional(),
+  description: z.string().nullable(),
+  engine: z.string().nullable(),
   model: z.string(),
-  power: z.coerce.number().optional(),
-  trim: z.string().optional(),
-  year: z.coerce.number().optional(),
+  power: z.coerce.number().nullable(),
+  trim: z.string().nullable(),
+  year: z.coerce.number().nullable(),
 });
 
 export const createVehicleSchema = vehicleSchema.omit({

@@ -1,6 +1,5 @@
-import * as operationService from "#core/operation/service";
 import * as vehicleService from "#core/vehicle/service";
-import { createVehicleSchema, updateVehicleSchema } from "@cm3k/validation";
+import { createVehicleSchema, getVehicleSchema, updateVehicleSchema } from "@cm3k/validation";
 import { call } from "@orpc/server";
 import { beforeAll, describe, expect, it, vi, type Mocked } from "vitest";
 import * as z from "zod/v4";
@@ -22,7 +21,18 @@ describe("/vehicles", () => {
   describe("GET /{id}", () => {
     let spy: Mocked<typeof vehicleService.getVehicle>;
     beforeAll(() => {
-      spy = vi.spyOn(vehicleService, "getVehicle");
+      const mockVehicle: z.infer<typeof getVehicleSchema> = {
+        brand: "Kia",
+        description: "Good but slow sedan",
+        engine: "2.0l CVVT",
+        model: "Magentis",
+        power: 144,
+        trim: "MG",
+        year: 2008,
+        id: 1,
+        operations: [],
+      };
+      spy = vi.spyOn(vehicleService, "getVehicle").mockResolvedValue(mockVehicle);
     });
 
     describe("call endpoint with correct arguments", () => {
