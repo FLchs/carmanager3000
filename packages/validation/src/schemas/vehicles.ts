@@ -2,6 +2,7 @@ import * as z from "zod/v4";
 
 import { listOperationsSchema } from "./operations";
 
+// TODO: make optional instead of nullable to accept partial input
 export const vehicleSchema = z.object({
   id: z.coerce.number(),
   brand: z.string(),

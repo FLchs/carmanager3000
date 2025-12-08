@@ -34,7 +34,7 @@ describe("Vehicles service test", () => {
     await reset(dbModule.db, { operations, vehicles });
   });
 
-  describe("list", () => {
+  describe("listVehicle", () => {
     it("returns empty array if database is empty", async () => {
       const vehiclesList = await listVehicle();
       expect(vehiclesList).toEqual([]);
@@ -48,7 +48,7 @@ describe("Vehicles service test", () => {
     });
   });
 
-  describe("get", () => {
+  describe("getVehicle", () => {
     it("returns a vehicle with operations", async () => {
       await seed(dbModule.db, { operations, vehicles }).refine(() => ({
         vehicles: {
@@ -79,7 +79,7 @@ describe("Vehicles service test", () => {
     it.todo("returns the correct error type if not found");
   });
 
-  describe("create", () => {
+  describe("createVehicle", () => {
     it("create a vehicle", async () => {
       const result = await createVehicle({
         brand: "Kia",
@@ -107,7 +107,7 @@ describe("Vehicles service test", () => {
     });
   });
 
-  describe("update", () => {
+  describe("updateVehicle", () => {
     it("update a vehicle", async () => {
       await seed(dbModule.db, { operations, vehicles }).refine(() => ({
         vehicles: {
@@ -128,7 +128,7 @@ describe("Vehicles service test", () => {
     it.todo("returns the correct error type if not found");
   });
 
-  describe("delete", () => {
+  describe("removeVehicle", () => {
     it("remove a vehicle", async () => {
       await seed(dbModule.db, { vehicles }, { count: 2 });
       await removeVehicle(1);
