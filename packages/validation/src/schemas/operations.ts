@@ -2,10 +2,10 @@ import * as z from "zod/v4";
 
 export const operationSchema = z.object({
   id: z.coerce.number<number>(),
-  note: z.string().nullable(),
-  mileage: z.coerce.number<number>().nullable(),
-  type: z.string().nullable(),
-  date: z.coerce.date<Date>().nullable(),
+  note: z.string().optional(),
+  mileage: z.coerce.number<number>().optional(),
+  type: z.string().optional(),
+  date: z.coerce.date<Date>().optional(),
   vehicleId: z.number(),
 });
 
