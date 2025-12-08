@@ -4,6 +4,7 @@ import {
   listOperationsSchema,
   createOperationSchema,
   updateVehicleSchema,
+  createVehicleSchema,
 } from "@cm3k/validation";
 import { oc } from "@orpc/contract";
 import { z } from "zod/v4";
@@ -33,7 +34,7 @@ const create = oc
     method: "POST",
     path: "/",
   })
-  .input(vehicleSchema.omit({ id: true }))
+  .input(createVehicleSchema)
   .output(successSchema);
 
 const update = oc
