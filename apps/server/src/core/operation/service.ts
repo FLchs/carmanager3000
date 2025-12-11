@@ -25,9 +25,8 @@ export const getOperation = async (id: number) => {
   return operation;
 };
 
-export const createOperation = async (input: z.infer<typeof createOperationSchema>) => {
-  console.table(input);
-  await db.insert(operations).values(input);
+export const createOperation = async (id: number, input: z.infer<typeof createOperationSchema>) => {
+  await db.insert(operations).values({ ...input, vehicleId: id });
   return {
     ok: true,
   };
@@ -37,7 +36,6 @@ export const updateOperation = async (id: number, input: z.infer<typeof updateOp
   if (id == undefined) {
     return { status: 404 };
   }
-  console.table(input);
   await db.update(operations).set(input).where(eq(operations.id, id));
   return {
     ok: true,

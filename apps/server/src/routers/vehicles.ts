@@ -42,10 +42,7 @@ const remove = o.vehicles.remove.handler(async ({ input }) => {
 
 const operations = {
   create: o.vehicles.operations.create.handler(async ({ input }) => {
-    await createOperation({
-      ...input.body,
-      vehicleId: input.params.id,
-    });
+    await createOperation(input.params.vehicleId, input.body);
     return {
       ok: true,
     };

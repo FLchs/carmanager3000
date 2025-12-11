@@ -59,7 +59,8 @@ export const updateVehicle = async (id: number, input: z.infer<typeof updateVehi
 };
 
 export const removeVehicle = async (id: number) => {
-  await db.delete(vehicles).where(eq(vehicles.id, id));
+  const result = await db.delete(vehicles).where(eq(vehicles.id, id));
+  console.log(result);
   return {
     ok: true,
   };
