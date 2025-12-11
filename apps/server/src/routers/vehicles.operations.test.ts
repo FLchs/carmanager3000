@@ -1,7 +1,7 @@
 import * as operationService from "#core/operation/service";
 import { createOperationSchema } from "@cm3k/validation";
 import { call } from "@orpc/server";
-import { beforeAll, beforeEach, describe, expect, it, vi, type Mocked } from "vitest";
+import { beforeAll, describe, expect, it, vi, type Mocked } from "vitest";
 import { z } from "zod/v4";
 
 import { router } from ".";
@@ -48,11 +48,10 @@ describe("/vehicles", () => {
       it("calls createOperation with vehicleId from params and body data", async () => {
         await call(router.vehicles.vehicles.operations.create, {
           body: mockOperation,
-          params: { id: 1 },
+          params: { vehicleId: 1 },
         });
-        expect(spy).toHaveBeenCalledWith({
+        expect(spy).toHaveBeenCalledWith(1, {
           ...mockOperation,
-          vehicleId: 1,
         });
       });
 
@@ -72,16 +71,16 @@ describe("/vehicles", () => {
         it("calls createVehicle with correct argument", async () => {
           await call(router.vehicles.vehicles.operations.create, {
             body: mockOperation,
-            params: { id: 1 },
+            params: { vehicleId: 1 },
           });
-          expect(spy).toHaveBeenCalledWith({ ...mockOperation, vehicleId: 1 });
+          expect(spy).toHaveBeenCalledWith(1, { ...mockOperation });
         });
 
         it.each(optional)("should not throw without optional property %s", async (a) => {
           const damagedVehicle = { ...mockOperation, [a]: undefined };
           const result = await call(router.vehicles.vehicles.operations.create, {
             body: damagedVehicle,
-            params: { id: 1 },
+            params: { vehicleId: 1 },
           });
           expect(result).toStrictEqual({ ok: true });
         });

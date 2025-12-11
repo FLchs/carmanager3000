@@ -107,12 +107,11 @@ describe("Operations service test", () => {
   describe("createOperation", () => {
     it("creates an operation", async () => {
       await seed(dbModule.db, { vehicles }, { count: 1 });
-      const result = await createOperation({
+      const result = await createOperation(1, {
         date: new Date("2024-01-15"),
         mileage: 50000,
         note: "Oil change",
         type: "maintenance",
-        vehicleId: 1,
       });
       expect(result).toStrictEqual({ ok: true });
       const operationsList = await dbModule.db.query.operations.findMany();
