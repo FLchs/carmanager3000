@@ -1,10 +1,11 @@
+import { errors } from "#errors";
 import {
-  vehicleSchema,
   getVehicleSchema,
   listOperationsSchema,
   createOperationSchema,
   updateVehicleSchema,
   createVehicleSchema,
+  listVehiclesSchema,
 } from "@cm3k/validation";
 import { oc } from "@orpc/contract";
 import { z } from "zod/v4";
@@ -19,14 +20,14 @@ const list = oc
     method: "GET",
     path: "/",
   })
-  .output(z.array(vehicleSchema));
+  .output(listVehiclesSchema);
 
 const get = oc
   .route({
     method: "GET",
     path: "/{id}",
   })
-  .input(vehicleSchema.pick({ id: true }))
+  .input(z.object({ id: z.coerce.number<number>() }))
   .output(getVehicleSchema);
 
 const create = oc
@@ -34,6 +35,7 @@ const create = oc
     method: "POST",
     path: "/",
   })
+  .errors(errors)
   .input(createVehicleSchema)
   .output(successSchema);
 
@@ -56,20 +58,21 @@ const remove = oc
     method: "DELETE",
     path: "/{id}",
   })
-  .input(vehicleSchema.pick({ id: true }))
+  .input(z.object({ id: z.coerce.number<number>() }))
   .output(successSchema);
 
 const operations = {
   create: oc
     .route({
       method: "POST",
-      path: "/{id}",
+      path: "/{vehicleId}",
       inputStructure: "detailed",
     })
+    .errors(errors)
     .input(
       z.object({
-        body: createOperationSchema.omit({ vehicleId: true }),
-        params: z.object({ id: z.coerce.number<number>() }),
+        body: createOperationSchema,
+        params: z.object({ vehicleId: z.coerce.number<number>() }),
       }),
     )
     .output(successSchema),
@@ -82,12 +85,13 @@ const operations = {
     })
     .input(z.object({ params: z.object({ vehicleId: z.coerce.number<number>() }) }))
     .output(listOperationsSchema),
+
   remove: oc
     .route({
       method: "DELETE",
-      path: "/{id}",
+      path: "/{vehicleId}/{id}",
     })
-    .input(z.object({ id: z.number() }))
+    .input(z.object({ id: z.coerce.number<number>() }))
     .output(successSchema),
 };
 

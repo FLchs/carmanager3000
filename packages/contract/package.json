@@ -24,6 +24,7 @@
   "dependencies": {
     "@cm3k/validation": "workspace:*",
     "@orpc/contract": "^1.11.3",
+    "@orpc/server": "^1.12.2",
     "zod": "^4.1.13"
   }
 }

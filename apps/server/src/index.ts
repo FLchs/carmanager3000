@@ -1,6 +1,7 @@
+import { validationErrorInterceptor } from "#lib/validationErrorInterceptor";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
-import { type RouterClient } from "@orpc/server";
+import { onError, type RouterClient } from "@orpc/server";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 import { Hono } from "hono";
 import { pinoLogger } from "hono-pino";
@@ -25,6 +26,7 @@ export const apiHandler = new OpenAPIHandler(router, {
       schemaConverters: [new ZodToJsonSchemaConverter()],
     }),
   ],
+  clientInterceptors: [onError(validationErrorInterceptor)],
 });
 
 app.use(
@@ -43,7 +45,7 @@ app.use(
   "/*",
   cors({
     allowHeaders: ["Content-Type", "Authorization"],
-    allowMethods: ["GET", "POST", "OPTIONS"],
+    allowMethods: ["GET", "POST", "OPTIONS", "DELETE"],
     credentials: true,
     origin: process.env.CORS_ORIGIN || "",
   }),
