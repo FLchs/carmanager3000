@@ -1,3 +1,5 @@
+import type { AnyFieldApi } from "@tanstack/react-form";
+
 import { isDefinedError } from "@orpc/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -13,6 +15,7 @@ function VehicleCreateForm({ cancel }: { cancel: () => void }) {
     openapi.vehicles.create.mutationOptions({
       onError: (error) => {
         if (isDefinedError(error) && error.code === "INPUT_VALIDATION_FAILED") {
+          console.table(error.data.fieldErrors);
           form.setErrorMap({
             onSubmit: {
               fields: error.data.fieldErrors,
@@ -32,6 +35,7 @@ function VehicleCreateForm({ cancel }: { cancel: () => void }) {
   const form = useAppForm({
     defaultValues: {
       brand: "",
+      description: "",
       engine: "",
       model: "",
       power: 0,
@@ -53,12 +57,54 @@ function VehicleCreateForm({ cancel }: { cancel: () => void }) {
         }}
         className="grid gap-4"
       >
-        <form.AppField children={(field) => <field.TextField label="Brand" />} name="brand" />
-        <form.AppField children={(field) => <field.TextField label="Model" />} name="model" />
-        <form.AppField children={(field) => <field.TextField label="Trim" />} name="trim" />
-        <form.AppField children={(field) => <field.TextField label="Engine" />} name="engine" />
-        <form.AppField children={(field) => <field.NumberField label="Power" />} name="power" />
-        <form.AppField children={(field) => <field.NumberField label="Year" />} name="year" />
+        <form.AppField name="brand">
+          {(field) => (
+            <>
+              <field.TextField label="Brand" />
+              <FieldInfo field={field} />
+            </>
+          )}
+        </form.AppField>
+        <form.AppField name="model">
+          {(field) => (
+            <>
+              <field.TextField label="Model" />
+              <FieldInfo field={field} />
+            </>
+          )}
+        </form.AppField>
+        <form.AppField name="trim">
+          {(field) => (
+            <>
+              <field.TextField label="Trim" />
+              <FieldInfo field={field} />
+            </>
+          )}
+        </form.AppField>
+        <form.AppField name="engine">
+          {(field) => (
+            <>
+              <field.TextField label="Engine" />
+              <FieldInfo field={field} />
+            </>
+          )}
+        </form.AppField>
+        <form.AppField name="power">
+          {(field) => (
+            <>
+              <field.NumberField label="Power" />
+              <FieldInfo field={field} />
+            </>
+          )}
+        </form.AppField>
+        <form.AppField name="year">
+          {(field) => (
+            <>
+              <field.NumberField label="Year" />
+              <FieldInfo field={field} />
+            </>
+          )}
+        </form.AppField>
         <form.AppForm>
           <div className="flex flex-row gap-4">
             <form.SubscribeButton type="submit">Save</form.SubscribeButton>
@@ -73,3 +119,14 @@ function VehicleCreateForm({ cancel }: { cancel: () => void }) {
 }
 
 export default VehicleCreateForm;
+
+function FieldInfo({ field }: { field: AnyFieldApi }) {
+  return (
+    <>
+      {field.state.meta.isTouched && !field.state.meta.isValid ? (
+        <em>{field.state.meta.errors.join(",")}</em>
+      ) : null}
+      {field.state.meta.isValidating ? "Validating..." : null}
+    </>
+  );
+}

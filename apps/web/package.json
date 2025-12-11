@@ -13,7 +13,8 @@
   },
   "dependencies": {
     "@cm3k/contract": "workspace:*",
-    "@orpc/client": "^1.9.3",
+    "@cm3k/validation": "workspace:*",
+    "@orpc/client": "^1.12.2",
     "@orpc/contract": "^1.11.3",
     "@orpc/openapi-client": "^1.12.2",
     "@orpc/tanstack-query": "^1.9.3",
