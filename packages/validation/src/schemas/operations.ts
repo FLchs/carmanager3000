@@ -12,7 +12,7 @@ export const operationOutSchema = z.object({
   date: z.date().nullable(),
   mileage: z.number().int().nullable(),
   note: z.string().nullable(),
-  type: z.string().nullable(),
+  type: z.string(),
 });
 
 export const createOperationSchema = operationInSchema;

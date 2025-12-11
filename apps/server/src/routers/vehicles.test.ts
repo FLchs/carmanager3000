@@ -45,6 +45,7 @@ describe("/vehicles", () => {
     describe("call endpoint with bad arguments", () => {
       it("return error with bad argument", async () => {
         // TODO: good place to start typed error checking
+        // @ts-expect-error: intentionally passing invalid type for testing
         await expect(call(router.vehicles.vehicles.get, { id: "hello" })).rejects.toThrowError(
           /validation/,
         );

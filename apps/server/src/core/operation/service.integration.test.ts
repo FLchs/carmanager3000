@@ -145,7 +145,6 @@ describe("Operations service test", () => {
       const result = await updateOperation(1, {
         note: "Updated note",
         type: "repair",
-        vehicleId: 1,
       });
       expect(result).toStrictEqual({ ok: true });
       const updatedOperation = await dbModule.db.query.operations.findFirst({
