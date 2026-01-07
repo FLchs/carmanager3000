@@ -1,4 +1,4 @@
-import { onError, ORPCError, ValidationError } from "@orpc/server";
+import { ORPCError, ValidationError } from "@orpc/server";
 import * as z from "zod/v4";
 
 export const validationErrorInterceptor = (err: unknown) => {
