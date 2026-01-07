@@ -9,4 +9,16 @@ export const errors = {
       formErrors: z.array(z.string()),
     }),
   },
+  NOT_FOUND: {
+    status: 404,
+    data: z.object({
+      message: z.string(),
+    }),
+  },
+  SKILL_ISSUE: {
+    status: 418,
+    data: z.object({
+      message: z.string(),
+    }),
+  },
 } satisfies ErrorMap;

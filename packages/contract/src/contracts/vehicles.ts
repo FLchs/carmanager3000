@@ -35,7 +35,6 @@ const create = oc
     method: "POST",
     path: "/",
   })
-  .errors(errors)
   .input(createVehicleSchema)
   .output(successSchema);
 
@@ -68,7 +67,6 @@ const operations = {
       path: "/{vehicleId}",
       inputStructure: "detailed",
     })
-    .errors(errors)
     .input(
       z.object({
         body: createOperationSchema,
@@ -95,7 +93,7 @@ const operations = {
     .output(successSchema),
 };
 
-export const vehiclesContract = oc.prefix("/vehicles").router({
+export const vehiclesContract = oc.errors(errors).prefix("/vehicles").router({
   vehicles: {
     update,
     list,
