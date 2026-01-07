@@ -1,6 +1,8 @@
 import * as vehicleService from "#core/vehicle/service";
+import { NotFoundError } from "#lib/errors";
 import { createVehicleSchema, getVehicleSchema, updateVehicleSchema } from "@cm3k/validation";
-import { call } from "@orpc/server";
+import { call, isDefinedError } from "@orpc/server";
+import { err, ok } from "true-myth/result";
 import { beforeAll, describe, expect, it, vi, type Mocked } from "vitest";
 import * as z from "zod/v4";
 
@@ -32,7 +34,8 @@ describe("/vehicles", () => {
         id: 1,
         operations: [],
       };
-      spy = vi.spyOn(vehicleService, "getVehicle").mockResolvedValue(mockVehicle);
+      // @ts-expect-error: intentionally passing invalid type for testing
+      spy = vi.spyOn(vehicleService, "getVehicle").mockResolvedValue(ok(mockVehicle));
     });
 
     describe("call endpoint with correct arguments", () => {
@@ -48,6 +51,17 @@ describe("/vehicles", () => {
         // @ts-expect-error: intentionally passing invalid type for testing
         await expect(call(router.vehicles.vehicles.get, { id: "hello" })).rejects.toThrowError(
           /validation/,
+        );
+      });
+
+      it("return error with unknown id", async () => {
+        // TODO: good place to start typed error checking
+        spy = vi
+          .spyOn(vehicleService, "getVehicle")
+          // @ts-expect-error: intentionally passing invalid type for testing
+          .mockResolvedValue(err(new NotFoundError({ data: { message: "error" } })));
+        await expect(call(router.vehicles.vehicles.get, { id: 12 })).rejects.toSatisfy((error) =>
+          isDefinedError(error),
         );
       });
     });

@@ -1,12 +1,13 @@
 import { operations } from "#db/schemas/operations";
 import { relations } from "#db/schemas/relations";
 import { vehicles } from "#db/schemas/vehicle";
+import { NotFoundError } from "#lib/errors";
 import { rootDir } from "#utils/paths";
 import { getVehicleSchema, listVehiclesSchema } from "@cm3k/validation";
 import { drizzle } from "drizzle-orm/libsql";
 import { migrate } from "drizzle-orm/libsql/migrator";
 import { reset, seed } from "drizzle-seed";
-import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { assert, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { createVehicle, getVehicle, listVehicle, removeVehicle, updateVehicle } from "./service";
 
@@ -60,8 +61,9 @@ describe("Vehicles service test", () => {
         },
       }));
       const result = await getVehicle(1);
-      expect(result.operations.length).toEqual(10);
-      expect(getVehicleSchema.safeParse(result).error).toBeUndefined();
+      assert(result.isOk);
+      expect(result.value.operations.length).toEqual(10);
+      expect(getVehicleSchema.safeParse(result.value).error).toBeUndefined();
     });
 
     it("returns a vehicle without operations", async () => {
@@ -72,11 +74,22 @@ describe("Vehicles service test", () => {
         },
       }));
       const result = await getVehicle(1);
-      expect(result.operations.length).toEqual(0);
-      expect(getVehicleSchema.safeParse(result).error).toBeUndefined();
+      assert(result.isOk);
+      expect(result.value.operations.length).toEqual(0);
+      expect(getVehicleSchema.safeParse(result.value).error).toBeUndefined();
     });
 
-    it.todo("returns the correct error type if not found");
+    it("returns the correct error type if not found", async () => {
+      await seed(dbModule.db, { vehicles }).refine(() => ({
+        vehicles: {
+          columns: {},
+          count: 1,
+        },
+      }));
+      const result = await getVehicle(2);
+      assert(result.isErr);
+      expect(result.error).toBeInstanceOf(NotFoundError);
+    });
   });
 
   describe("createVehicle", () => {

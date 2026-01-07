@@ -16,7 +16,13 @@ const list = o.vehicles.list.handler(async () => {
 });
 
 const get = o.vehicles.get.handler(async ({ input }) => {
-  return getVehicle(input.id);
+  const result = await getVehicle(input.id);
+
+  if (result.isErr) {
+    throw result.error;
+  }
+
+  return result.value;
 });
 
 const create = o.vehicles.create.handler(async ({ input }) => {

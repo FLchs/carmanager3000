@@ -1,8 +1,10 @@
 import { db } from "#db/index";
 import { vehicles } from "#db/schemas/vehicle";
+import { NotFoundError } from "#lib/errors";
 import { createVehicleSchema, updateVehicleSchema } from "@cm3k/validation";
 import { eq } from "drizzle-orm";
-import { z } from "zod/v4";
+import { ok, err } from "true-myth/result";
+import * as z from "zod/v4";
 
 export const listVehicle = async () => {
   const vehiclesList = await db.select().from(vehicles);
@@ -34,13 +36,13 @@ export const getVehicle = async (id: number) => {
       },
     },
   });
-
-  if (row == undefined) throw new Error("wbi");
-  return row;
+  if (row !== undefined) {
+    return ok(row);
+  }
+  return err(new NotFoundError({ data: { message: "Vehicle not found" } }));
 };
 
 export const createVehicle = async (input: z.infer<typeof createVehicleSchema>) => {
-  console.table(input);
   await db.insert(vehicles).values(input);
   // TODO: return correct error
   return {
