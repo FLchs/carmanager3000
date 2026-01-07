@@ -1,7 +1,7 @@
 import * as vehicleService from "#core/vehicle/service";
-import { NotFoundError } from "#lib/errors";
+import { NotFoundError, ServiceError } from "#lib/errors";
 import { createVehicleSchema, getVehicleSchema, updateVehicleSchema } from "@cm3k/validation";
-import { call, isDefinedError } from "@orpc/server";
+import { call } from "@orpc/server";
 import { err, ok } from "true-myth/result";
 import { beforeAll, describe, expect, it, vi, type Mocked } from "vitest";
 import * as z from "zod/v4";
@@ -60,8 +60,8 @@ describe("/vehicles", () => {
           .spyOn(vehicleService, "getVehicle")
           // @ts-expect-error: intentionally passing invalid type for testing
           .mockResolvedValue(err(new NotFoundError({ data: { message: "error" } })));
-        await expect(call(router.vehicles.vehicles.get, { id: 12 })).rejects.toSatisfy((error) =>
-          isDefinedError(error),
+        await expect(call(router.vehicles.vehicles.get, { id: 12 })).rejects.toSatisfy(
+          (error) => error instanceof ServiceError,
         );
       });
     });
