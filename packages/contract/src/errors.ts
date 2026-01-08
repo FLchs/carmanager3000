@@ -11,9 +11,6 @@ export const errors = {
   },
   NOT_FOUND: {
     status: 404,
-    data: z.object({
-      message: z.string(),
-    }),
   },
   SKILL_ISSUE: {
     status: 418,
