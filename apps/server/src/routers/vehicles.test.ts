@@ -1,7 +1,7 @@
 import * as vehicleService from "#core/vehicle/service";
-import { NotFoundError, ServiceError } from "#lib/errors";
+import { NotFoundError } from "#lib/serviceErrors";
 import { createVehicleSchema, getVehicleSchema, updateVehicleSchema } from "@cm3k/validation";
-import { call } from "@orpc/server";
+import { call, isDefinedError } from "@orpc/server";
 import { err, ok } from "true-myth/result";
 import { beforeAll, describe, expect, it, vi, type Mocked } from "vitest";
 import * as z from "zod/v4";
@@ -49,8 +49,8 @@ describe("/vehicles", () => {
       it("return error with bad argument", async () => {
         // TODO: good place to start typed error checking
         // @ts-expect-error: intentionally passing invalid type for testing
-        await expect(call(router.vehicles.vehicles.get, { id: "hello" })).rejects.toThrowError(
-          /validation/,
+        await expect(call(router.vehicles.vehicles.get, { id: "hello" })).rejects.toSatisfy((err) =>
+          isDefinedError(err),
         );
       });
 
@@ -60,8 +60,8 @@ describe("/vehicles", () => {
           .spyOn(vehicleService, "getVehicle")
           // @ts-expect-error: intentionally passing invalid type for testing
           .mockResolvedValue(err(new NotFoundError({ data: { message: "error" } })));
-        await expect(call(router.vehicles.vehicles.get, { id: 12 })).rejects.toSatisfy(
-          (error) => error instanceof ServiceError,
+        await expect(call(router.vehicles.vehicles.get, { id: 12 })).rejects.toSatisfy((err) =>
+          isDefinedError(err),
         );
       });
     });
@@ -98,8 +98,8 @@ describe("/vehicles", () => {
     describe("call enpoint with bad arguments", () => {
       it.each(required)("should throw without required property %s", async (a) => {
         const damagedVehicle = { ...mockVehicle, [a]: undefined };
-        await expect(call(router.vehicles.vehicles.create, damagedVehicle)).rejects.toThrowError(
-          /Input validation failed/,
+        await expect(call(router.vehicles.vehicles.create, damagedVehicle)).rejects.toSatisfy(
+          (err) => isDefinedError(err),
         );
       });
     });

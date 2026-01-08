@@ -1,6 +1,6 @@
 import { db } from "#db/index";
 import { vehicles } from "#db/schemas/vehicle";
-import { NotFoundError } from "#lib/errors";
+import { NotFoundError } from "#lib/serviceErrors";
 import { createVehicleSchema, updateVehicleSchema } from "@cm3k/validation";
 import { eq } from "drizzle-orm";
 import { ok, err } from "true-myth/result";
@@ -39,7 +39,7 @@ export const getVehicle = async (id: number) => {
   if (row !== undefined) {
     return ok(row);
   }
-  return err(new NotFoundError({ data: { message: "Vehicle not found" } }));
+  return err(new NotFoundError("Vehicle not found"));
 };
 
 export const createVehicle = async (input: z.infer<typeof createVehicleSchema>) => {

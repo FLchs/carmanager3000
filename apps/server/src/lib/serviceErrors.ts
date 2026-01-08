@@ -1,6 +1,3 @@
-type NotFoundErrorBody = { data: { message: string } };
-type DbErrorBody = { status: number };
-
 type ServiceErrorName = "NotFoundError" | "DbError";
 
 export class ServiceError extends Error {
@@ -13,18 +10,14 @@ export class ServiceError extends Error {
 
 export class NotFoundError extends ServiceError {
   readonly name = "NotFoundError";
-  readonly body: NotFoundErrorBody;
-  constructor(body: NotFoundErrorBody) {
-    super("NotFoundError", "Entity not found");
-    this.body = body;
+  constructor(message?: string) {
+    super("NotFoundError", message ?? "Entity not found");
   }
 }
 
 export class DbError extends ServiceError {
   readonly name = "DbError";
-  readonly body: DbErrorBody;
-  constructor(body: DbErrorBody) {
-    super("DbError", "Database error");
-    this.body = body;
+  constructor(message?: string) {
+    super("DbError", message ?? "Database error");
   }
 }

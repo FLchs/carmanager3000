@@ -1,6 +1,6 @@
 import * as operationService from "#core/operation/service";
 import { createOperationSchema } from "@cm3k/validation";
-import { call } from "@orpc/server";
+import { call, isDefinedError } from "@orpc/server";
 import { beforeAll, describe, expect, it, vi, type Mocked } from "vitest";
 import { z } from "zod/v4";
 
@@ -26,7 +26,7 @@ describe("/vehicles", () => {
         await expect(
           // @ts-expect-error: intentionally passing invalid type for testing
           call(router.vehicles.vehicles.operations.list, { params: { vehicleId: "invalid" } }),
-        ).rejects.toThrowError(/validation/);
+        ).rejects.toSatisfy((err) => isDefinedError(err));
       });
     });
   });
@@ -91,7 +91,7 @@ describe("/vehicles", () => {
           await expect(
             // @ts-expect-error: intentionally passing invalid type for testing
             call(router.vehicles.vehicles.operations.create, damagedVehicle),
-          ).rejects.toThrowError(/Input validation failed/);
+          ).rejects.toSatisfy((err) => isDefinedError(err));
         });
       });
     });
@@ -115,7 +115,7 @@ describe("/vehicles", () => {
         await expect(
           // @ts-expect-error: intentionally passing invalid type for testing
           call(router.vehicles.vehicles.operations.remove, { id: "invalid" }),
-        ).rejects.toThrowError(/validation/);
+        ).rejects.toSatisfy((err) => isDefinedError(err));
       });
     });
   });

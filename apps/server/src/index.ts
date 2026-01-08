@@ -1,7 +1,6 @@
-import { validationErrorInterceptor } from "#lib/validationErrorInterceptor";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
-import { onError, type RouterClient } from "@orpc/server";
+import { type RouterClient } from "@orpc/server";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 import { Hono } from "hono";
 import { pinoLogger } from "hono-pino";
@@ -26,18 +25,17 @@ export const apiHandler = new OpenAPIHandler(router, {
       schemaConverters: [new ZodToJsonSchemaConverter()],
     }),
   ],
-  clientInterceptors: [onError(validationErrorInterceptor)],
 });
 
 app.use(
   process.env.NODE_ENV === "PROD"
     ? pinoLogger({
-        pino: {
-          level: "debug",
-          transport: { target: "hono-pino/debug-log", options: { colorEnabled: true } },
-          timestamp: pino.stdTimeFunctions.unixTime,
-        },
-      })
+      pino: {
+        level: "debug",
+        transport: { target: "hono-pino/debug-log", options: { colorEnabled: true } },
+        timestamp: pino.stdTimeFunctions.unixTime,
+      },
+    })
     : logger(),
 );
 
