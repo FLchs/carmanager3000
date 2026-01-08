@@ -132,7 +132,7 @@ describe("Vehicles service test", () => {
         },
       }));
       const result = await updateVehicle(1, { brand: "Kia" });
-      expect(result).toStrictEqual({ ok: true });
+      assert(!result.isErr);
       const updatedVehicle = await dbModule.db.query.vehicles.findFirst({
         where: { id: 1 },
       });
@@ -144,9 +144,10 @@ describe("Vehicles service test", () => {
   describe("removeVehicle", () => {
     it("remove a vehicle", async () => {
       await seed(dbModule.db, { vehicles }, { count: 2 });
-      await removeVehicle(1);
-      const result = await listVehicle();
-      expect(result).toHaveLength(1);
+      const result = await removeVehicle(1);
+      assert(!result.isErr);
+      const vehiclesList = await listVehicle();
+      expect(vehiclesList).toHaveLength(1);
     });
     it.todo("returns the correct error type if not found");
   });

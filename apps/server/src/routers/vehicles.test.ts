@@ -112,7 +112,11 @@ describe("/vehicles", () => {
   describe("PUT /", () => {
     let spy: Mocked<typeof vehicleService.updateVehicle>;
     beforeAll(() => {
-      spy = vi.spyOn(vehicleService, "updateVehicle").mockResolvedValue({ ok: true });
+      spy = vi
+        .spyOn(vehicleService, "updateVehicle")
+        .mockResolvedValue(
+          ok(mockVehicle) as Awaited<ReturnType<typeof vehicleService.updateVehicle>>,
+        );
     });
     const mockVehicle: z.infer<typeof updateVehicleSchema> = {
       brand: "Kia",
@@ -153,7 +157,7 @@ describe("/vehicles", () => {
   describe("DELETE /", () => {
     let spy: Mocked<typeof vehicleService.removeVehicle>;
     beforeAll(() => {
-      spy = vi.spyOn(vehicleService, "removeVehicle").mockResolvedValue({ ok: true });
+      spy = vi.spyOn(vehicleService, "removeVehicle").mockResolvedValue(ok());
     });
     describe("call endpoint with correct arguments", () => {
       it("calls createVehicle with correct argument", async () => {

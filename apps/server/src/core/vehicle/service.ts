@@ -56,19 +56,27 @@ export const createVehicle = async (input: z.infer<typeof createVehicleSchema>) 
 };
 
 export const updateVehicle = async (id: number, input: z.infer<typeof updateVehicleSchema>) => {
-  if (id == undefined) {
-    return { status: 404 };
+  try {
+    const vehicle = await db.update(vehicles).set(input).where(eq(vehicles.id, id)).returning();
+    if (vehicle.length === 0) {
+      return err(new NotFoundError("Vehicle not found"));
+    }
+    return ok();
+  } catch (error) {
+    console.log(error);
+    return err(new DbError());
   }
-  await db.update(vehicles).set(input).where(eq(vehicles.id, id));
-  return {
-    ok: true,
-  };
 };
 
 export const removeVehicle = async (id: number) => {
-  const result = await db.delete(vehicles).where(eq(vehicles.id, id));
-  console.log(result);
-  return {
-    ok: true,
-  };
+  try {
+    const result = await db.delete(vehicles).where(eq(vehicles.id, id)).returning();
+    if (result.length === 0) {
+      return err(new NotFoundError("Vehicle not found"));
+    }
+    return ok();
+  } catch (error) {
+    console.log(error);
+    return err(new DbError());
+  }
 };
