@@ -1,7 +1,7 @@
 import { operations } from "#db/schemas/operations";
 import { relations } from "#db/schemas/relations";
 import { vehicles } from "#db/schemas/vehicle";
-import { NotFoundError } from "#lib/errors";
+import { NotFoundError } from "#lib/serviceErrors";
 import { rootDir } from "#utils/paths";
 import { getVehicleSchema, listVehiclesSchema } from "@cm3k/validation";
 import { drizzle } from "drizzle-orm/libsql";
