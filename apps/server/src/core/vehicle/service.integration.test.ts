@@ -103,20 +103,20 @@ describe("Vehicles service test", () => {
         trim: "MG",
         year: 2008,
       });
-      expect(result).toStrictEqual({ ok: true });
+      assert(!result.isErr);
+      expect(result.value).toBeTypeOf("number");
     });
     it("does not create a vehicle if a property is missing", async () => {
-      await expect(
-        // @ts-expect-error missing property on purpose
-        createVehicle({
-          description: "A luxuous yet slow sedan",
-          engine: "2.0L CVVT",
-          model: "Magentis",
-          power: 144,
-          trim: "MG",
-          year: 2008,
-        }),
-      ).rejects.toThrow(/Failed query/);
+      // @ts-expect-error missing property on purpose
+      const result = await createVehicle({
+        description: "A luxuous yet slow sedan",
+        engine: "2.0L CVVT",
+        model: "Magentis",
+        power: 144,
+        trim: "MG",
+        year: 2008,
+      });
+      expect(result.isErr).toBe(true);
     });
   });
 

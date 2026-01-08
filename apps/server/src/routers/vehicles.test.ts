@@ -69,7 +69,9 @@ describe("/vehicles", () => {
   describe("POST /", () => {
     let spy: Mocked<typeof vehicleService.createVehicle>;
     beforeAll(() => {
-      spy = vi.spyOn(vehicleService, "createVehicle").mockResolvedValue({ ok: true });
+      spy = vi
+        .spyOn(vehicleService, "createVehicle")
+        .mockResolvedValue(ok(1) as Awaited<ReturnType<typeof vehicleService.createVehicle>>);
     });
     const mockVehicle: z.infer<typeof createVehicleSchema> = {
       brand: "Kia",
@@ -85,7 +87,9 @@ describe("/vehicles", () => {
     const optional = Object.keys(mockVehicle).filter((k) => !required.includes(k));
     describe("call endpoint with correct arguments", () => {
       it("calls createVehicle with correct argument", async () => {
-        await call(router.vehicles.vehicles.create, mockVehicle);
+        try {
+          await call(router.vehicles.vehicles.create, mockVehicle);
+        } catch { } // it will error as getVehicle won't find it.
         expect(spy).toHaveBeenCalledWith(mockVehicle);
       });
 

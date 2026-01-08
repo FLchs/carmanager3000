@@ -36,7 +36,7 @@ const create = oc
     path: "/",
   })
   .input(createVehicleSchema)
-  .output(successSchema);
+  .output(getVehicleSchema);
 
 const update = oc
   .route({

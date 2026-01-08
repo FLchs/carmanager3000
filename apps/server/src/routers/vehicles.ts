@@ -26,10 +26,16 @@ const get = o.vehicles.get.handler(async ({ input }) => {
 });
 
 const create = o.vehicles.create.handler(async ({ input }) => {
-  await createVehicle(input);
-  return {
-    ok: true,
-  };
+  const id = await createVehicle(input);
+  if (id.isErr) {
+    throw id.error;
+  }
+  const result = await getVehicle(id.value);
+  if (result.isErr) {
+    throw result.error;
+  }
+
+  return result.value;
 });
 
 const update = o.vehicles.update.handler(async ({ input }) => {

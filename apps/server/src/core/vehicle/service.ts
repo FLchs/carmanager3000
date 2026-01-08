@@ -1,6 +1,6 @@
 import { db } from "#db/index";
 import { vehicles } from "#db/schemas/vehicle";
-import { NotFoundError } from "#lib/serviceErrors";
+import { DbError, NotFoundError } from "#lib/serviceErrors";
 import { createVehicleSchema, updateVehicleSchema } from "@cm3k/validation";
 import { eq } from "drizzle-orm";
 import { ok, err } from "true-myth/result";
@@ -43,11 +43,16 @@ export const getVehicle = async (id: number) => {
 };
 
 export const createVehicle = async (input: z.infer<typeof createVehicleSchema>) => {
-  await db.insert(vehicles).values(input);
-  // TODO: return correct error
-  return {
-    ok: true,
-  };
+  try {
+    const [{ id }] = await db.insert(vehicles).values(input).returning({
+      id: vehicles.id,
+    });
+    return ok(id);
+  } catch (error) {
+    // TODO: better log
+    console.log(error);
+    return err(new DbError());
+  }
 };
 
 export const updateVehicle = async (id: number, input: z.infer<typeof updateVehicleSchema>) => {
