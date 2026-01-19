@@ -26,10 +26,11 @@ export const getOperation = async (id: number) => {
 };
 
 export const createOperation = async (id: number, input: z.infer<typeof createOperationSchema>) => {
-  await db.insert(operations).values({ ...input, vehicleId: id });
-  return {
-    ok: true,
-  };
+  const [operation] = await db
+    .insert(operations)
+    .values({ ...input, vehicleId: id })
+    .returning({ id: operations.id });
+  return operation.id;
 };
 
 export const updateOperation = async (id: number, input: z.infer<typeof updateOperationSchema>) => {

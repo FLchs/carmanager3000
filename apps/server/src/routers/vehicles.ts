@@ -1,4 +1,9 @@
-import { createOperation, listOperations, removeOperation } from "#core/operation/service";
+import {
+  createOperation,
+  getOperation,
+  listOperations,
+  removeOperation,
+} from "#core/operation/service";
 import {
   createVehicle,
   getVehicle,
@@ -6,6 +11,7 @@ import {
   removeVehicle,
   updateVehicle,
 } from "#core/vehicle/service";
+import { DbError } from "#lib/serviceErrors";
 import { vehiclesContract } from "@cm3k/contract";
 import { implement } from "@orpc/server";
 
@@ -40,9 +46,11 @@ const create = o.vehicles.create.handler(async ({ input }) => {
 
 const update = o.vehicles.update.handler(async ({ input }) => {
   await updateVehicle(input.params.id, input.body);
-  return {
-    ok: true,
-  };
+  const result = await getVehicle(input.params.id);
+  if (result.isErr) {
+    throw result.error;
+  }
+  return result.value;
 });
 
 const remove = o.vehicles.remove.handler(async ({ input }) => {
@@ -54,10 +62,12 @@ const remove = o.vehicles.remove.handler(async ({ input }) => {
 
 const operations = {
   create: o.vehicles.operations.create.handler(async ({ input }) => {
-    await createOperation(input.params.vehicleId, input.body);
-    return {
-      ok: true,
-    };
+    const operationId = await createOperation(input.params.vehicleId, input.body);
+    const operation = await getOperation(operationId);
+    if (!operation) {
+      throw new DbError("Failed to retrieve created operation");
+    }
+    return operation;
   }),
   list: o.vehicles.operations.list.handler(async ({ input }) => {
     return await listOperations(input.params.vehicleId);
