@@ -19,8 +19,8 @@ export const listOperations = async (vehicleId?: number) => {
       },
     });
     return ok(operationsList);
-  } catch {
-    return err(new DbError());
+  } catch (error) {
+    return err(new DbError(error));
   }
 };
 
@@ -40,8 +40,8 @@ export const getOperation = async (id: number) => {
       return ok(operation);
     }
     return err(new NotFoundError("Operation not found"));
-  } catch {
-    return err(new DbError());
+  } catch (eror) {
+    return err(new DbError(eror));
   }
 };
 
@@ -52,8 +52,8 @@ export const createOperation = async (id: number, input: z.infer<typeof createOp
       .values({ ...input, vehicleId: id })
       .returning({ id: operations.id });
     return ok(operation.id);
-  } catch {
-    return err(new DbError());
+  } catch (error) {
+    return err(new DbError(error));
   }
 };
 
@@ -64,8 +64,8 @@ export const updateOperation = async (id: number, input: z.infer<typeof updateOp
       return err(new NotFoundError("Operation not found"));
     }
     return ok();
-  } catch {
-    return err(new DbError());
+  } catch (error) {
+    return err(new DbError(error));
   }
 };
 
@@ -76,7 +76,7 @@ export const removeOperation = async (id: number) => {
       return err(new NotFoundError("Operation not found"));
     }
     return ok();
-  } catch {
-    return err(new DbError());
+  } catch (error) {
+    return err(new DbError(error));
   }
 };

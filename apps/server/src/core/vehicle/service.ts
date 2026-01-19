@@ -53,9 +53,7 @@ export const createVehicle = async (input: z.infer<typeof createVehicleSchema>) 
     });
     return ok(id);
   } catch (error) {
-    // TODO: better log
-    console.log(error);
-    return err(new DbError());
+    return err(new DbError(error));
   }
 };
 
@@ -67,8 +65,7 @@ export const updateVehicle = async (id: number, input: z.infer<typeof updateVehi
     }
     return ok();
   } catch (error) {
-    console.log(error);
-    return err(new DbError());
+    return err(new DbError(error));
   }
 };
 
@@ -80,7 +77,6 @@ export const removeVehicle = async (id: number) => {
     }
     return ok();
   } catch (error) {
-    console.log(error);
-    return err(new DbError());
+    return err(new DbError(error));
   }
 };
