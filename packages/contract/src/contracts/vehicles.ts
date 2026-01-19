@@ -6,6 +6,7 @@ import {
   updateVehicleSchema,
   createVehicleSchema,
   listVehiclesSchema,
+  getOperationSchema,
 } from "@cm3k/validation";
 import { oc } from "@orpc/contract";
 import { z } from "zod/v4";
@@ -40,7 +41,7 @@ const create = oc
 
 const update = oc
   .route({
-    method: "PUT",
+    method: "PATCH",
     path: "/{id}",
     inputStructure: "detailed",
   })
@@ -50,7 +51,7 @@ const update = oc
       params: z.object({ id: z.coerce.number<number>() }),
     }),
   )
-  .output(successSchema);
+  .output(getVehicleSchema);
 
 const remove = oc
   .route({
@@ -64,7 +65,7 @@ const operations = {
   create: oc
     .route({
       method: "POST",
-      path: "/{vehicleId}",
+      path: "/{vehicleId}/operations",
       inputStructure: "detailed",
     })
     .input(
@@ -73,7 +74,7 @@ const operations = {
         params: z.object({ vehicleId: z.coerce.number<number>() }),
       }),
     )
-    .output(successSchema),
+    .output(getOperationSchema),
 
   list: oc
     .route({
