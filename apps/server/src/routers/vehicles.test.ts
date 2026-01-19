@@ -12,7 +12,7 @@ describe("/vehicles", () => {
   describe("GET /", () => {
     let spy: Mocked<typeof vehicleService.listVehicle>;
     beforeAll(() => {
-      spy = vi.spyOn(vehicleService, "listVehicle").mockResolvedValue([]);
+      spy = vi.spyOn(vehicleService, "listVehicle").mockResolvedValue(ok([]) as Awaited<ReturnType<typeof vehicleService.listVehicle>>);
     });
 
     it("calls listVehicle", async () => {
@@ -67,12 +67,6 @@ describe("/vehicles", () => {
     });
   });
   describe("POST /", () => {
-    let spy: Mocked<typeof vehicleService.createVehicle>;
-    beforeAll(() => {
-      spy = vi
-        .spyOn(vehicleService, "createVehicle")
-        .mockResolvedValue(ok(1) as Awaited<ReturnType<typeof vehicleService.createVehicle>>);
-    });
     const mockVehicle: z.infer<typeof createVehicleSchema> = {
       brand: "Kia",
       description: "Good but slow sedan",
@@ -83,20 +77,31 @@ describe("/vehicles", () => {
       year: 2008,
     };
 
+    let spy: Mocked<typeof vehicleService.createVehicle>;
+    let getVehicleSpy: Mocked<typeof vehicleService.getVehicle>;
+    beforeAll(() => {
+      spy = vi
+        .spyOn(vehicleService, "createVehicle")
+        .mockResolvedValue(ok(1) as Awaited<ReturnType<typeof vehicleService.createVehicle>>);
+      getVehicleSpy = vi
+        .spyOn(vehicleService, "getVehicle")
+        .mockResolvedValue(
+          ok({ ...mockVehicle, id: 1, operations: [] }) as Awaited<ReturnType<typeof vehicleService.getVehicle>>,
+        );
+    });
+
     const required = z.toJSONSchema(createVehicleSchema).required || [];
     const optional = Object.keys(mockVehicle).filter((k) => !required.includes(k));
     describe("call endpoint with correct arguments", () => {
       it("calls createVehicle with correct argument", async () => {
-        try {
-          await call(router.vehicles.vehicles.create, mockVehicle);
-        } catch { } // it will error as getVehicle won't find it.
+        await call(router.vehicles.vehicles.create, mockVehicle);
         expect(spy).toHaveBeenCalledWith(mockVehicle);
       });
 
       it.each(optional)("should not throw without optional property %s", async (a) => {
         const damagedVehicle = { ...mockVehicle, [a]: undefined };
         const result = await call(router.vehicles.vehicles.create, damagedVehicle);
-        expect(result).toStrictEqual({ ok: true });
+        expect(result.id).toBe(1);
       });
     });
     describe("call enpoint with bad arguments", () => {
@@ -110,14 +115,6 @@ describe("/vehicles", () => {
   });
 
   describe("PUT /", () => {
-    let spy: Mocked<typeof vehicleService.updateVehicle>;
-    beforeAll(() => {
-      spy = vi
-        .spyOn(vehicleService, "updateVehicle")
-        .mockResolvedValue(
-          ok(mockVehicle) as Awaited<ReturnType<typeof vehicleService.updateVehicle>>,
-        );
-    });
     const mockVehicle: z.infer<typeof updateVehicleSchema> = {
       brand: "Kia",
       description: "Good but slow sedan",
@@ -127,6 +124,19 @@ describe("/vehicles", () => {
       trim: "MG",
       year: 2008,
     };
+
+    let spy: Mocked<typeof vehicleService.updateVehicle>;
+    let getVehicleSpy: Mocked<typeof vehicleService.getVehicle>;
+    beforeAll(() => {
+      spy = vi
+        .spyOn(vehicleService, "updateVehicle")
+        .mockResolvedValue(ok());
+      getVehicleSpy = vi
+        .spyOn(vehicleService, "getVehicle")
+        .mockResolvedValue(
+          ok({ ...mockVehicle, id: 1, operations: [] }) as Awaited<ReturnType<typeof vehicleService.getVehicle>>,
+        );
+    });
 
     const required = z.toJSONSchema(updateVehicleSchema).required || [];
     const optional = Object.keys(mockVehicle).filter((k) => !required.includes(k));
@@ -142,7 +152,7 @@ describe("/vehicles", () => {
           body: damagedVehicle,
           params: { id: 1 },
         });
-        expect(result).toStrictEqual({ ok: true });
+        expect(result.id).toBe(1);
       });
     });
     describe("call enpoint with bad arguments", () => {

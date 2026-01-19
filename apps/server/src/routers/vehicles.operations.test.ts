@@ -1,6 +1,7 @@
 import * as operationService from "#core/operation/service";
 import { createOperationSchema } from "@cm3k/validation";
 import { call, isDefinedError } from "@orpc/server";
+import { ok } from "true-myth/result";
 import { beforeAll, describe, expect, it, vi, type Mocked } from "vitest";
 import { z } from "zod/v4";
 
@@ -15,7 +16,7 @@ describe("/vehicles", () => {
 
     describe("call endpoint with correct arguments", () => {
       it("calls listOperations with correct vehicleId", async () => {
-        spy.mockResolvedValue([]);
+        spy.mockResolvedValue(ok([]));
         await call(router.vehicles.vehicles.operations.list, { params: { vehicleId: 1 } });
         expect(spy).toHaveBeenCalledWith(1);
       });
@@ -33,8 +34,16 @@ describe("/vehicles", () => {
 
   describe("POST /vehicles/{id}/operations/", () => {
     let spy: Mocked<typeof operationService.createOperation>;
+    let getOperationSpy: Mocked<typeof operationService.getOperation>;
     beforeAll(() => {
-      spy = vi.spyOn(operationService, "createOperation").mockResolvedValue({ ok: true });
+      spy = vi.spyOn(operationService, "createOperation").mockResolvedValue(ok(1) as Awaited<ReturnType<typeof operationService.createOperation>>);
+      getOperationSpy = vi.spyOn(operationService, "getOperation").mockResolvedValue(ok({
+        id: 1,
+        date: new Date("2024-03-15"),
+        type: "maintenance",
+        mileage: 55000,
+        note: "Regular maintenance",
+      }) as Awaited<ReturnType<typeof operationService.getOperation>>);
     });
 
     const mockOperation = {
@@ -82,7 +91,7 @@ describe("/vehicles", () => {
             body: damagedVehicle,
             params: { vehicleId: 1 },
           });
-          expect(result).toStrictEqual({ ok: true });
+          expect(result.id).toBe(1);
         });
       });
       describe("call enpoint with bad arguments", () => {
@@ -100,7 +109,7 @@ describe("/vehicles", () => {
   describe("DELETE /vehicles/operations/{operationId}", () => {
     let spy: Mocked<typeof operationService.removeOperation>;
     beforeAll(() => {
-      spy = vi.spyOn(operationService, "removeOperation").mockResolvedValue({ ok: true });
+      spy = vi.spyOn(operationService, "removeOperation").mockResolvedValue(ok() as Awaited<ReturnType<typeof operationService.removeOperation>>);
     });
 
     describe("call endpoint with correct arguments", () => {

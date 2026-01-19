@@ -7,8 +7,12 @@ import { ok, err } from "true-myth/result";
 import * as z from "zod/v4";
 
 export const listVehicle = async () => {
-  const vehiclesList = await db.select().from(vehicles);
-  return vehiclesList;
+  try {
+    const vehiclesList = await db.select().from(vehicles);
+    return ok(vehiclesList);
+  } catch {
+    return err(new DbError());
+  }
 };
 
 export const getVehicle = async (id: number) => {

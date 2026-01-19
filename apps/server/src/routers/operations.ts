@@ -8,7 +8,11 @@ const list = os
     path: "/",
   })
   .handler(async () => {
-    return await listOperations();
+    const result = await listOperations();
+    if (result.isErr) {
+      throw result.error;
+    }
+    return result.value;
   });
 
 export const operationsRouter = os.prefix("/operations").router({

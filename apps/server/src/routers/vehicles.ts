@@ -11,14 +11,17 @@ import {
   removeVehicle,
   updateVehicle,
 } from "#core/vehicle/service";
-import { DbError } from "#lib/serviceErrors";
 import { vehiclesContract } from "@cm3k/contract";
 import { implement } from "@orpc/server";
 
 const o = implement(vehiclesContract);
 
 const list = o.vehicles.list.handler(async () => {
-  return await listVehicle();
+  const result = await listVehicle();
+  if (result.isErr) {
+    throw result.error;
+  }
+  return result.value;
 });
 
 const get = o.vehicles.get.handler(async ({ input }) => {
@@ -45,7 +48,10 @@ const create = o.vehicles.create.handler(async ({ input }) => {
 });
 
 const update = o.vehicles.update.handler(async ({ input }) => {
-  await updateVehicle(input.params.id, input.body);
+  const updateResult = await updateVehicle(input.params.id, input.body);
+  if (updateResult.isErr) {
+    throw updateResult.error;
+  }
   const result = await getVehicle(input.params.id);
   if (result.isErr) {
     throw result.error;
@@ -54,7 +60,10 @@ const update = o.vehicles.update.handler(async ({ input }) => {
 });
 
 const remove = o.vehicles.remove.handler(async ({ input }) => {
-  await removeVehicle(input.id);
+  const result = await removeVehicle(input.id);
+  if (result.isErr) {
+    throw result.error;
+  }
   return {
     ok: true,
   };
@@ -62,18 +71,28 @@ const remove = o.vehicles.remove.handler(async ({ input }) => {
 
 const operations = {
   create: o.vehicles.operations.create.handler(async ({ input }) => {
-    const operationId = await createOperation(input.params.vehicleId, input.body);
-    const operation = await getOperation(operationId);
-    if (!operation) {
-      throw new DbError("Failed to retrieve created operation");
+    const id = await createOperation(input.params.vehicleId, input.body);
+    if (id.isErr) {
+      throw id.error;
     }
-    return operation;
+    const result = await getOperation(id.value);
+    if (result.isErr) {
+      throw result.error;
+    }
+    return result.value;
   }),
   list: o.vehicles.operations.list.handler(async ({ input }) => {
-    return await listOperations(input.params.vehicleId);
+    const result = await listOperations(input.params.vehicleId);
+    if (result.isErr) {
+      throw result.error;
+    }
+    return result.value;
   }),
   remove: o.vehicles.operations.remove.handler(async ({ input }) => {
-    await removeOperation(input.id);
+    const result = await removeOperation(input.id);
+    if (result.isErr) {
+      throw result.error;
+    }
     return {
       ok: true,
     };

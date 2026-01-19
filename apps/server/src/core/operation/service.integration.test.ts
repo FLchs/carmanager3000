@@ -41,8 +41,11 @@ describe("Operations service test", () => {
 
   describe("listOperations", () => {
     it("returns empty array if database is empty", async () => {
-      const operationsList = await listOperations();
-      expect(operationsList).toEqual([]);
+      const result = await listOperations();
+      expect(result.isOk).toBe(true);
+      if (result.isOk) {
+        expect(result.value).toEqual([]);
+      }
     });
 
     it("returns all operations when no vehicleId is provided", async () => {
@@ -56,7 +59,10 @@ describe("Operations service test", () => {
         },
       }));
       const result = await listOperations();
-      expect(result).toHaveLength(6);
+      expect(result.isOk).toBe(true);
+      if (result.isOk) {
+        expect(result.value).toHaveLength(6);
+      }
     });
 
     it("returns operations for a specific vehicle", async () => {
@@ -70,15 +76,18 @@ describe("Operations service test", () => {
         },
       }));
       const result = await listOperations(1);
-      expect(result).toHaveLength(3);
-      expect(result.every((op) => op.id !== undefined)).toBe(true);
-      result.forEach(async (op) => {
-        const dbOp = await dbModule.db.query.operations.findFirst({
-          columns: { vehicleId: true },
-          where: { id: op.id },
+      expect(result.isOk).toBe(true);
+      if (result.isOk) {
+        expect(result.value).toHaveLength(3);
+        expect(result.value.every((op) => op.id !== undefined)).toBe(true);
+        result.value.forEach(async (op) => {
+          const dbOp = await dbModule.db.query.operations.findFirst({
+            columns: { vehicleId: true },
+            where: { id: op.id },
+          });
+          expect(dbOp?.vehicleId).toBe(1);
         });
-        expect(dbOp?.vehicleId).toBe(1);
-      });
+      }
     });
   });
 
@@ -94,13 +103,16 @@ describe("Operations service test", () => {
         },
       }));
       const result = await getOperation(1);
-      expect(result).toBeDefined();
-      expect(result?.id).toBe(1);
+      expect(result.isOk).toBe(true);
+      if (result.isOk) {
+        expect(result.value).toBeDefined();
+        expect(result.value.id).toBe(1);
+      }
     });
 
-    it("returns undefined if operation not found", async () => {
+    it("returns error if operation not found", async () => {
       const result = await getOperation(999);
-      expect(result).toBeUndefined();
+      expect(result.isErr).toBe(true);
     });
   });
 
@@ -113,21 +125,20 @@ describe("Operations service test", () => {
         note: "Oil change",
         type: "maintenance",
       });
-      expect(result).toStrictEqual({ ok: true });
+      expect(result.isOk).toBe(true);
       const operationsList = await dbModule.db.query.operations.findMany();
       expect(operationsList).toHaveLength(1);
     });
 
     it("does not create an operation if vehicleId is missing", async () => {
-      await expect(
-        // @ts-expect-error missing property on purpose
-        createOperation({
-          date: new Date("2024-01-15"),
-          mileage: 50000,
-          note: "Oil change",
-          type: "maintenance",
-        }),
-      ).rejects.toThrow(/Failed query/);
+      // @ts-expect-error missing property on purpose
+      const result = await createOperation({
+        date: new Date("2024-01-15"),
+        mileage: 50000,
+        note: "Oil change",
+        type: "maintenance",
+      });
+      expect(result.isErr).toBe(true);
     });
   });
 
@@ -146,7 +157,7 @@ describe("Operations service test", () => {
         note: "Updated note",
         type: "repair",
       });
-      expect(result).toStrictEqual({ ok: true });
+      expect(result.isOk).toBe(true);
       const updatedOperation = await dbModule.db.query.operations.findFirst({
         where: { id: 1 },
       });
@@ -168,9 +179,13 @@ describe("Operations service test", () => {
           },
         },
       }));
-      await removeOperation(1);
+      const removeResult = await removeOperation(1);
+      expect(removeResult.isOk).toBe(true);
       const result = await listOperations();
-      expect(result).toHaveLength(2);
+      expect(result.isOk).toBe(true);
+      if (result.isOk) {
+        expect(result.value).toHaveLength(2);
+      }
     });
 
     it.todo("returns the correct error type if not found");

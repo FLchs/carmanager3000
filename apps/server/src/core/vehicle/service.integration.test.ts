@@ -38,14 +38,16 @@ describe("Vehicles service test", () => {
   describe("listVehicle", () => {
     it("returns empty array if database is empty", async () => {
       const vehiclesList = await listVehicle();
-      expect(vehiclesList).toEqual([]);
+      assert(vehiclesList.isOk);
+      expect(vehiclesList.value).toEqual([]);
     });
 
     it("returns validated vehicles", async () => {
       await seed(dbModule.db, { vehicles }, { count: 2 });
       const result = await listVehicle();
-      expect(result).toHaveLength(2);
-      expect(listVehiclesSchema.safeParse(result).error).toBeUndefined();
+      assert(result.isOk);
+      expect(result.value).toHaveLength(2);
+      expect(listVehiclesSchema.safeParse(result.value).error).toBeUndefined();
     });
   });
 
@@ -145,9 +147,10 @@ describe("Vehicles service test", () => {
     it("remove a vehicle", async () => {
       await seed(dbModule.db, { vehicles }, { count: 2 });
       const result = await removeVehicle(1);
-      assert(!result.isErr);
+      assert(result.isOk);
       const vehiclesList = await listVehicle();
-      expect(vehiclesList).toHaveLength(1);
+      assert(vehiclesList.isOk);
+      expect(vehiclesList.value).toHaveLength(1);
     });
     it.todo("returns the correct error type if not found");
   });
