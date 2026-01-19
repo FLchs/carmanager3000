@@ -17,7 +17,11 @@ export class NotFoundError extends ServiceError {
 
 export class DbError extends ServiceError {
   readonly name = "DbError";
-  constructor(message?: string) {
+  readonly originalError?: Error;
+  constructor(originalError?: unknown, message?: string) {
     super("DbError", message ?? "Database error");
+    if (originalError instanceof Error) {
+      this.originalError = originalError;
+    }
   }
 }
