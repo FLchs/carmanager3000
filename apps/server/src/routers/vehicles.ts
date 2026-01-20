@@ -1,4 +1,9 @@
-import { createOperation, listOperations, removeOperation } from "#core/operation/service";
+import {
+  createOperation,
+  getOperation,
+  listOperations,
+  removeOperation,
+} from "#core/operation/service";
 import {
   createVehicle,
   getVehicle,
@@ -12,29 +17,53 @@ import { implement } from "@orpc/server";
 const o = implement(vehiclesContract);
 
 const list = o.vehicles.list.handler(async () => {
-  return await listVehicle();
+  const result = await listVehicle();
+  if (result.isErr) {
+    throw result.error;
+  }
+  return result.value;
 });
 
 const get = o.vehicles.get.handler(async ({ input }) => {
-  return getVehicle(input.id);
+  const result = await getVehicle(input.id);
+
+  if (result.isErr) {
+    throw result.error;
+  }
+
+  return result.value;
 });
 
 const create = o.vehicles.create.handler(async ({ input }) => {
-  await createVehicle(input);
-  return {
-    ok: true,
-  };
+  const id = await createVehicle(input);
+  if (id.isErr) {
+    throw id.error;
+  }
+  const result = await getVehicle(id.value);
+  if (result.isErr) {
+    throw result.error;
+  }
+
+  return result.value;
 });
 
 const update = o.vehicles.update.handler(async ({ input }) => {
-  await updateVehicle(input.params.id, input.body);
-  return {
-    ok: true,
-  };
+  const updateResult = await updateVehicle(input.params.id, input.body);
+  if (updateResult.isErr) {
+    throw updateResult.error;
+  }
+  const result = await getVehicle(input.params.id);
+  if (result.isErr) {
+    throw result.error;
+  }
+  return result.value;
 });
 
 const remove = o.vehicles.remove.handler(async ({ input }) => {
-  await removeVehicle(input.id);
+  const result = await removeVehicle(input.id);
+  if (result.isErr) {
+    throw result.error;
+  }
   return {
     ok: true,
   };
@@ -42,19 +71,28 @@ const remove = o.vehicles.remove.handler(async ({ input }) => {
 
 const operations = {
   create: o.vehicles.operations.create.handler(async ({ input }) => {
-    await createOperation({
-      ...input.body,
-      vehicleId: input.params.id,
-    });
-    return {
-      ok: true,
-    };
+    const id = await createOperation(input.params.vehicleId, input.body);
+    if (id.isErr) {
+      throw id.error;
+    }
+    const result = await getOperation(id.value);
+    if (result.isErr) {
+      throw result.error;
+    }
+    return result.value;
   }),
   list: o.vehicles.operations.list.handler(async ({ input }) => {
-    return await listOperations(input.params.vehicleId);
+    const result = await listOperations(input.params.vehicleId);
+    if (result.isErr) {
+      throw result.error;
+    }
+    return result.value;
   }),
   remove: o.vehicles.operations.remove.handler(async ({ input }) => {
-    await removeOperation(input.id);
+    const result = await removeOperation(input.id);
+    if (result.isErr) {
+      throw result.error;
+    }
     return {
       ok: true,
     };

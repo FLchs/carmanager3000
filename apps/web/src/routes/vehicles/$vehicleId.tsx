@@ -1,5 +1,5 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeftCircleIcon, Trash } from "lucide-react";
 import { Suspense, useCallback } from "react";
 
@@ -22,16 +22,34 @@ export const Route = createFileRoute("/vehicles/$vehicleId")({
 
 function RouteComponent() {
   const { vehicleId } = Route.useParams();
+  const navigate = useNavigate();
   const {
     data: { id, brand, engine, model, power, trim, year },
   } = useSuspenseQuery(openapi.vehicles.get.queryOptions({ input: { id: Number(vehicleId) } }));
+  const client = useQueryClient();
+
+  const deleteMutation = useMutation(
+    openapi.vehicles.remove.mutationOptions({
+      onMutate: async (_, context) => {
+        context.client.setQueryData(openapi.vehicles.list.queryKey(), (old) =>
+          old?.filter((vehicle) => vehicle.id !== id),
+        );
+      },
+      onSuccess: async () => {
+        await client.invalidateQueries({
+          queryKey: openapi.vehicles.list.key(),
+        });
+        navigate({ to: "/vehicles" });
+      },
+    }),
+  );
 
   const { confirm } = useDialog();
   const handleDelete = useCallback(async () => {
     if (await confirm({ title: `Delete ${model} from the database ?` })) {
-      console.log("DELETED");
+      deleteMutation.mutate({ id });
     }
-  }, [confirm, model]);
+  }, [confirm, model, id, deleteMutation]);
 
   return (
     <div className="text-text w-full">
@@ -75,11 +93,11 @@ function RouteComponent() {
             </section>
             <section className="hidden">
               <h2 className="text-text col-span-2 mb-4 text-xl font-bold">Upcoming maintenance</h2>
-              <div className="bg-bg border-border rounded-lg border-1"></div>
+              <div className="bg-bg border-border rounded-lg border"></div>
             </section>
             <section>
               <h2 className="text-text col-span-2 mb-4 text-xl font-bold">Maintenance log</h2>
-              <div className="bg-bg border-border rounded-lg border-1">
+              <div className="bg-bg border-border rounded-lg border">
                 <Suspense fallback={<p>Loading...</p>}>
                   <OperationTable id={id} />
                 </Suspense>

@@ -1,6 +1,8 @@
 import * as vehicleService from "#core/vehicle/service";
+import { NotFoundError } from "#lib/serviceErrors";
 import { createVehicleSchema, getVehicleSchema, updateVehicleSchema } from "@cm3k/validation";
-import { call } from "@orpc/server";
+import { call, isDefinedError } from "@orpc/server";
+import { err, ok } from "true-myth/result";
 import { beforeAll, describe, expect, it, vi, type Mocked } from "vitest";
 import * as z from "zod/v4";
 
@@ -10,7 +12,7 @@ describe("/vehicles", () => {
   describe("GET /", () => {
     let spy: Mocked<typeof vehicleService.listVehicle>;
     beforeAll(() => {
-      spy = vi.spyOn(vehicleService, "listVehicle").mockResolvedValue([]);
+      spy = vi.spyOn(vehicleService, "listVehicle").mockResolvedValue(ok([]) as Awaited<ReturnType<typeof vehicleService.listVehicle>>);
     });
 
     it("calls listVehicle", async () => {
@@ -32,7 +34,8 @@ describe("/vehicles", () => {
         id: 1,
         operations: [],
       };
-      spy = vi.spyOn(vehicleService, "getVehicle").mockResolvedValue(mockVehicle);
+      // @ts-expect-error: intentionally passing invalid type for testing
+      spy = vi.spyOn(vehicleService, "getVehicle").mockResolvedValue(ok(mockVehicle));
     });
 
     describe("call endpoint with correct arguments", () => {
@@ -45,17 +48,25 @@ describe("/vehicles", () => {
     describe("call endpoint with bad arguments", () => {
       it("return error with bad argument", async () => {
         // TODO: good place to start typed error checking
-        await expect(call(router.vehicles.vehicles.get, { id: "hello" })).rejects.toThrowError(
-          /validation/,
+        // @ts-expect-error: intentionally passing invalid type for testing
+        await expect(call(router.vehicles.vehicles.get, { id: "hello" })).rejects.toSatisfy((err) =>
+          isDefinedError(err),
+        );
+      });
+
+      it("return error with unknown id", async () => {
+        // TODO: good place to start typed error checking
+        spy = vi
+          .spyOn(vehicleService, "getVehicle")
+          // @ts-expect-error: intentionally passing invalid type for testing
+          .mockResolvedValue(err(new NotFoundError({ data: { message: "error" } })));
+        await expect(call(router.vehicles.vehicles.get, { id: 12 })).rejects.toSatisfy((err) =>
+          isDefinedError(err),
         );
       });
     });
   });
   describe("POST /", () => {
-    let spy: Mocked<typeof vehicleService.createVehicle>;
-    beforeAll(() => {
-      spy = vi.spyOn(vehicleService, "createVehicle").mockResolvedValue({ ok: true });
-    });
     const mockVehicle: z.infer<typeof createVehicleSchema> = {
       brand: "Kia",
       description: "Good but slow sedan",
@@ -65,6 +76,19 @@ describe("/vehicles", () => {
       trim: "MG",
       year: 2008,
     };
+
+    let spy: Mocked<typeof vehicleService.createVehicle>;
+    let getVehicleSpy: Mocked<typeof vehicleService.getVehicle>;
+    beforeAll(() => {
+      spy = vi
+        .spyOn(vehicleService, "createVehicle")
+        .mockResolvedValue(ok(1) as Awaited<ReturnType<typeof vehicleService.createVehicle>>);
+      getVehicleSpy = vi
+        .spyOn(vehicleService, "getVehicle")
+        .mockResolvedValue(
+          ok({ ...mockVehicle, id: 1, operations: [] }) as Awaited<ReturnType<typeof vehicleService.getVehicle>>,
+        );
+    });
 
     const required = z.toJSONSchema(createVehicleSchema).required || [];
     const optional = Object.keys(mockVehicle).filter((k) => !required.includes(k));
@@ -77,24 +101,20 @@ describe("/vehicles", () => {
       it.each(optional)("should not throw without optional property %s", async (a) => {
         const damagedVehicle = { ...mockVehicle, [a]: undefined };
         const result = await call(router.vehicles.vehicles.create, damagedVehicle);
-        expect(result).toStrictEqual({ ok: true });
+        expect(result.id).toBe(1);
       });
     });
     describe("call enpoint with bad arguments", () => {
       it.each(required)("should throw without required property %s", async (a) => {
         const damagedVehicle = { ...mockVehicle, [a]: undefined };
-        await expect(call(router.vehicles.vehicles.create, damagedVehicle)).rejects.toThrowError(
-          /Input validation failed/,
+        await expect(call(router.vehicles.vehicles.create, damagedVehicle)).rejects.toSatisfy(
+          (err) => isDefinedError(err),
         );
       });
     });
   });
 
   describe("PUT /", () => {
-    let spy: Mocked<typeof vehicleService.updateVehicle>;
-    beforeAll(() => {
-      spy = vi.spyOn(vehicleService, "updateVehicle").mockResolvedValue({ ok: true });
-    });
     const mockVehicle: z.infer<typeof updateVehicleSchema> = {
       brand: "Kia",
       description: "Good but slow sedan",
@@ -104,6 +124,19 @@ describe("/vehicles", () => {
       trim: "MG",
       year: 2008,
     };
+
+    let spy: Mocked<typeof vehicleService.updateVehicle>;
+    let getVehicleSpy: Mocked<typeof vehicleService.getVehicle>;
+    beforeAll(() => {
+      spy = vi
+        .spyOn(vehicleService, "updateVehicle")
+        .mockResolvedValue(ok());
+      getVehicleSpy = vi
+        .spyOn(vehicleService, "getVehicle")
+        .mockResolvedValue(
+          ok({ ...mockVehicle, id: 1, operations: [] }) as Awaited<ReturnType<typeof vehicleService.getVehicle>>,
+        );
+    });
 
     const required = z.toJSONSchema(updateVehicleSchema).required || [];
     const optional = Object.keys(mockVehicle).filter((k) => !required.includes(k));
@@ -119,7 +152,7 @@ describe("/vehicles", () => {
           body: damagedVehicle,
           params: { id: 1 },
         });
-        expect(result).toStrictEqual({ ok: true });
+        expect(result.id).toBe(1);
       });
     });
     describe("call enpoint with bad arguments", () => {
@@ -134,7 +167,7 @@ describe("/vehicles", () => {
   describe("DELETE /", () => {
     let spy: Mocked<typeof vehicleService.removeVehicle>;
     beforeAll(() => {
-      spy = vi.spyOn(vehicleService, "removeVehicle").mockResolvedValue({ ok: true });
+      spy = vi.spyOn(vehicleService, "removeVehicle").mockResolvedValue(ok());
     });
     describe("call endpoint with correct arguments", () => {
       it("calls createVehicle with correct argument", async () => {

@@ -1,7 +1,8 @@
 import * as operationService from "#core/operation/service";
 import { createOperationSchema } from "@cm3k/validation";
-import { call } from "@orpc/server";
-import { beforeAll, beforeEach, describe, expect, it, vi, type Mocked } from "vitest";
+import { call, isDefinedError } from "@orpc/server";
+import { ok } from "true-myth/result";
+import { beforeAll, describe, expect, it, vi, type Mocked } from "vitest";
 import { z } from "zod/v4";
 
 import { router } from ".";
@@ -15,7 +16,7 @@ describe("/vehicles", () => {
 
     describe("call endpoint with correct arguments", () => {
       it("calls listOperations with correct vehicleId", async () => {
-        spy.mockResolvedValue([]);
+        spy.mockResolvedValue(ok([]));
         await call(router.vehicles.vehicles.operations.list, { params: { vehicleId: 1 } });
         expect(spy).toHaveBeenCalledWith(1);
       });
@@ -26,15 +27,23 @@ describe("/vehicles", () => {
         await expect(
           // @ts-expect-error: intentionally passing invalid type for testing
           call(router.vehicles.vehicles.operations.list, { params: { vehicleId: "invalid" } }),
-        ).rejects.toThrowError(/validation/);
+        ).rejects.toSatisfy((err) => isDefinedError(err));
       });
     });
   });
 
   describe("POST /vehicles/{id}/operations/", () => {
     let spy: Mocked<typeof operationService.createOperation>;
+    let getOperationSpy: Mocked<typeof operationService.getOperation>;
     beforeAll(() => {
-      spy = vi.spyOn(operationService, "createOperation").mockResolvedValue({ ok: true });
+      spy = vi.spyOn(operationService, "createOperation").mockResolvedValue(ok(1) as Awaited<ReturnType<typeof operationService.createOperation>>);
+      getOperationSpy = vi.spyOn(operationService, "getOperation").mockResolvedValue(ok({
+        id: 1,
+        date: new Date("2024-03-15"),
+        type: "maintenance",
+        mileage: 55000,
+        note: "Regular maintenance",
+      }) as Awaited<ReturnType<typeof operationService.getOperation>>);
     });
 
     const mockOperation = {
@@ -48,11 +57,10 @@ describe("/vehicles", () => {
       it("calls createOperation with vehicleId from params and body data", async () => {
         await call(router.vehicles.vehicles.operations.create, {
           body: mockOperation,
-          params: { id: 1 },
+          params: { vehicleId: 1 },
         });
-        expect(spy).toHaveBeenCalledWith({
+        expect(spy).toHaveBeenCalledWith(1, {
           ...mockOperation,
-          vehicleId: 1,
         });
       });
 
@@ -72,18 +80,18 @@ describe("/vehicles", () => {
         it("calls createVehicle with correct argument", async () => {
           await call(router.vehicles.vehicles.operations.create, {
             body: mockOperation,
-            params: { id: 1 },
+            params: { vehicleId: 1 },
           });
-          expect(spy).toHaveBeenCalledWith({ ...mockOperation, vehicleId: 1 });
+          expect(spy).toHaveBeenCalledWith(1, { ...mockOperation });
         });
 
         it.each(optional)("should not throw without optional property %s", async (a) => {
           const damagedVehicle = { ...mockOperation, [a]: undefined };
           const result = await call(router.vehicles.vehicles.operations.create, {
             body: damagedVehicle,
-            params: { id: 1 },
+            params: { vehicleId: 1 },
           });
-          expect(result).toStrictEqual({ ok: true });
+          expect(result.id).toBe(1);
         });
       });
       describe("call enpoint with bad arguments", () => {
@@ -92,7 +100,7 @@ describe("/vehicles", () => {
           await expect(
             // @ts-expect-error: intentionally passing invalid type for testing
             call(router.vehicles.vehicles.operations.create, damagedVehicle),
-          ).rejects.toThrowError(/Input validation failed/);
+          ).rejects.toSatisfy((err) => isDefinedError(err));
         });
       });
     });
@@ -101,7 +109,7 @@ describe("/vehicles", () => {
   describe("DELETE /vehicles/operations/{operationId}", () => {
     let spy: Mocked<typeof operationService.removeOperation>;
     beforeAll(() => {
-      spy = vi.spyOn(operationService, "removeOperation").mockResolvedValue({ ok: true });
+      spy = vi.spyOn(operationService, "removeOperation").mockResolvedValue(ok() as Awaited<ReturnType<typeof operationService.removeOperation>>);
     });
 
     describe("call endpoint with correct arguments", () => {
@@ -116,7 +124,7 @@ describe("/vehicles", () => {
         await expect(
           // @ts-expect-error: intentionally passing invalid type for testing
           call(router.vehicles.vehicles.operations.remove, { id: "invalid" }),
-        ).rejects.toThrowError(/validation/);
+        ).rejects.toSatisfy((err) => isDefinedError(err));
       });
     });
   });

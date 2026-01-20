@@ -1,12 +1,18 @@
 import { db } from "#db/index";
 import { vehicles } from "#db/schemas/vehicle";
+import { DbError, NotFoundError } from "#lib/serviceErrors";
 import { createVehicleSchema, updateVehicleSchema } from "@cm3k/validation";
 import { eq } from "drizzle-orm";
-import { z } from "zod/v4";
+import { ok, err } from "true-myth/result";
+import * as z from "zod/v4";
 
 export const listVehicle = async () => {
-  const vehiclesList = await db.select().from(vehicles);
-  return vehiclesList;
+  try {
+    const vehiclesList = await db.select().from(vehicles);
+    return ok(vehiclesList);
+  } catch {
+    return err(new DbError());
+  }
 };
 
 export const getVehicle = async (id: number) => {
@@ -34,33 +40,43 @@ export const getVehicle = async (id: number) => {
       },
     },
   });
-
-  if (row == undefined) throw new Error("wbi");
-  return row;
+  if (row !== undefined) {
+    return ok(row);
+  }
+  return err(new NotFoundError("Vehicle not found"));
 };
 
 export const createVehicle = async (input: z.infer<typeof createVehicleSchema>) => {
-  console.table(input);
-  await db.insert(vehicles).values(input);
-  // TODO: return correct error
-  return {
-    ok: true,
-  };
+  try {
+    const [{ id }] = await db.insert(vehicles).values(input).returning({
+      id: vehicles.id,
+    });
+    return ok(id);
+  } catch (error) {
+    return err(new DbError(error));
+  }
 };
 
 export const updateVehicle = async (id: number, input: z.infer<typeof updateVehicleSchema>) => {
-  if (id == undefined) {
-    return { status: 404 };
+  try {
+    const vehicle = await db.update(vehicles).set(input).where(eq(vehicles.id, id)).returning();
+    if (vehicle.length === 0) {
+      return err(new NotFoundError("Vehicle not found"));
+    }
+    return ok();
+  } catch (error) {
+    return err(new DbError(error));
   }
-  await db.update(vehicles).set(input).where(eq(vehicles.id, id));
-  return {
-    ok: true,
-  };
 };
 
 export const removeVehicle = async (id: number) => {
-  await db.delete(vehicles).where(eq(vehicles.id, id));
-  return {
-    ok: true,
-  };
+  try {
+    const result = await db.delete(vehicles).where(eq(vehicles.id, id)).returning();
+    if (result.length === 0) {
+      return err(new NotFoundError("Vehicle not found"));
+    }
+    return ok();
+  } catch (error) {
+    return err(new DbError(error));
+  }
 };

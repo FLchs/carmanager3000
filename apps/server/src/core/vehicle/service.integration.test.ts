@@ -1,12 +1,13 @@
 import { operations } from "#db/schemas/operations";
 import { relations } from "#db/schemas/relations";
 import { vehicles } from "#db/schemas/vehicle";
+import { NotFoundError } from "#lib/serviceErrors";
 import { rootDir } from "#utils/paths";
 import { getVehicleSchema, listVehiclesSchema } from "@cm3k/validation";
 import { drizzle } from "drizzle-orm/libsql";
 import { migrate } from "drizzle-orm/libsql/migrator";
 import { reset, seed } from "drizzle-seed";
-import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { assert, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { createVehicle, getVehicle, listVehicle, removeVehicle, updateVehicle } from "./service";
 
@@ -37,14 +38,16 @@ describe("Vehicles service test", () => {
   describe("listVehicle", () => {
     it("returns empty array if database is empty", async () => {
       const vehiclesList = await listVehicle();
-      expect(vehiclesList).toEqual([]);
+      assert(vehiclesList.isOk);
+      expect(vehiclesList.value).toEqual([]);
     });
 
     it("returns validated vehicles", async () => {
       await seed(dbModule.db, { vehicles }, { count: 2 });
       const result = await listVehicle();
-      expect(result).toHaveLength(2);
-      expect(listVehiclesSchema.safeParse(result).error).toBeUndefined();
+      assert(result.isOk);
+      expect(result.value).toHaveLength(2);
+      expect(listVehiclesSchema.safeParse(result.value).error).toBeUndefined();
     });
   });
 
@@ -60,8 +63,9 @@ describe("Vehicles service test", () => {
         },
       }));
       const result = await getVehicle(1);
-      expect(result.operations.length).toEqual(10);
-      expect(getVehicleSchema.safeParse(result).error).toBeUndefined();
+      assert(result.isOk);
+      expect(result.value.operations.length).toEqual(10);
+      expect(getVehicleSchema.safeParse(result.value).error).toBeUndefined();
     });
 
     it("returns a vehicle without operations", async () => {
@@ -72,11 +76,22 @@ describe("Vehicles service test", () => {
         },
       }));
       const result = await getVehicle(1);
-      expect(result.operations.length).toEqual(0);
-      expect(getVehicleSchema.safeParse(result).error).toBeUndefined();
+      assert(result.isOk);
+      expect(result.value.operations.length).toEqual(0);
+      expect(getVehicleSchema.safeParse(result.value).error).toBeUndefined();
     });
 
-    it.todo("returns the correct error type if not found");
+    it("returns the correct error type if not found", async () => {
+      await seed(dbModule.db, { vehicles }).refine(() => ({
+        vehicles: {
+          columns: {},
+          count: 1,
+        },
+      }));
+      const result = await getVehicle(2);
+      assert(result.isErr);
+      expect(result.error).toBeInstanceOf(NotFoundError);
+    });
   });
 
   describe("createVehicle", () => {
@@ -90,20 +105,20 @@ describe("Vehicles service test", () => {
         trim: "MG",
         year: 2008,
       });
-      expect(result).toStrictEqual({ ok: true });
+      assert(!result.isErr);
+      expect(result.value).toBeTypeOf("number");
     });
     it("does not create a vehicle if a property is missing", async () => {
-      await expect(
-        // @ts-expect-error missing property on purpose
-        createVehicle({
-          description: "A luxuous yet slow sedan",
-          engine: "2.0L CVVT",
-          model: "Magentis",
-          power: 144,
-          trim: "MG",
-          year: 2008,
-        }),
-      ).rejects.toThrow(/Failed query/);
+      // @ts-expect-error missing property on purpose
+      const result = await createVehicle({
+        description: "A luxuous yet slow sedan",
+        engine: "2.0L CVVT",
+        model: "Magentis",
+        power: 144,
+        trim: "MG",
+        year: 2008,
+      });
+      expect(result.isErr).toBe(true);
     });
   });
 
@@ -119,7 +134,7 @@ describe("Vehicles service test", () => {
         },
       }));
       const result = await updateVehicle(1, { brand: "Kia" });
-      expect(result).toStrictEqual({ ok: true });
+      assert(!result.isErr);
       const updatedVehicle = await dbModule.db.query.vehicles.findFirst({
         where: { id: 1 },
       });
@@ -131,9 +146,11 @@ describe("Vehicles service test", () => {
   describe("removeVehicle", () => {
     it("remove a vehicle", async () => {
       await seed(dbModule.db, { vehicles }, { count: 2 });
-      await removeVehicle(1);
-      const result = await listVehicle();
-      expect(result).toHaveLength(1);
+      const result = await removeVehicle(1);
+      assert(result.isOk);
+      const vehiclesList = await listVehicle();
+      assert(vehiclesList.isOk);
+      expect(vehiclesList.value).toHaveLength(1);
     });
     it.todo("returns the correct error type if not found");
   });

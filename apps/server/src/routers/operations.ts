@@ -1,16 +1,20 @@
 import { listOperations } from "#core/operation/service";
-import o from "#lib/orpc";
+import { os } from "@orpc/server";
 
-const list = o
+const list = os
   .route({
     inputStructure: "detailed",
     method: "GET",
     path: "/",
   })
   .handler(async () => {
-    return await listOperations();
+    const result = await listOperations();
+    if (result.isErr) {
+      throw result.error;
+    }
+    return result.value;
   });
 
-export const operationsRouter = o.prefix("/operations").router({
+export const operationsRouter = os.prefix("/operations").router({
   list,
 });

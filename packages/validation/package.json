@@ -1,5 +1,6 @@
 {
   "name": "@cm3k/validation",
+  "private": true,
   "type": "module",
   "imports": {
     "#*": "./src/*.ts"
@@ -8,21 +9,20 @@
     ".": "./src/index.ts",
     "./schemas/*": "./src/schemas/*"
   },
+  "module": "index.ts",
   "scripts": {
     "lint": "oxlint",
     "format": "oxfmt"
   },
-  "module": "index.ts",
-  "private": true,
+  "dependencies": {
+    "zod": "^4.3.5"
+  },
   "devDependencies": {
     "@types/bun": "latest",
-    "oxfmt": "^0.16.0",
-    "oxlint": "^1.31.0"
+    "oxfmt": "^0.21.0",
+    "oxlint": "^1.41.0"
   },
   "peerDependencies": {
-    "typescript": "^5"
-  },
-  "dependencies": {
-    "zod": "^4.1.13"
+    "typescript": "^5.9.3"
   }
 }

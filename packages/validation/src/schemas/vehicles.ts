@@ -2,8 +2,7 @@ import * as z from "zod/v4";
 
 import { listOperationsSchema } from "./operations";
 
-// TODO: make optional instead of nullable to accept partial input
-export const vehicleSchema = z.object({
+export const vehicleOutSchema = z.object({
   id: z.coerce.number(),
   brand: z.string(),
   description: z.string().nullable(),
@@ -14,14 +13,22 @@ export const vehicleSchema = z.object({
   year: z.coerce.number().nullable(),
 });
 
-export const createVehicleSchema = vehicleSchema.omit({
-  id: true,
+export const vehicleInSchema = z.object({
+  brand: z.string(),
+  description: z.string(),
+  engine: z.string(),
+  model: z.string(),
+  power: z.coerce.number(),
+  trim: z.string(),
+  year: z.coerce.number(),
 });
 
-export const updateVehicleSchema = vehicleSchema.partial().omit({ id: true });
+export const createVehicleSchema = vehicleInSchema;
 
-export const getVehicleSchema = vehicleSchema.extend({
+export const updateVehicleSchema = vehicleInSchema.partial();
+
+export const getVehicleSchema = vehicleOutSchema.extend({
   operations: listOperationsSchema,
 });
 
-export const listVehiclesSchema = z.array(vehicleSchema);
+export const listVehiclesSchema = z.array(vehicleOutSchema);
