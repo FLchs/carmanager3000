@@ -3,7 +3,7 @@ import { relations } from "#db/schemas/relations";
 import { vehicles } from "#db/schemas/vehicle";
 import { NotFoundError } from "#lib/serviceErrors";
 import { rootDir } from "#utils/paths";
-import { getVehicleSchema, listVehiclesSchema } from "@cm3k/validation";
+import { listVehiclesSchema } from "@cm3k/validation";
 import { drizzle } from "drizzle-orm/libsql";
 import { migrate } from "drizzle-orm/libsql/migrator";
 import { reset, seed } from "drizzle-seed";
@@ -58,35 +58,6 @@ describe("Vehicles service test", () => {
   });
 
   describe("getVehicle", () => {
-    it("returns a vehicle with operations", async () => {
-      await seed(dbModule.db, { operations, vehicles }).refine(() => ({
-        vehicles: {
-          columns: {},
-          count: 1,
-          with: {
-            operations: 10,
-          },
-        },
-      }));
-      const result = await getVehicle(1);
-      assert(result.isOk);
-      expect(result.value.operations.length).toEqual(10);
-      expect(getVehicleSchema.safeParse(result.value).error).toBeUndefined();
-    });
-
-    it("returns a vehicle without operations", async () => {
-      await seed(dbModule.db, { vehicles }).refine(() => ({
-        vehicles: {
-          columns: {},
-          count: 1,
-        },
-      }));
-      const result = await getVehicle(1);
-      assert(result.isOk);
-      expect(result.value.operations.length).toEqual(0);
-      expect(getVehicleSchema.safeParse(result.value).error).toBeUndefined();
-    });
-
     it("returns the correct error type if not found", async () => {
       await seed(dbModule.db, { vehicles }).refine(() => ({
         vehicles: {

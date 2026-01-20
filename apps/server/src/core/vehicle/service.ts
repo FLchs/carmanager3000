@@ -40,17 +40,6 @@ export const getVehicle = async (id: number) => {
       trim: true,
       year: true,
     },
-    with: {
-      operations: {
-        columns: {
-          id: true,
-          date: true,
-          mileage: true,
-          note: true,
-          type: true,
-        },
-      },
-    },
   });
   if (row !== undefined) {
     return ok(row);
