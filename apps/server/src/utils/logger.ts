@@ -1,11 +1,19 @@
 import pino from "pino";
 import pretty from "pino-pretty";
 
-export default pino(
+export const httpPino = pino(
   {
-    level: "error",
-    // transport: { target: "hono-pino/debug-log", options: { colorEnabled: true } },
-    timestamp: pino.stdTimeFunctions.unixTime,
+    level: "info",
+    timestamp: pino.stdTimeFunctions.isoTime,
   },
-  pretty({ colorize: true }),
+  pretty({
+    colorize: true,
+    messageFormat: "{req.method} {req.url} {res.status} - {responseTime}ms",
+    ignore: "req,res,reqId,responseTime,hostname",
+  }),
 );
+
+export const logger = pino({
+  level: "error",
+  timestamp: pino.stdTimeFunctions.isoTime,
+});

@@ -1,5 +1,5 @@
 import { NotFoundError, ServiceError } from "#lib/serviceErrors";
-import logger from "#utils/logger";
+import { logger } from "#utils/logger";
 import { errors } from "@cm3k/contract";
 import { ORPCError, os, ValidationError } from "@orpc/server";
 import { z } from "zod/v4";
@@ -10,7 +10,6 @@ export const errorMiddleware = os
     try {
       return await next();
     } catch (error) {
-      logger.error(error);
       logger.error({
         err: error,
         route: procedure["~orpc"].route,

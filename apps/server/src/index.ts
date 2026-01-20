@@ -1,4 +1,4 @@
-import logger from "#utils/logger";
+import { httpPino } from "#utils/logger";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
 import { type RouterClient } from "@orpc/server";
@@ -26,7 +26,7 @@ export const apiHandler = new OpenAPIHandler(router, {
   ],
 });
 
-app.use(pinoLogger({ pino: logger }));
+app.use(pinoLogger({ pino: httpPino }));
 
 app.use(
   "/*",
