@@ -12,7 +12,9 @@ describe("/vehicles", () => {
   describe("GET /", () => {
     let spy: Mocked<typeof vehicleService.listVehicle>;
     beforeAll(() => {
-      spy = vi.spyOn(vehicleService, "listVehicle").mockResolvedValue(ok([]) as Awaited<ReturnType<typeof vehicleService.listVehicle>>);
+      spy = vi
+        .spyOn(vehicleService, "listVehicle")
+        .mockResolvedValue(ok([]) as Awaited<ReturnType<typeof vehicleService.listVehicle>>);
     });
 
     it("calls listVehicle", async () => {
@@ -32,7 +34,6 @@ describe("/vehicles", () => {
         trim: "MG",
         year: 2008,
         id: 1,
-        operations: [],
       };
       // @ts-expect-error: intentionally passing invalid type for testing
       spy = vi.spyOn(vehicleService, "getVehicle").mockResolvedValue(ok(mockVehicle));
@@ -86,7 +87,9 @@ describe("/vehicles", () => {
       getVehicleSpy = vi
         .spyOn(vehicleService, "getVehicle")
         .mockResolvedValue(
-          ok({ ...mockVehicle, id: 1, operations: [] }) as Awaited<ReturnType<typeof vehicleService.getVehicle>>,
+          ok({ ...mockVehicle, id: 1, operations: [] }) as Awaited<
+            ReturnType<typeof vehicleService.getVehicle>
+          >,
         );
     });
 
@@ -128,13 +131,13 @@ describe("/vehicles", () => {
     let spy: Mocked<typeof vehicleService.updateVehicle>;
     let getVehicleSpy: Mocked<typeof vehicleService.getVehicle>;
     beforeAll(() => {
-      spy = vi
-        .spyOn(vehicleService, "updateVehicle")
-        .mockResolvedValue(ok());
+      spy = vi.spyOn(vehicleService, "updateVehicle").mockResolvedValue(ok());
       getVehicleSpy = vi
         .spyOn(vehicleService, "getVehicle")
         .mockResolvedValue(
-          ok({ ...mockVehicle, id: 1, operations: [] }) as Awaited<ReturnType<typeof vehicleService.getVehicle>>,
+          ok({ ...mockVehicle, id: 1, operations: [] }) as Awaited<
+            ReturnType<typeof vehicleService.getVehicle>
+          >,
         );
     });
 
