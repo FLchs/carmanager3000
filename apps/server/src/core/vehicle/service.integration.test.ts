@@ -43,7 +43,13 @@ describe("Vehicles service test", () => {
     });
 
     it("returns validated vehicles", async () => {
-      await seed(dbModule.db, { vehicles }, { count: 2 });
+      await seed(dbModule.db, { vehicles }, { count: 2 }).refine(() => ({
+        vehicles: {
+          columns: {
+            deleted: false,
+          },
+        },
+      }));
       const result = await listVehicle();
       assert(result.isOk);
       expect(result.value).toHaveLength(2);
@@ -126,7 +132,7 @@ describe("Vehicles service test", () => {
     it("update a vehicle", async () => {
       await seed(dbModule.db, { operations, vehicles }).refine(() => ({
         vehicles: {
-          columns: {},
+          columns: { deleted: false },
           count: 1,
           with: {
             operations: 10,
@@ -145,7 +151,12 @@ describe("Vehicles service test", () => {
 
   describe("removeVehicle", () => {
     it("remove a vehicle", async () => {
-      await seed(dbModule.db, { vehicles }, { count: 2 });
+      await seed(dbModule.db, { operations, vehicles }).refine(() => ({
+        vehicles: {
+          columns: { deleted: false },
+          count: 2,
+        },
+      }));
       const result = await removeVehicle(1);
       assert(result.isOk);
       const vehiclesList = await listVehicle();

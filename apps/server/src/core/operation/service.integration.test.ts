@@ -51,10 +51,14 @@ describe("Operations service test", () => {
     it("returns all operations when no vehicleId is provided", async () => {
       await seed(dbModule.db, { operations, vehicles }).refine(() => ({
         vehicles: {
-          columns: {},
           count: 2,
           with: {
             operations: 3,
+          },
+        },
+        operations: {
+          columns: {
+            deleted: false,
           },
         },
       }));
@@ -68,10 +72,15 @@ describe("Operations service test", () => {
     it("returns operations for a specific vehicle", async () => {
       await seed(dbModule.db, { operations, vehicles }).refine(() => ({
         vehicles: {
-          columns: {},
+          columns: { deleted: false },
           count: 2,
           with: {
             operations: 3,
+          },
+        },
+        operations: {
+          columns: {
+            deleted: false,
           },
         },
       }));
@@ -176,6 +185,11 @@ describe("Operations service test", () => {
           count: 1,
           with: {
             operations: 3,
+          },
+        },
+        operations: {
+          columns: {
+            deleted: false,
           },
         },
       }));
