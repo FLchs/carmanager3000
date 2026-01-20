@@ -12,5 +12,6 @@ export const operations = sqliteTable("operations", {
   vehicleId: integer("vehicle_id")
     .notNull()
     .references(() => vehicles.id),
+  deleted: integer({ mode: "boolean" }).default(false),
   ...timestamps,
 });

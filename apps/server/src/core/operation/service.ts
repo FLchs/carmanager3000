@@ -9,7 +9,7 @@ import * as z from "zod/v4";
 export const listOperations = async (vehicleId?: number) => {
   try {
     const operationsList = await db.query.operations.findMany({
-      where: { vehicleId },
+      where: { vehicleId, deleted: false },
       columns: {
         id: true,
         date: true,
@@ -71,7 +71,11 @@ export const updateOperation = async (id: number, input: z.infer<typeof updateOp
 
 export const removeOperation = async (id: number) => {
   try {
-    const result = await db.delete(operations).where(eq(operations.id, id)).returning();
+    const result = await db
+      .update(operations)
+      .set({ deleted: true })
+      .where(eq(operations.id, id))
+      .returning();
     if (result.length === 0) {
       return err(new NotFoundError("Operation not found"));
     }
