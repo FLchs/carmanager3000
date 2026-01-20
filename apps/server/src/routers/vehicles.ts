@@ -5,6 +5,12 @@ import {
   removeOperation,
 } from "#core/operation/service";
 import {
+  createDocument,
+  getDocument,
+  listDocuments,
+  removeDocument,
+} from "#core/documents/service";
+import {
   createVehicle,
   getVehicle,
   listVehicle,
@@ -99,12 +105,44 @@ const operations = {
   }),
 };
 
+const documents = {
+  create: o.vehicles.documents.create.handler(async ({ input }) => {
+    const documentData = { ...input.body, entityId: input.params.vehicleId, entityType: "vehicle" as const };
+    const id = await createDocument(documentData);
+    if (id.isErr) {
+      throw id.error;
+    }
+    const result = await getDocument(id.value);
+    if (result.isErr) {
+      throw result.error;
+    }
+    return result.value;
+  }),
+  list: o.vehicles.documents.list.handler(async ({ input }) => {
+    const result = await listDocuments(input.params.vehicleId, "vehicle");
+    if (result.isErr) {
+      throw result.error;
+    }
+    return result.value;
+  }),
+  remove: o.vehicles.documents.remove.handler(async ({ input }) => {
+    const result = await removeDocument(input.id);
+    if (result.isErr) {
+      throw result.error;
+    }
+    return {
+      ok: true,
+    };
+  }),
+};
+
 export const vehiclesRouter = o.router({
   vehicles: {
     create,
     get,
     list,
     operations,
+    documents,
     remove,
     update,
   },
