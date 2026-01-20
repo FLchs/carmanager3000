@@ -8,7 +8,19 @@ import * as z from "zod/v4";
 
 export const listVehicle = async () => {
   try {
-    const vehiclesList = await db.select().from(vehicles);
+    const vehiclesList = await db.query.vehicles.findMany({
+      where: { deleted: false },
+      columns: {
+        id: true,
+        brand: true,
+        description: true,
+        engine: true,
+        model: true,
+        power: true,
+        trim: true,
+        year: true,
+      },
+    });
     return ok(vehiclesList);
   } catch {
     return err(new DbError());
@@ -71,7 +83,11 @@ export const updateVehicle = async (id: number, input: z.infer<typeof updateVehi
 
 export const removeVehicle = async (id: number) => {
   try {
-    const result = await db.delete(vehicles).where(eq(vehicles.id, id)).returning();
+    const result = await db
+      .update(vehicles)
+      .set({ deleted: true })
+      .where(eq(vehicles.id, id))
+      .returning();
     if (result.length === 0) {
       return err(new NotFoundError("Vehicle not found"));
     }

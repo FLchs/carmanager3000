@@ -1,0 +1,1 @@
+ALTER TABLE `vehicle` ADD `deleted` integer DEFAULT false;
