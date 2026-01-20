@@ -1,21 +1,24 @@
 import * as z from "zod/v4";
 
-export const operationSchema = z.object({
-  id: z.coerce.number<number>(),
+export const operationInSchema = z.object({
+  date: z.coerce.date<Date>(),
+  mileage: z.number().int(),
+  note: z.string(),
+  type: z.string(),
+});
+
+export const operationOutSchema = z.object({
+  id: z.number().int(),
+  date: z.date().nullable(),
+  mileage: z.number().int().nullable(),
   note: z.string().nullable(),
-  mileage: z.coerce.number<number>().nullable(),
-  type: z.string().nullable(),
-  date: z.coerce.date<Date>().nullable(),
-  vehicleId: z.number(),
+  type: z.string(),
 });
 
-// CRUD operation schemas following verbDomain pattern
-export const createOperationSchema = operationSchema.omit({
-  id: true,
-});
+export const createOperationSchema = operationInSchema;
 
-export const getOperationSchema = operationSchema.omit({
-  vehicleId: true,
-});
+export const updateOperationSchema = operationInSchema.partial();
 
-export const listOperationsSchema = z.array(getOperationSchema);
+export const getOperationSchema = operationOutSchema;
+
+export const listOperationsSchema = z.array(operationOutSchema);

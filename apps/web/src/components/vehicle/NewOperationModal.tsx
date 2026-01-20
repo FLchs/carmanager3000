@@ -1,4 +1,7 @@
+import { createOperationSchema } from "@cm3k/validation";
+import { isDefinedError } from "@orpc/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { format } from "date-fns";
 
 import { useAppForm } from "@/hooks/useForm";
 import { openapi } from "@/lib/openapi";
@@ -15,24 +18,43 @@ export default function NewOperationModal({
 }) {
   const client = useQueryClient();
 
+  const form = useAppForm({
+    defaultValues: {
+      date: new Date(),
+      mileage: 0,
+      note: "",
+      type: "",
+    },
+    validators: {
+      onChange: createOperationSchema,
+    },
+    onSubmit: async ({ value }) => {
+      console.log(value);
+      createVehicleMutation.mutate({ body: value, params: { vehicleId: Number(id) } });
+    },
+  });
+
   const createVehicleMutation = useMutation(
     openapi.vehicles.operations.create.mutationOptions({
-      onError: async () => {
-        void client.invalidateQueries({
-          queryKey: openapi.vehicles.get.key(),
-        });
+      onError: async (error) => {
+        if (isDefinedError(error) && error.code === "INPUT_VALIDATION_FAILED") {
+          console.table(error.data.fieldErrors);
+          form.setErrorMap({
+            onSubmit: {
+              fields: error.data.fieldErrors,
+            },
+          });
+        }
       },
       onMutate: async (log, context) => {
-        onClose();
         const tempItem = {
           id: 0,
-          createdAt: "",
-          updatedAt: "",
-          ...log,
+          ...log.body,
+          date: format(log.body.date, "yyyy-MM-dd"),
         };
         context.client.setQueryData(
-          openapi.operations.list.queryKey({
-            input: { query: { vehicleId: Number(id) } },
+          openapi.vehicles.operations.list.queryKey({
+            input: { params: { vehicleId: Number(id) } },
           }),
           (old) => old && [...old, tempItem],
         );
@@ -42,21 +64,10 @@ export default function NewOperationModal({
         void client.invalidateQueries({
           queryKey: openapi.vehicles.operations.key(),
         });
+        onClose();
       },
     }),
   );
-
-  const form = useAppForm({
-    defaultValues: {
-      date: new Date(),
-      mileage: 0,
-      note: "",
-      type: "",
-    },
-    onSubmit: async ({ value }) => {
-      createVehicleMutation.mutate({ vehicleId: Number(id), ...value });
-    },
-  });
 
   if (!visible) return;
   return (
@@ -71,13 +82,34 @@ export default function NewOperationModal({
           }}
           className="grid gap-4"
         >
-          <form.AppField children={(field) => <field.DateField label="Date" />} name="date" />
-          <form.AppField
-            children={(field) => <field.NumberField label="Mileage" />}
-            name="mileage"
-          />
-          <form.AppField children={(field) => <field.TextField label="Note" />} name="note" />
-          <form.AppField children={(field) => <field.TextField label="Type" />} name="type" />
+          <form.AppField name="date">
+            {(field) => (
+              <>
+                <field.DateField label="Date" />
+              </>
+            )}
+          </form.AppField>
+          <form.AppField name="mileage">
+            {(field) => (
+              <>
+                <field.NumberField label="Mileage" />
+              </>
+            )}
+          </form.AppField>
+          <form.AppField name="note">
+            {(field) => (
+              <>
+                <field.TextField label="Note" />
+              </>
+            )}
+          </form.AppField>
+          <form.AppField name="type">
+            {(field) => (
+              <>
+                <field.TextField label="Type" />
+              </>
+            )}
+          </form.AppField>
           <form.AppForm>
             <div className="flex flex-row gap-4">
               <form.SubscribeButton type="submit">Save</form.SubscribeButton>

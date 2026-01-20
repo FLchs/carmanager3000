@@ -8,7 +8,7 @@ export const operations = sqliteTable("operations", {
   date: integer({ mode: "timestamp" }),
   mileage: integer(),
   note: text(),
-  type: text(),
+  type: text().notNull(),
   vehicleId: integer("vehicle_id")
     .notNull()
     .references(() => vehicles.id),
