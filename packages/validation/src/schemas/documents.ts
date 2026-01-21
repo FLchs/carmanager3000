@@ -1,9 +1,10 @@
 import * as z from "zod/v4";
 
 export const documentInSchema = z.object({
-  date: z.coerce.date<Date>().nullable(),
-  mileage: z.number().int().nullable(),
-  uri: z.string().nullable(),
+  date: z.coerce.date<Date>(),
+  mileage: z.coerce.number<number>().int().nullable(),
+  file: z.file(),
+  // uri: z.url().nullable(),
   note: z.string().nullable(),
   type: z.enum(["cover"]),
 });
