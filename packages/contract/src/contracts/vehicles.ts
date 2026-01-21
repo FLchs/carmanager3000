@@ -120,14 +120,6 @@ const documents = {
     })
     .input(z.object({ params: z.object({ vehicleId: z.coerce.number<number>() }) }))
     .output(listDocumentsSchema),
-
-  remove: oc
-    .route({
-      method: "DELETE",
-      path: "/{vehicleId}/{id}",
-    })
-    .input(z.object({ id: z.coerce.number<number>() }))
-    .output(successSchema),
 };
 
 export const vehiclesContract = oc.errors(errors).prefix("/vehicles").router({
