@@ -2,11 +2,13 @@ import { documents } from "#db/schemas/documents";
 import { operations } from "#db/schemas/operations";
 import { relations } from "#db/schemas/relations";
 import { vehicles } from "#db/schemas/vehicle";
+import * as fileUtils from "#utils/files";
 import { rootDir } from "#utils/paths";
 import { drizzle } from "drizzle-orm/libsql";
 import { migrate } from "drizzle-orm/libsql/migrator";
 import { reset, seed } from "drizzle-seed";
-import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { ok } from "true-myth/result";
+import { beforeAll, beforeEach, describe, expect, it, Mocked, vi } from "vitest";
 
 import {
   createDocument,
@@ -30,10 +32,13 @@ vi.mock("#db/index", () => {
 
 describe("Documents service test", () => {
   let dbModule: Awaited<typeof import("#db/index")>;
-
+  let spy: Mocked<typeof fileUtils.saveFile>;
   beforeAll(async () => {
     dbModule = await import("#db/index");
     await dbModule.migrateDb();
+    spy = vi
+      .spyOn(fileUtils, "saveFile")
+      .mockResolvedValue(ok("/uploads/test.pdf") as Awaited<ReturnType<typeof fileUtils.saveFile>>);
   });
 
   beforeEach(async () => {
@@ -122,16 +127,18 @@ describe("Documents service test", () => {
   describe("createDocument", () => {
     it("creates a document", async () => {
       await seed(dbModule.db, { vehicles }, { count: 1 });
+      const file = new File([], "testfile.pdf");
       const result = await createDocument({
         date: new Date("2024-01-15"),
         mileage: 50000,
         note: "Insurance document",
         type: "cover",
-        file: new File([], "testfile.pdf"),
+        file,
         entityId: 1,
         entityType: "vehicle",
       });
       expect(result.isOk).toBe(true);
+      expect(spy).toHaveBeenCalledWith(file);
       const documentsList = await dbModule.db.query.documents.findMany();
       expect(documentsList).toHaveLength(1);
     });
