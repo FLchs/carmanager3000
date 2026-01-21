@@ -1,15 +1,15 @@
 import {
-  createOperation,
-  getOperation,
-  listOperations,
-  removeOperation,
-} from "#core/operation/service";
-import {
   createDocument,
   getDocument,
   listDocuments,
   removeDocument,
 } from "#core/documents/service";
+import {
+  createOperation,
+  getOperation,
+  listOperations,
+  removeOperation,
+} from "#core/operation/service";
 import {
   createVehicle,
   getVehicle,
@@ -107,7 +107,11 @@ const operations = {
 
 const documents = {
   create: o.vehicles.documents.create.handler(async ({ input }) => {
-    const documentData = { ...input.body, entityId: input.params.vehicleId, entityType: "vehicle" as const };
+    const documentData = {
+      ...input.body,
+      entityId: input.params.vehicleId,
+      entityType: "vehicle" as const,
+    };
     const id = await createDocument(documentData);
     if (id.isErr) {
       throw id.error;
@@ -124,15 +128,6 @@ const documents = {
       throw result.error;
     }
     return result.value;
-  }),
-  remove: o.vehicles.documents.remove.handler(async ({ input }) => {
-    const result = await removeDocument(input.id);
-    if (result.isErr) {
-      throw result.error;
-    }
-    return {
-      ok: true,
-    };
   }),
 };
 

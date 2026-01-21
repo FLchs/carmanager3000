@@ -55,7 +55,7 @@ describe("/vehicles", () => {
       date: new Date("2024-03-15"),
       mileage: 55000,
       note: "Insurance document",
-      uri: "https://example.com/doc.pdf",
+      file: new File([], "testfile.pdf"),
     };
 
     describe("call endpoint with correct arguments", () => {
@@ -113,31 +113,6 @@ describe("/vehicles", () => {
             call(router.vehicles.vehicles.documents.create, damagedDocument),
           ).rejects.toSatisfy((err) => isDefinedError(err));
         });
-      });
-    });
-  });
-
-  describe("DELETE /vehicles/documents/{documentId}", () => {
-    let spy: Mocked<typeof documentService.removeDocument>;
-    beforeAll(() => {
-      spy = vi
-        .spyOn(documentService, "removeDocument")
-        .mockResolvedValue(ok() as Awaited<ReturnType<typeof documentService.removeDocument>>);
-    });
-
-    describe("call endpoint with correct arguments", () => {
-      it("calls removeDocument with correct id", async () => {
-        await call(router.vehicles.vehicles.documents.remove, { id: 1 });
-        expect(spy).toHaveBeenCalledWith(1);
-      });
-    });
-
-    describe("call endpoint with bad arguments", () => {
-      it("rejects with invalid id type", async () => {
-        await expect(
-          // @ts-expect-error: intentionally passing invalid type for testing
-          call(router.vehicles.vehicles.documents.remove, { id: "invalid" }),
-        ).rejects.toSatisfy((err) => isDefinedError(err));
       });
     });
   });
