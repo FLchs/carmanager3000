@@ -1,7 +1,7 @@
 import * as z from "zod/v4";
 
 export const operationInSchema = z.object({
-  date: z.coerce.date<Date>(),
+  date: z.coerce.date<Date>().nullable(),
   mileage: z.number().int(),
   note: z.string(),
   type: z.string(),
