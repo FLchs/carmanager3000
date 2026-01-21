@@ -5,6 +5,7 @@ import { type RouterClient } from "@orpc/server";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 import { Hono } from "hono";
 import { pinoLogger } from "hono-pino";
+import { serveStatic } from "hono/bun";
 import { cors } from "hono/cors";
 import { requestId } from "hono/request-id";
 
@@ -37,6 +38,8 @@ app.use(
     origin: process.env.CORS_ORIGIN || "",
   }),
 );
+
+app.use("/uploads/*", serveStatic({ root: "./" }));
 
 app.use("/*", async (c, next) => {
   const apiResult = await apiHandler.handle(c.req.raw, {
