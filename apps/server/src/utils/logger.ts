@@ -13,7 +13,10 @@ export const httpPino = pino(
   }),
 );
 
-export const logger = pino({
-  level: "error",
-  timestamp: pino.stdTimeFunctions.isoTime,
-});
+export const logger = pino(
+  {
+    level: "error",
+    timestamp: pino.stdTimeFunctions.isoTime,
+  },
+  pretty(),
+);
