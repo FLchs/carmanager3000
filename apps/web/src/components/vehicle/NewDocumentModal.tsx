@@ -1,15 +1,14 @@
-import type { z } from "zod/v4";
-
-import { createOperationSchema } from "@cm3k/validation";
+import { createDocumentSchema } from "@cm3k/validation";
 import { isDefinedError } from "@orpc/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
+import { type z } from "zod/v4";
 
 import { useAppForm } from "@/hooks/useForm";
 import { openapi } from "@/lib/openapi";
 
 import Modal from "../ui/Modal";
-export default function NewOperationModal({
+export default function NewDocumentModal({
   id,
   onClose,
   visible,
@@ -24,20 +23,20 @@ export default function NewOperationModal({
     defaultValues: {
       date: new Date(),
       mileage: 0,
+      file: new File([], "", undefined),
       note: "",
-      type: "",
-    } as z.infer<typeof createOperationSchema>,
+      type: "cover" as "cover",
+    } as z.infer<typeof createDocumentSchema>,
     validators: {
-      onChange: createOperationSchema,
+      onChange: createDocumentSchema,
     },
     onSubmit: async ({ value }) => {
-      console.log(value);
       createVehicleMutation.mutate({ body: value, params: { vehicleId: Number(id) } });
     },
   });
 
   const createVehicleMutation = useMutation(
-    openapi.vehicles.operations.create.mutationOptions({
+    openapi.vehicles.documents.create.mutationOptions({
       onError: async (error) => {
         if (isDefinedError(error) && error.code === "INPUT_VALIDATION_FAILED") {
           console.table(error.data.fieldErrors);
@@ -52,10 +51,11 @@ export default function NewOperationModal({
         const tempItem = {
           id: 0,
           ...log.body,
-          date: format(log.body.date ?? new Date(), "yyyy-MM-dd"),
+          date: format(log.body.date, "yyyy-MM-dd"),
+          uri: "",
         };
         context.client.setQueryData(
-          openapi.vehicles.operations.list.queryKey({
+          openapi.vehicles.documents.list.queryKey({
             input: { params: { vehicleId: Number(id) } },
           }),
           (old) => old && [...old, tempItem],
@@ -64,7 +64,7 @@ export default function NewOperationModal({
       onSuccess: async () => {
         form.reset();
         void client.invalidateQueries({
-          queryKey: openapi.vehicles.operations.key(),
+          queryKey: openapi.vehicles.documents.key(),
         });
         onClose();
       },
@@ -102,6 +102,13 @@ export default function NewOperationModal({
             {(field) => (
               <>
                 <field.TextField label="Note" />
+              </>
+            )}
+          </form.AppField>
+          <form.AppField name="file">
+            {(field) => (
+              <>
+                <field.FileField label="File" />
               </>
             )}
           </form.AppField>
