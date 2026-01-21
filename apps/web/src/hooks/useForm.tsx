@@ -1,6 +1,7 @@
 import { createFormHook } from "@tanstack/react-form";
 
 import DateField from "@/components/ui/form/DateField";
+import FileField from "@/components/ui/form/FileField";
 
 import { SubscribeButton } from "../components/ui/form/Button";
 import NumberField from "../components/ui/form/NumberField";
@@ -14,6 +15,7 @@ export const { useAppForm, withFieldGroup, withForm } = createFormHook({
     DateField,
     NumberField,
     TextField,
+    FileField,
   },
   formComponents: {
     SubscribeButton,
