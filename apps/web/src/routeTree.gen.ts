@@ -38,7 +38,7 @@ const VehiclesEditIdRoute = VehiclesEditIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/vehicles/$vehicleId': typeof VehiclesVehicleIdRoute
-  '/vehicles': typeof VehiclesIndexRoute
+  '/vehicles/': typeof VehiclesIndexRoute
   '/vehicles/edit/$id': typeof VehiclesEditIdRoute
 }
 export interface FileRoutesByTo {
@@ -56,7 +56,7 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/vehicles/$vehicleId' | '/vehicles' | '/vehicles/edit/$id'
+  fullPaths: '/' | '/vehicles/$vehicleId' | '/vehicles/' | '/vehicles/edit/$id'
   fileRoutesByTo: FileRoutesByTo
   to: '/' | '/vehicles/$vehicleId' | '/vehicles' | '/vehicles/edit/$id'
   id:
@@ -86,7 +86,7 @@ declare module '@tanstack/react-router' {
     '/vehicles/': {
       id: '/vehicles/'
       path: '/vehicles'
-      fullPath: '/vehicles'
+      fullPath: '/vehicles/'
       preLoaderRoute: typeof VehiclesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
