@@ -7,6 +7,7 @@ import { ErrorZone } from "@/components/ErrorZone";
 import Button from "@/components/ui/Button";
 import InfoCard from "@/components/ui/InfoCard";
 import InfoCardItem from "@/components/ui/InfoCard/InfoCardItem";
+import DocumentTable from "@/components/vehicle/DocumentsTable";
 import OperationTable from "@/components/vehicle/OperationsTable";
 import { useDialog } from "@/hooks/useConfirm";
 import { openapi } from "@/lib/openapi";
@@ -100,6 +101,14 @@ function RouteComponent() {
               <div className="bg-bg border-border rounded-lg border">
                 <Suspense fallback={<p>Loading...</p>}>
                   <OperationTable id={id} />
+                </Suspense>
+              </div>
+            </section>
+            <section>
+              <h2 className="text-text col-span-2 mb-4 text-xl font-bold">Documents</h2>
+              <div className="bg-bg border-border rounded-lg border">
+                <Suspense fallback={<p>Loading...</p>}>
+                  <DocumentTable id={id} />
                 </Suspense>
               </div>
             </section>
