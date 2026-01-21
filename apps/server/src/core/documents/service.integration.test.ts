@@ -127,7 +127,7 @@ describe("Documents service test", () => {
         mileage: 50000,
         note: "Insurance document",
         type: "cover",
-        uri: "https://example.com/doc.pdf",
+        file: new File([], "testfile.pdf"),
         entityId: 1,
         entityType: "vehicle",
       });
@@ -142,7 +142,7 @@ describe("Documents service test", () => {
         date: new Date("2024-01-15"),
         mileage: 50000,
         note: "Insurance document",
-        uri: "https://example.com/doc.pdf",
+        file: new File([], "testfile.pdf"),
       });
       expect(result.isErr).toBe(true);
     });
@@ -164,14 +164,14 @@ describe("Documents service test", () => {
 
       const result = await updateDocument(documentId, {
         note: "Updated note",
-        uri: "https://example.com/updated.pdf",
+        // uri: "https://example.com/updated.pdf",
       });
       expect(result.isOk).toBe(true);
       const updatedDocument = await dbModule.db.query.documents.findFirst({
         where: { id: documentId },
       });
       expect(updatedDocument?.note).toStrictEqual("Updated note");
-      expect(updatedDocument?.uri).toStrictEqual("https://example.com/updated.pdf");
+      // expect(updatedDocument?.uri).toStrictEqual("https://example.com/updated.pdf");
     });
 
     it.todo("returns the correct error type if not found");

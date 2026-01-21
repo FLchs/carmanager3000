@@ -1,8 +1,12 @@
 import { db } from "#db/index";
 import { documents } from "#db/schemas/documents";
 import { DbError, NotFoundError } from "#lib/serviceErrors";
+import { saveFile } from "#utils/files";
+import { rootDir } from "#utils/paths";
 import { createDocumentSchema, updateDocumentSchema } from "@cm3k/validation";
 import { eq } from "drizzle-orm";
+import { writeFile } from "fs/promises";
+import path from "path";
 import { ok, err } from "true-myth/result";
 import * as z from "zod/v4";
 
@@ -54,7 +58,18 @@ export const getDocument = async (id: number) => {
 
 export const createDocument = async (input: z.infer<typeof createDocumentServiceSchema>) => {
   try {
-    const [document] = await db.insert(documents).values(input).returning({ id: documents.id });
+    const { file, ...docs } = input;
+
+    const result = await saveFile(file);
+    if (result.isErr) {
+      return err(result.error);
+    }
+    console.log({ ...docs, uri: result.value });
+
+    const [document] = await db
+      .insert(documents)
+      .values({ ...docs, uri: result.value })
+      .returning({ id: documents.id });
     return ok(document.id);
   } catch (error) {
     return err(new DbError(error));
