@@ -4,9 +4,8 @@ export const documentInSchema = z.object({
   date: z.coerce.date<Date>(),
   mileage: z.coerce.number<number>().int().nullable(),
   file: z.file(),
-  // uri: z.url().nullable(),
   note: z.string().nullable(),
-  type: z.enum(["cover"]),
+  typeId: z.coerce.number<number>().int(),
 });
 
 export const documentOutSchema = z.object({
@@ -15,7 +14,7 @@ export const documentOutSchema = z.object({
   mileage: z.number().int().nullable(),
   uri: z.string().nullable(),
   note: z.string().nullable(),
-  type: z.enum(["cover"]),
+  type: z.object({ name: z.string().nullable() }).nullable(),
 });
 
 export const createDocumentSchema = documentInSchema;
