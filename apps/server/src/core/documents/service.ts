@@ -2,11 +2,8 @@ import { db } from "#db/index";
 import { documents } from "#db/schemas/documents";
 import { DbError, NotFoundError } from "#lib/serviceErrors";
 import { saveFile } from "#utils/files";
-import { rootDir } from "#utils/paths";
 import { createDocumentSchema, updateDocumentSchema } from "@cm3k/validation";
 import { eq } from "drizzle-orm";
-import { writeFile } from "fs/promises";
-import path from "path";
 import { ok, err } from "true-myth/result";
 import * as z from "zod/v4";
 
@@ -19,13 +16,19 @@ export const listDocuments = async (entityId?: number, entityType?: "vehicle" | 
   try {
     const documentsList = await db.query.documents.findMany({
       where: { entityId, entityType, deleted: false },
+      with: {
+        type: {
+          columns: {
+            name: true,
+          },
+        },
+      },
       columns: {
         id: true,
         date: true,
         mileage: true,
         uri: true,
         note: true,
-        type: true,
       },
     });
     return ok(documentsList);
@@ -38,13 +41,19 @@ export const getDocument = async (id: number) => {
   try {
     const document = await db.query.documents.findFirst({
       where: { id },
+      with: {
+        type: {
+          columns: {
+            name: true,
+          },
+        },
+      },
       columns: {
         id: true,
         date: true,
         mileage: true,
         uri: true,
         note: true,
-        type: true,
       },
     });
     if (document !== undefined) {
@@ -64,7 +73,6 @@ export const createDocument = async (input: z.infer<typeof createDocumentService
     if (result.isErr) {
       return err(result.error);
     }
-    console.log({ ...docs, uri: result.value });
 
     const [document] = await db
       .insert(documents)

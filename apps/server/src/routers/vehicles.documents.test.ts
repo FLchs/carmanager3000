@@ -42,7 +42,7 @@ describe("/vehicles", () => {
         ok({
           id: 1,
           date: new Date("2024-03-15"),
-          type: "cover" as const,
+          type: { name: "THing" },
           mileage: 55000,
           note: "Insurance document",
           uri: "https://example.com/doc.pdf",
@@ -51,7 +51,7 @@ describe("/vehicles", () => {
     });
 
     const mockDocument = {
-      type: "cover" as const,
+      typeId: 1,
       date: new Date("2024-03-15"),
       mileage: 55000,
       note: "Insurance document",
