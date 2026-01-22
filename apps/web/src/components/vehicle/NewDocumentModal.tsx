@@ -25,7 +25,7 @@ export default function NewDocumentModal({
       mileage: 0,
       file: new File([], "", undefined),
       note: "",
-      type: "cover" as "cover",
+      typeId: 0,
     } as z.infer<typeof createDocumentSchema>,
     validators: {
       onChange: createDocumentSchema,
@@ -53,6 +53,7 @@ export default function NewDocumentModal({
           ...log.body,
           date: format(log.body.date, "yyyy-MM-dd"),
           uri: "",
+          type: null,
         };
         context.client.setQueryData(
           openapi.vehicles.documents.list.queryKey({
@@ -112,10 +113,10 @@ export default function NewDocumentModal({
               </>
             )}
           </form.AppField>
-          <form.AppField name="type">
+          <form.AppField name="typeId">
             {(field) => (
               <>
-                <field.TextField label="Type" />
+                <field.NumberField label="Type" />
               </>
             )}
           </form.AppField>

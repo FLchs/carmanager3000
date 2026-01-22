@@ -93,6 +93,9 @@ function Table({ id }: { id: number }) {
       columnHelper.accessor("type", {
         enableSorting: true,
         header: "Type",
+        cell: (row) => {
+          return row.getValue()?.name;
+        },
       }),
       columnHelper.accessor("date", {
         header: "Date",
