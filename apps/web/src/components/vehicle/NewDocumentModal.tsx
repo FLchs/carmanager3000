@@ -1,8 +1,7 @@
 import { createDocumentSchema } from "@cm3k/validation";
 import { isDefinedError } from "@orpc/client";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
-import { type z } from "zod/v4";
 
 import { useAppForm } from "@/hooks/useForm";
 import { openapi } from "@/lib/openapi";
@@ -21,19 +20,23 @@ export default function NewDocumentModal({
 
   const form = useAppForm({
     defaultValues: {
-      date: new Date(),
-      mileage: 0,
-      file: new File([], "", undefined),
+      date: null as Date | null,
+      mileage: "" as number | "",
+      file: null as File | null,
       note: "",
       typeId: 0,
-    } as z.infer<typeof createDocumentSchema>,
+    },
     validators: {
-      onChange: createDocumentSchema,
+      onChange: createDocumentSchema.omit({ file: true }),
+      onSubmit: createDocumentSchema,
     },
     onSubmit: async ({ value }) => {
-      createVehicleMutation.mutate({ body: value, params: { vehicleId: Number(id) } });
+      console.log(value);
+      // createVehicleMutation.mutate({ body: value, params: { vehicleId: Number(id) } });
     },
   });
+
+  const { data: types } = useQuery(openapi.documentTypes.list.queryOptions({}));
 
   const createVehicleMutation = useMutation(
     openapi.vehicles.documents.create.mutationOptions({
@@ -95,7 +98,7 @@ export default function NewDocumentModal({
           <form.AppField name="mileage">
             {(field) => (
               <>
-                <field.NumberField label="Mileage" />
+                <field.NumberField label="Mileage" nullable />
               </>
             )}
           </form.AppField>
@@ -116,7 +119,7 @@ export default function NewDocumentModal({
           <form.AppField name="typeId">
             {(field) => (
               <>
-                <field.NumberField label="Type" />
+                <field.SelectField label="Type" options={types} />
               </>
             )}
           </form.AppField>

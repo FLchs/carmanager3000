@@ -46,31 +46,34 @@ function DateInput({ label }: { label: string }) {
 
   return (
     <div>
-      <label className="text-text-muted" htmlFor={field.name}>
+      <label htmlFor={field.name} className="text-text-muted">
         {label}:
       </label>
-      <div className="flex flex-row bg-bg-light rounded-lg w-fit h-8 mt-1">
-        <div className="relative px-1 w-fit my-auto">
+      <div className="flex flex-row">
+        <div className="relative rounded-l-lg bg-bg-light">
           <input
-            type="text"
             value={fieldString}
             onChange={(e) => setFieldString(e.target.value)}
             onBlur={(e) => onBlur(e.target.value)}
-            className="outline-0 w-32"
+            type="text"
+            id={field.name}
+            className="block h-8 w-full p-3 text-sm outline-0 placeholder:text-sm"
             placeholder={localeFormat.toLowerCase()}
             maxLength={localeFormat.length}
           />
-
-          <button className="absolute right-1.5 h-full" type="button" onClick={clearField}>
-            <X className="w-4.5 cursor-pointer rounded-full h-4.5 p-0.5 text-text-muted" />
+          <button type="button" className="absolute right-0 bottom-0 h-full text-text-muted">
+            <X
+              className="mr-2 h-4.5 w-4.5 cursor-pointer rounded-full p-0.5 hover:bg-highlight"
+              onClick={clearField}
+            />
           </button>
         </div>
         <button
           type="button"
-          className="border-l-2 border-bg-dark p-1 cursor-pointer"
+          className="h-8 cursor-pointer rounded-r-lg border-l-2 border-bg-dark bg-bg-light px-1.5 text-text-muted hover:bg-highlight"
           onClick={() => setShowCalendar(true)}
         >
-          <CalendarIcon className="w-6 m-auto px-1" />
+          <CalendarIcon className="h-4 w-4" />
         </button>
       </div>
       {showCalendar && <Calendar value={field.state.value ?? new Date()} onChange={setDate} />}
