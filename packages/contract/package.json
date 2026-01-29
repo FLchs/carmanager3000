@@ -18,12 +18,12 @@
     "@orpc/client": "^1.13.4",
     "@orpc/contract": "^1.13.4",
     "@orpc/server": "^1.13.4",
-    "zod": "^4.3.5"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/bun": "latest",
     "oxfmt": "^0.21.0",
-    "oxlint": "^1.41.0"
+    "oxlint": "^1.42.0"
   },
   "peerDependencies": {
     "typescript": "^5.9.3"
