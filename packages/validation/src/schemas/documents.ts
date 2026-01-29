@@ -1,10 +1,10 @@
 import * as z from "zod/v4";
 
 export const documentInSchema = z.object({
-  date: z.coerce.date<Date>(),
+  date: z.coerce.date<Date>().nullable(),
   mileage: z.coerce.number<number>().int().nullable(),
-  file: z.file(),
-  note: z.string().nullable(),
+  file: z.custom<File | null>().refine((file) => file !== null, "A file is required"),
+  note: z.string(),
   typeId: z.coerce.number<number>().int(),
 });
 
