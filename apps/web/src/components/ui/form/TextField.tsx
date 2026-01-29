@@ -2,6 +2,7 @@ import { useStore } from "@tanstack/react-form";
 
 import { useFieldContext } from "../../../contexts/form-context";
 import FormErrors from "./FormErrors";
+import { X } from "lucide-react";
 
 export default function TextField({ label }: { label: string }) {
   const field = useFieldContext<string>();
@@ -9,17 +10,29 @@ export default function TextField({ label }: { label: string }) {
   const errors = useStore(field.store, (state) => state.meta.errors);
 
   return (
-    <div className="grid">
+    <div>
       <label className="text-text-muted" htmlFor={field.name}>
-        {label}
+        {label}:
       </label>
-      <input
-        className="bg-bg-light border-border text-text-muted rounded-lg border p-2 outline-0"
-        id={field.name}
-        onBlur={field.handleBlur}
-        onChange={(e) => field.handleChange(e.target.value)}
-        value={field.state.value}
-      />
+      <div className="flex flex-row">
+        <div className="relative w-full rounded-lg bg-bg-light">
+          <input
+            value={field.state.value}
+            onChange={(e) => {
+              field.handleChange(e.target.value);
+            }}
+            type="text"
+            id={field.name}
+            className="block h-8 w-full p-3 text-sm outline-0 placeholder:text-sm"
+          />
+          <button type="button" className="absolute right-0 bottom-0 h-full text-text-muted">
+            <X
+              className="mr-2 h-4.5 w-4.5 cursor-pointer rounded-full p-0.5 hover:bg-highlight"
+              onClick={() => field.setValue("")}
+            />
+          </button>
+        </div>
+      </div>
       <FormErrors errors={errors} />
     </div>
   );

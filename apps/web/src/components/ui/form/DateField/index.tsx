@@ -50,7 +50,7 @@ function DateInput({ label }: { label: string }) {
         {label}:
       </label>
       <div className="flex flex-row">
-        <div className="relative rounded-l-lg bg-bg-light">
+        <div className="relative w-full rounded-l-lg bg-bg-light">
           <input
             value={fieldString}
             onChange={(e) => setFieldString(e.target.value)}
