@@ -8,37 +8,36 @@ import { openapi } from "@/lib/openapi";
 
 import Modal from "../ui/Modal";
 export default function NewDocumentModal({
-  id,
+  vehicleId,
   onClose,
   visible,
 }: {
-  id: string;
+  vehicleId: string;
   onClose: () => void;
   visible: boolean;
 }) {
-  const client = useQueryClient();
+  const queryClient = useQueryClient();
 
   const form = useAppForm({
     defaultValues: {
       date: null as Date | null,
-      mileage: "" as number | "",
+      mileage: null as number | null,
       file: null as File | null,
       note: "",
       typeId: 0,
     },
     validators: {
-      onChange: createDocumentSchema.omit({ file: true }),
       onSubmit: createDocumentSchema,
     },
     onSubmit: async ({ value }) => {
       console.log(value);
-      // createVehicleMutation.mutate({ body: value, params: { vehicleId: Number(id) } });
+      createDocumentMutation.mutate({ body: value, params: { vehicleId: Number(vehicleId) } });
     },
   });
 
-  const { data: types } = useQuery(openapi.documentTypes.list.queryOptions({}));
+  const { data: documentTypes } = useQuery(openapi.documentTypes.list.queryOptions({}));
 
-  const createVehicleMutation = useMutation(
+  const createDocumentMutation = useMutation(
     openapi.vehicles.documents.create.mutationOptions({
       onError: async (error) => {
         if (isDefinedError(error) && error.code === "INPUT_VALIDATION_FAILED") {
@@ -50,24 +49,24 @@ export default function NewDocumentModal({
           });
         }
       },
-      onMutate: async (log, context) => {
-        const tempItem = {
+      onMutate: async (documentData, context) => {
+        const optimisticDocument = {
           id: 0,
-          ...log.body,
-          date: format(log.body.date, "yyyy-MM-dd"),
+          ...documentData.body,
+          date: documentData.body.date && format(documentData.body.date, "yyyy-MM-dd"),
           uri: "",
           type: null,
         };
         context.client.setQueryData(
           openapi.vehicles.documents.list.queryKey({
-            input: { params: { vehicleId: Number(id) } },
+            input: { params: { vehicleId: Number(vehicleId) } },
           }),
-          (old) => old && [...old, tempItem],
+          (oldDocuments) => oldDocuments && [...oldDocuments, optimisticDocument],
         );
       },
       onSuccess: async () => {
         form.reset();
-        void client.invalidateQueries({
+        void queryClient.invalidateQueries({
           queryKey: openapi.vehicles.documents.key(),
         });
         onClose();
@@ -79,7 +78,7 @@ export default function NewDocumentModal({
   return (
     <Modal>
       <div className="mb-2 flex flex-col gap-2">
-        <h1 className="font-bold">Add new log entry</h1>
+        <h1 className="font-bold">Add a new document</h1>
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -98,7 +97,7 @@ export default function NewDocumentModal({
           <form.AppField name="mileage">
             {(field) => (
               <>
-                <field.NumberField label="Mileage" nullable />
+                <field.NumberField label="Mileage" />
               </>
             )}
           </form.AppField>
@@ -119,16 +118,16 @@ export default function NewDocumentModal({
           <form.AppField name="typeId">
             {(field) => (
               <>
-                <field.SelectField label="Type" options={types} />
+                <field.SelectField label="Type" options={documentTypes} />
               </>
             )}
           </form.AppField>
           <form.AppForm>
-            <div className="flex flex-row gap-4">
-              <form.SubscribeButton type="submit">Save</form.SubscribeButton>
+            <div className="flex flex-row justify-end gap-4">
               <form.SubscribeButton callback={onClose} type="button" variant="secondary_outline">
                 Cancel
               </form.SubscribeButton>
+              <form.SubscribeButton type="submit">Save</form.SubscribeButton>
             </div>
           </form.AppForm>
         </form>
