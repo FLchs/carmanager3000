@@ -6,11 +6,11 @@ import { useFieldContext } from "../../../contexts/form-context";
 import FormErrors from "./FormErrors";
 
 export default function NumberField({ label, required }: { label: string; required?: boolean }) {
-  const field = useFieldContext<number | "">();
+  const field = useFieldContext<number>();
 
   const updateValue = useCallback(
     (int: number) => {
-      field.handleChange(Math.max(Number(field.state.value) + int, 0));
+      field.handleChange(Math.max(Number(field.state.value ?? "") + int, 0));
     },
     [field],
   );
@@ -33,7 +33,7 @@ export default function NumberField({ label, required }: { label: string; requir
         </button>
         <div className="relative w-full bg-bg-light">
           <input
-            value={field.state.value}
+            value={field.state.value ?? ""}
             onChange={(e) => {
               const val = parseInt(e.target.value);
               field.handleChange(Number.isNaN(val) ? 0 : val);

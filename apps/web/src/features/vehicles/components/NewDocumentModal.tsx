@@ -1,12 +1,13 @@
 import { createDocumentSchema } from "@cm3k/validation";
 import { isDefinedError } from "@orpc/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { format } from "date-fns";
 
 import { useAppForm } from "#/hooks/useForm";
 import { openapi } from "#/lib/openapi";
 
 import Modal from "#/components/ui/Modal";
+import type { z } from "zod/v4";
+import { format } from "date-fns";
 export default function NewDocumentModal({
   vehicleId,
   onClose,
@@ -21,18 +22,20 @@ export default function NewDocumentModal({
   const form = useAppForm({
     defaultValues: {
       name: "",
-      date: null as Date | null,
-      mileage: null as number | null,
-      file: null as File | null,
-      note: "",
+      date: undefined,
+      mileage: undefined,
+      file: undefined,
+      note: undefined,
       typeId: 0,
-    },
+    } as z.input<typeof createDocumentSchema>,
     validators: {
       onSubmit: createDocumentSchema,
     },
     onSubmit: async ({ value }) => {
-      console.log(value);
-      createDocumentMutation.mutate({ body: value, params: { vehicleId: Number(vehicleId) } });
+      createDocumentMutation.mutate({
+        body: value,
+        params: { vehicleId: Number(vehicleId) },
+      });
     },
   });
 
@@ -42,7 +45,6 @@ export default function NewDocumentModal({
     openapi.vehicles.documents.create.mutationOptions({
       onError: async (error) => {
         if (isDefinedError(error) && error.code === "INPUT_VALIDATION_FAILED") {
-          console.table(error.data.fieldErrors);
           form.setErrorMap({
             onSubmit: {
               fields: error.data.fieldErrors,
@@ -52,11 +54,15 @@ export default function NewDocumentModal({
       },
       onMutate: async (documentData, context) => {
         const optimisticDocument = {
+          name: documentData.body.name,
           id: 0,
-          ...documentData.body,
-          date: documentData.body.date && format(documentData.body.date, "yyyy-MM-dd"),
+          type: {
+            name: documentTypes?.find((d) => d.id === documentData.body.typeId)?.name ?? null,
+          },
+          note: documentData.body.note ?? "",
+          date: documentData.body.date ? format(documentData.body.date, "dd-MMM-yyyy") : null,
+          mileage: documentData.body.mileage ?? null,
           uri: "",
-          type: null,
         };
         context.client.setQueryData(
           openapi.vehicles.documents.list.queryKey({
@@ -66,11 +72,11 @@ export default function NewDocumentModal({
         );
       },
       onSuccess: async () => {
-        form.reset();
+        onClose();
         void queryClient.invalidateQueries({
           queryKey: openapi.vehicles.documents.key(),
         });
-        onClose();
+        form.reset();
       },
     }),
   );
@@ -98,7 +104,7 @@ export default function NewDocumentModal({
           <form.AppField name="file">
             {(field) => (
               <>
-                <field.FileField label="File" required />
+                <field.FileField label="File" />
               </>
             )}
           </form.AppField>

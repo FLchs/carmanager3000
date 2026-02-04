@@ -13,7 +13,7 @@ export default function SelectField({
   required?: boolean;
   options?: { id: string | number; name: string }[];
 }) {
-  const field = useFieldContext<string>();
+  const field = useFieldContext<number | undefined>();
 
   const errors = useStore(field.store, (state) => state.meta.errors);
 
@@ -31,15 +31,15 @@ export default function SelectField({
               id={field.name}
               onBlur={field.handleBlur}
               onChange={(e) => {
-                field.handleChange(e.target.value);
+                field.handleChange(Number(e.target.value));
               }}
               value={field.state.value}
               className="block h-8 w-full appearance-none pl-2 text-text-muted outline-0"
             >
-              <option value={0}></option>
-              {options?.map(({ id, name }) => {
+              <option value={undefined}></option>
+              {options?.map(({ name, id }) => {
                 return (
-                  <option value={id} key={id}>
+                  <option value={Number(id)} key={id}>
                     {name}
                   </option>
                 );

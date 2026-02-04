@@ -10,7 +10,7 @@ import FormErrors from "../FormErrors";
 import { Calendar } from "./Calendar";
 
 function DateInput({ label, required = false }: { label: string; required?: boolean }) {
-  const field = useFieldContext<Date | null>();
+  const field = useFieldContext<Date | undefined>();
   const errors = useStore(field.store, (state) => state.meta.errors);
   const [fieldString, setFieldString] = useState("");
   const [showCalendar, setShowCalendar] = useState(false);
@@ -41,7 +41,7 @@ function DateInput({ label, required = false }: { label: string; required?: bool
 
   const clearField = useCallback(() => {
     setFieldString("");
-    field.handleChange(null);
+    field.handleChange(undefined);
   }, [field]);
 
   return (
