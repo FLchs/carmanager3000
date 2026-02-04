@@ -9,7 +9,7 @@ import { useLocaleDateFormat } from "@/hooks/useLocaleDateFormat";
 import FormErrors from "../FormErrors";
 import { Calendar } from "./Calendar";
 
-function DateInput({ label }: { label: string }) {
+function DateInput({ label, required = false }: { label: string; required?: boolean }) {
   const field = useFieldContext<Date | null>();
   const errors = useStore(field.store, (state) => state.meta.errors);
   const [fieldString, setFieldString] = useState("");
@@ -46,8 +46,9 @@ function DateInput({ label }: { label: string }) {
 
   return (
     <div>
-      <label htmlFor={field.name} className="text-text-muted">
-        {label}:
+      <label className="text-text-muted" htmlFor={field.name}>
+        {label}
+        {required && <span className="text-primary"> * </span>}:
       </label>
       <div className="flex flex-row">
         <div className="relative w-full rounded-l-lg bg-bg-light">

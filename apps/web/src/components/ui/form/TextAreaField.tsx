@@ -4,7 +4,7 @@ import { useFieldContext } from "../../../contexts/form-context";
 import FormErrors from "./FormErrors";
 import { X } from "lucide-react";
 
-export default function TextAreaField({ label }: { label: string }) {
+export default function TextAreaField({ label, required }: { label: string; required?: boolean }) {
   const field = useFieldContext<string>();
 
   const errors = useStore(field.store, (state) => state.meta.errors);
@@ -12,7 +12,8 @@ export default function TextAreaField({ label }: { label: string }) {
   return (
     <div>
       <label className="text-text-muted" htmlFor={field.name}>
-        {label}:
+        {label}
+        {required && <span className="text-primary"> * </span>}:
       </label>
       <div className="flex flex-row">
         <div className="relative w-full rounded-lg bg-bg-light">

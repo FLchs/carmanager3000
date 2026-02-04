@@ -5,7 +5,7 @@ import { useCallback } from "react";
 import { useFieldContext } from "../../../contexts/form-context";
 import FormErrors from "./FormErrors";
 
-export default function NumberField({ label }: { label: string }) {
+export default function NumberField({ label, required }: { label: string; required?: boolean }) {
   const field = useFieldContext<number | "">();
 
   const updateValue = useCallback(
@@ -20,7 +20,8 @@ export default function NumberField({ label }: { label: string }) {
   return (
     <div>
       <label className="text-text-muted" htmlFor={field.name}>
-        {label}:
+        {label}
+        {required && <span className="text-primary"> * </span>}:
       </label>
       <div className="flex flex-row">
         <button

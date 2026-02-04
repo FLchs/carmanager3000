@@ -5,7 +5,13 @@ import FormErrors from "./FormErrors";
 import { FileIcon, X } from "lucide-react";
 import { useMemo } from "react";
 
-export default function FileField({ label }: { label: string }) {
+export default function FileField({
+  label,
+  required = false,
+}: {
+  label: string;
+  required?: boolean;
+}) {
   const field = useFieldContext<File | undefined>();
 
   const errors = useStore(field.store, (state) => state.meta.errors);
@@ -18,7 +24,8 @@ export default function FileField({ label }: { label: string }) {
   return (
     <div>
       <label className="text-text-muted" htmlFor={field.name}>
-        {label}:
+        {label}
+        {required && <span className="text-primary"> * </span>}:
       </label>
       {previewUrl ? (
         <Preview
@@ -54,6 +61,7 @@ export default function FileField({ label }: { label: string }) {
                 field.handleChange(file as any);
               }
             }}
+            required={required}
             type="file"
             id={field.name}
             className="hidden"
@@ -66,11 +74,10 @@ export default function FileField({ label }: { label: string }) {
 }
 
 function Preview({ url, onDelete, name }: { url: string; onDelete: () => void; name?: string }) {
-  // TODO: Make dimensions dynamic
   return (
-    <div className="relative my-2 w-fit rounded-lg bg-bg-light p-4 text-text-muted">
-      <object data={url} className="m-auto max-h-52 max-w-64"></object>
-      <p className="mx-auto max-w-52 text-center">{name}</p>
+    <div className="relative my-2 w-full rounded-lg bg-bg-light p-4 text-text-muted">
+      <object data={url} className="m-auto aspect-auto max-h-72 max-w-full"></object>
+      <p className="mx-auto text-center">{name}</p>
       <button type="button" className="absolute top-2 right-2 text-text-muted">
         <X
           className="h-4.5 w-4.5 cursor-pointer rounded-full bg-highlight p-0.5 hover:bg-highlight"

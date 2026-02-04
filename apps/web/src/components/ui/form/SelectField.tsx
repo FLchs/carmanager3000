@@ -6,9 +6,11 @@ import { ChevronsUpDown } from "lucide-react";
 
 export default function SelectField({
   label,
+  required = false,
   options,
 }: {
   label: string;
+  required?: boolean;
   options?: { id: string | number; name: string }[];
 }) {
   const field = useFieldContext<string>();
@@ -19,11 +21,13 @@ export default function SelectField({
     <>
       <div>
         <label className="text-text-muted" htmlFor={field.name}>
-          {label}:
+          {label}
+          {required && <span className="text-primary"> * </span>}:
         </label>
         <div className="flex flex-row">
           <div className="relative w-full rounded-lg bg-bg-light">
             <select
+              required={required}
               id={field.name}
               onBlur={field.handleBlur}
               onChange={(e) => {
