@@ -18,7 +18,7 @@ import NewDocumentModal from "./NewDocumentModal";
 function DocumentTable({ id }: { id: number }) {
   const [showAddModal, setShowAddModal] = useState(false);
   return (
-    <div className="bg-bg border-border rounded-lg border">
+    <div className="rounded-lg border border-border bg-bg">
       <div className="flex flex-row justify-between px-4 pt-2">
         <h3 className="text-text-muted">Recorded documents</h3>
         <Button callback={() => setShowAddModal(true)}>Add</Button>
@@ -145,7 +145,7 @@ function Table({ id }: { id: number }) {
   return (
     <div>
       <table className="w-full text-left">
-        <thead className="border-border border-b font-bold">
+        <thead className="border-b border-border font-bold">
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
@@ -167,8 +167,8 @@ function Table({ id }: { id: number }) {
                     >
                       {flexRender(header.column.columnDef.header, header.getContext())}
                       {{
-                        asc: <ArrowDownWideNarrow className="inline ml-1" size={18} />,
-                        desc: <ArrowUpWideNarrow className="inline ml-1" size={18} />,
+                        asc: <ArrowDownWideNarrow className="ml-1 inline" size={18} />,
+                        desc: <ArrowUpWideNarrow className="ml-1 inline" size={18} />,
                       }[header.column.getIsSorted() as string] ?? undefined}
                     </div>
                   )}
@@ -179,7 +179,7 @@ function Table({ id }: { id: number }) {
         </thead>
         <tbody>
           {table.getRowModel().rows.map((row) => (
-            <tr className={`border-border hover:bg-bg-dark border-b last:border-0`} key={row.id}>
+            <tr className={`border-b border-border last:border-0 hover:bg-bg-dark`} key={row.id}>
               {row.getVisibleCells().map((cell) => (
                 <td className="px-4 py-2" key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
