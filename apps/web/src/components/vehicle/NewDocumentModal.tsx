@@ -78,7 +78,7 @@ export default function NewDocumentModal({
   if (!visible) return;
   return (
     <Modal>
-      <div className="mb-2 flex flex-col gap-2">
+      <div className="mb-2 flex w-96 flex-col gap-2">
         <h1 className="font-bold">Add a new document</h1>
         <form
           onSubmit={(e) => {
@@ -91,10 +91,25 @@ export default function NewDocumentModal({
           <form.AppField name="name">
             {(field) => (
               <>
-                <field.TextField label="Name" />
+                <field.TextField label="Name" required />
               </>
             )}
           </form.AppField>
+          <form.AppField name="file">
+            {(field) => (
+              <>
+                <field.FileField label="File" required />
+              </>
+            )}
+          </form.AppField>
+          <form.AppField name="typeId">
+            {(field) => (
+              <>
+                <field.SelectField label="Type" options={documentTypes} required />
+              </>
+            )}
+          </form.AppField>
+
           <form.AppField name="date">
             {(field) => (
               <>
@@ -116,21 +131,10 @@ export default function NewDocumentModal({
               </>
             )}
           </form.AppField>
-          <form.AppField name="file">
-            {(field) => (
-              <>
-                <field.FileField label="File" />
-              </>
-            )}
-          </form.AppField>
-          <form.AppField name="typeId">
-            {(field) => (
-              <>
-                <field.SelectField label="Type" options={documentTypes} />
-              </>
-            )}
-          </form.AppField>
           <form.AppForm>
+            <p className="ml-auto text-sm text-text-muted">
+              fields marked <span className="text-primary">*</span> are required
+            </p>
             <div className="flex flex-row justify-end gap-4">
               <form.SubscribeButton callback={onClose} type="button" variant="secondary_outline">
                 Cancel
