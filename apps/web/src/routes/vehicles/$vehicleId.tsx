@@ -3,14 +3,14 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeftCircleIcon, Trash } from "lucide-react";
 import { Suspense, useCallback } from "react";
 
-import { ErrorZone } from "@/components/ErrorZone";
-import Button from "@/components/ui/Button";
-import InfoCard from "@/components/ui/InfoCard";
-import InfoCardItem from "@/components/ui/InfoCard/InfoCardItem";
-import DocumentTable from "@/features/vehicles/components/VehicleDocumentsTable";
-import OperationTable from "@/features/vehicles/components/VehicleOperationsTable";
-import { useDialog } from "@/hooks/useConfirm";
-import { openapi } from "@/lib/openapi";
+import { ErrorZone } from "#/components/ErrorZone";
+import Button from "#/components/ui/Button";
+import InfoCard from "#/components/ui/InfoCard";
+import InfoCardItem from "#/components/ui/InfoCard/InfoCardItem";
+import DocumentTable from "#/features/vehicles/components/VehicleDocumentsTable";
+import OperationTable from "#/features/vehicles/components/VehicleOperationsTable";
+import { useDialog } from "#/hooks/useConfirm";
+import { openapi } from "#/lib/openapi";
 
 export const Route = createFileRoute("/vehicles/$vehicleId")({
   component: RouteComponent,

@@ -5,10 +5,10 @@ import { isDefinedError } from "@orpc/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 
-import { useAppForm } from "@/hooks/useForm";
-import { openapi } from "@/lib/openapi";
+import { useAppForm } from "#/hooks/useForm";
+import { openapi } from "#/lib/openapi";
 
-import Modal from "@/components/ui/Modal";
+import Modal from "#/components/ui/Modal";
 export default function NewOperationModal({
   id,
   onClose,

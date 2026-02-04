@@ -3,8 +3,8 @@ import type { z } from "zod/v4";
 import { getVehicleSchema } from "@cm3k/validation";
 import { Link } from "@tanstack/react-router";
 
-import Card from "@/components/ui/Card";
-import VehicleMenu from "@/features/vehicles/components/vehicle-menu/VehicleMenu";
+import Card from "#/components/ui/Card";
+import VehicleMenu from "#/features/vehicles/components/vehicle-menu/VehicleMenu";
 
 type Vehicle = z.infer<typeof getVehicleSchema>;
 

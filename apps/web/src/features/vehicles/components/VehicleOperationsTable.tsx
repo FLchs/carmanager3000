@@ -9,10 +9,10 @@ import {
 import { ArrowDownWideNarrow, ArrowUpWideNarrow, LoaderCircleIcon, X } from "lucide-react";
 import { Suspense, useCallback, useMemo, useState } from "react";
 
-import { useDialog } from "@/hooks/useConfirm";
-import { openapi } from "@/lib/openapi";
+import { useDialog } from "#/hooks/useConfirm";
+import { openapi } from "#/lib/openapi";
 
-import Button from "@/components/ui/Button";
+import Button from "#/components/ui/Button";
 import NewOperationModal from "./NewOperationModal";
 
 function MaintenanceLogTable({ id }: { id: number }) {

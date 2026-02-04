@@ -3,9 +3,9 @@ import { useNavigate } from "@tanstack/react-router";
 import { Pen, Trash } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
 
-import PopoverContent from "@/components/ui/Popover";
-import { useDialog } from "@/hooks/useConfirm";
-import { openapi } from "@/lib/openapi";
+import PopoverContent from "#/components/ui/Popover";
+import { useDialog } from "#/hooks/useConfirm";
+import { openapi } from "#/lib/openapi";
 
 import Content from "./VehicleMenuContent";
 

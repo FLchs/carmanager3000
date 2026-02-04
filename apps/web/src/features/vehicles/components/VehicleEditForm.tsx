@@ -3,9 +3,9 @@ import type { z } from "zod/v4";
 import { getVehicleSchema, updateVehicleSchema } from "@cm3k/validation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { openapi } from "@/lib/openapi";
+import { openapi } from "#/lib/openapi";
 
-import { useAppForm } from "@/hooks/useForm";
+import { useAppForm } from "#/hooks/useForm";
 
 type VehicleEditData = z.infer<typeof getVehicleSchema>;
 type VehicleUpdateBody = z.input<typeof updateVehicleSchema>;

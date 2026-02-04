@@ -1,6 +1,6 @@
 import { use } from "react";
 
-import { ConfirmContext } from "@/contexts/ConfirmContext";
+import { ConfirmContext } from "#/contexts/ConfirmContext";
 
 export function useDialog() {
   const {

@@ -2,11 +2,11 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { Suspense, useState } from "react";
 
-import { ErrorZone } from "@/components/ErrorZone";
-import Button from "@/components/ui/Button";
-import VehicleCard from "@/features/vehicles/components/VehicleCard";
-import VehicleCreateForm from "@/features/vehicles/components/VehicleCreateForm";
-import { openapi } from "@/lib/openapi";
+import { ErrorZone } from "#/components/ErrorZone";
+import Button from "#/components/ui/Button";
+import VehicleCard from "#/features/vehicles/components/VehicleCard";
+import VehicleCreateForm from "#/features/vehicles/components/VehicleCreateForm";
+import { openapi } from "#/lib/openapi";
 
 export const Route = createFileRoute("/vehicles/")({
   component: RouteComponent,

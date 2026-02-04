@@ -3,10 +3,10 @@ import type { AnyFieldApi } from "@tanstack/react-form";
 import { isDefinedError } from "@orpc/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { openapi } from "@/lib/openapi";
+import { openapi } from "#/lib/openapi";
 
-import { useAppForm } from "@/hooks/useForm";
-import Card from "@/components/ui/Card";
+import { useAppForm } from "#/hooks/useForm";
+import Card from "#/components/ui/Card";
 
 function VehicleCreateForm({ cancel }: { cancel: () => void }) {
   const client = useQueryClient();
