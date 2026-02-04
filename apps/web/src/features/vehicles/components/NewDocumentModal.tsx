@@ -6,7 +6,7 @@ import { format } from "date-fns";
 import { useAppForm } from "@/hooks/useForm";
 import { openapi } from "@/lib/openapi";
 
-import Modal from "../ui/Modal";
+import Modal from "@/components/ui/Modal";
 export default function NewDocumentModal({
   vehicleId,
   onClose,

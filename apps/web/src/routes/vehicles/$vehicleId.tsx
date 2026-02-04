@@ -7,8 +7,8 @@ import { ErrorZone } from "@/components/ErrorZone";
 import Button from "@/components/ui/Button";
 import InfoCard from "@/components/ui/InfoCard";
 import InfoCardItem from "@/components/ui/InfoCard/InfoCardItem";
-import DocumentTable from "@/components/vehicle/DocumentsTable";
-import OperationTable from "@/components/vehicle/OperationsTable";
+import DocumentTable from "@/features/vehicles/components/VehicleDocumentsTable";
+import OperationTable from "@/features/vehicles/components/VehicleOperationsTable";
 import { useDialog } from "@/hooks/useConfirm";
 import { openapi } from "@/lib/openapi";
 

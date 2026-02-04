@@ -2,7 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeftCircleIcon } from "lucide-react";
 
-import EditVehicleForm from "@/components/vehicle/EditVehicleForm";
+import VehicleEditForm from "@/features/vehicles/components/VehicleEditForm";
 import { openapi } from "@/lib/openapi";
 
 export const Route = createFileRoute("/vehicles/edit/$id")({
@@ -28,7 +28,7 @@ function RouteComponent() {
         </Link>
       </div>
       <section className="max-w-[800px] p-4">
-        <EditVehicleForm
+        <VehicleEditForm
           onCancel={() => navigate({ params: { vehicleId: id }, to: "/vehicles/$vehicleId" })}
           onSuccess={() => navigate({ params: { vehicleId: id }, to: "/vehicles/$vehicleId" })}
           vehicle={vehicle}

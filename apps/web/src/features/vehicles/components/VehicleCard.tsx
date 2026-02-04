@@ -1,19 +1,14 @@
+import type { z } from "zod/v4";
+
+import { getVehicleSchema } from "@cm3k/validation";
 import { Link } from "@tanstack/react-router";
 
-import Card from "../ui/Card";
-import VehicleMenu from "./vehicleMenu";
+import Card from "@/components/ui/Card";
+import VehicleMenu from "@/features/vehicles/components/vehicle-menu/VehicleMenu";
 
-interface VehicleData {
-  brand: null | string;
-  engine: null | string;
-  id: number;
-  model: string;
-  power: null | number;
-  trim: null | string;
-  year: null | number;
-}
+type Vehicle = z.infer<typeof getVehicleSchema>;
 
-function Vehicle({ vehicle }: { vehicle: VehicleData }) {
+function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
   const { id, brand, engine, model, power, trim, year } = vehicle;
 
   return (
@@ -40,4 +35,4 @@ function Vehicle({ vehicle }: { vehicle: VehicleData }) {
   );
 }
 
-export default Vehicle;
+export default VehicleCard;

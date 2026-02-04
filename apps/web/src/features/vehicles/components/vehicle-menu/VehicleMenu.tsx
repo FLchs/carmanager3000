@@ -7,7 +7,7 @@ import PopoverContent from "@/components/ui/Popover";
 import { useDialog } from "@/hooks/useConfirm";
 import { openapi } from "@/lib/openapi";
 
-import Content from "./Content";
+import Content from "./VehicleMenuContent";
 
 export default function VehicleMenu({ id }: { id: number }) {
   const btnRef = useRef<HTMLButtonElement>(null);

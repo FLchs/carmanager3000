@@ -4,8 +4,8 @@ import { Suspense, useState } from "react";
 
 import { ErrorZone } from "@/components/ErrorZone";
 import Button from "@/components/ui/Button";
-import Vehicle from "@/components/vehicle/Vehicle";
-import VehicleCreateForm from "@/components/vehicle/VehicleCreateForm";
+import VehicleCard from "@/features/vehicles/components/VehicleCard";
+import VehicleCreateForm from "@/features/vehicles/components/VehicleCreateForm";
 import { openapi } from "@/lib/openapi";
 
 export const Route = createFileRoute("/vehicles/")({
@@ -47,7 +47,7 @@ function VehiclesList() {
   return (
     <>
       {vehicles.map((vehicle) => {
-        return <Vehicle key={vehicle.id} vehicle={vehicle} />;
+        return <VehicleCard key={vehicle.id} vehicle={vehicle} />;
       })}
     </>
   );

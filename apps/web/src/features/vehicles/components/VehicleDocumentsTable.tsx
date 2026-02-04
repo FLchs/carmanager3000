@@ -12,7 +12,7 @@ import { Suspense, useCallback, useMemo, useState } from "react";
 import { useDialog } from "@/hooks/useConfirm";
 import { openapi } from "@/lib/openapi";
 
-import Button from "../ui/Button";
+import Button from "@/components/ui/Button";
 import NewDocumentModal from "./NewDocumentModal";
 
 function DocumentTable({ id }: { id: number }) {

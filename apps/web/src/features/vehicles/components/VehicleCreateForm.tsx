@@ -5,8 +5,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { openapi } from "@/lib/openapi";
 
-import { useAppForm } from "../../hooks/useForm";
-import Card from "../ui/Card";
+import { useAppForm } from "@/hooks/useForm";
+import Card from "@/components/ui/Card";
 
 function VehicleCreateForm({ cancel }: { cancel: () => void }) {
   const client = useQueryClient();
