@@ -27,7 +27,7 @@ function DocumentTable({ id }: { id: number }) {
         <Table id={id} />
       </Suspense>
       <NewDocumentModal
-        id={id.toString()}
+        vehicleId={id.toString()}
         onClose={() => setShowAddModal(false)}
         visible={showAddModal}
       />
@@ -82,6 +82,10 @@ function Table({ id }: { id: number }) {
 
   const columns = useMemo(
     () => [
+      columnHelper.accessor("name", {
+        cell: (info) => info.renderValue(),
+        header: () => "Name",
+      }),
       columnHelper.accessor("mileage", {
         cell: (info) => info.renderValue(),
         header: () => "Mileage",

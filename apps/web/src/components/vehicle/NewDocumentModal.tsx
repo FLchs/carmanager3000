@@ -20,6 +20,7 @@ export default function NewDocumentModal({
 
   const form = useAppForm({
     defaultValues: {
+      name: "",
       date: null as Date | null,
       mileage: null as number | null,
       file: null as File | null,
@@ -87,6 +88,13 @@ export default function NewDocumentModal({
           }}
           className="grid gap-4"
         >
+          <form.AppField name="name">
+            {(field) => (
+              <>
+                <field.TextField label="Name" />
+              </>
+            )}
+          </form.AppField>
           <form.AppField name="date">
             {(field) => (
               <>
@@ -104,7 +112,7 @@ export default function NewDocumentModal({
           <form.AppField name="note">
             {(field) => (
               <>
-                <field.TextField label="Note" />
+                <field.TextAreaField label="Note" />
               </>
             )}
           </form.AppField>
