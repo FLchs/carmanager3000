@@ -9,6 +9,7 @@ import TextField from "@/components/ui/form/TextField";
 
 import { SubscribeButton } from "../components/ui/form/Button";
 import { fieldContext, formContext } from "../contexts/form-context";
+import TextAreaField from "@/components/ui/form/TextAreaField";
 
 export const { useAppForm, withFieldGroup, withForm } = createFormHook({
   fieldContext,
@@ -20,6 +21,7 @@ export const { useAppForm, withFieldGroup, withForm } = createFormHook({
     SelectField,
     CheckboxField,
     DateField,
+    TextAreaField,
   },
   formComponents: {
     SubscribeButton,
