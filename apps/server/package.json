@@ -23,7 +23,7 @@
     "@cm3k/contract": "workspace:*",
     "@cm3k/validation": "workspace:*",
     "@hono/swagger-ui": "^0.5.3",
-    "@libsql/client": "^0.15.15",
+    "@libsql/client": "^0.17.0",
     "@orpc/client": "^1.13.4",
     "@orpc/experimental-pino": "^1.13.4",
     "@orpc/openapi": "^1.13.4",
@@ -42,15 +42,15 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@types/bun": "^1.3.7",
+    "@types/bun": "^1.3.8",
     "@types/swagger-ui": "^5.21.1",
     "@types/swagger-ui-dist": "^3.30.6",
-    "@vitest/coverage-v8": "4.0.15",
+    "@vitest/coverage-v8": "4.0.18",
     "@vitest/ui": "^4.0.18",
-    "drizzle-kit": "^1.0.0-beta.9-e89174b",
-    "globals": "^16.5.0",
-    "oxfmt": "^0.21.0",
-    "oxlint": "^1.42.0",
+    "drizzle-kit": "^0.31.8",
+    "globals": "^17.3.0",
+    "oxfmt": "^0.28.0",
+    "oxlint": "^1.43.0",
     "vitest": "^4.0.18"
   }
 }
