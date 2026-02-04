@@ -41,6 +41,7 @@ describe("/vehicles", () => {
       vi.spyOn(documentService, "getDocument").mockResolvedValue(
         ok({
           id: 1,
+          name: "Test Document",
           date: new Date("2024-03-15"),
           type: { name: "THing" },
           mileage: 55000,
@@ -51,6 +52,7 @@ describe("/vehicles", () => {
     });
 
     const mockDocument = {
+      name: "Test Document",
       typeId: 1,
       date: new Date("2024-03-15"),
       mileage: 55000,

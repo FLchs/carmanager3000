@@ -42,7 +42,8 @@ describe("Documents service test", () => {
   });
 
   beforeEach(async () => {
-    await reset(dbModule.db, { documents, vehicles, operations });
+    await reset(dbModule.db, { vehicles, operations });
+    await dbModule.db.delete(documents);
   });
 
   describe("listDocuments", () => {
@@ -60,6 +61,7 @@ describe("Documents service test", () => {
       // Manually create documents
       for (let i = 0; i < 6; i++) {
         await dbModule.db.insert(documents).values({
+          name: "Test Document",
           typeId: 1,
           entityType: "vehicle",
           entityId: 1,
@@ -80,6 +82,7 @@ describe("Documents service test", () => {
       // Manually create documents for vehicle 1
       for (let i = 0; i < 6; i++) {
         await dbModule.db.insert(documents).values({
+          name: "Test Document",
           typeId: 1,
           entityType: "vehicle",
           entityId: 1,
@@ -104,6 +107,7 @@ describe("Documents service test", () => {
       const [{ id: documentId }] = await dbModule.db
         .insert(documents)
         .values({
+          name: "Test Document",
           typeId: 1,
           entityType: "vehicle",
           entityId: 1,
@@ -129,6 +133,7 @@ describe("Documents service test", () => {
       await seed(dbModule.db, { vehicles }, { count: 1 });
       const file = new File([], "testfile.pdf");
       const result = await createDocument({
+        name: "Test Document",
         date: new Date("2024-01-15"),
         mileage: 50000,
         note: "Insurance document",
@@ -163,6 +168,7 @@ describe("Documents service test", () => {
       const [{ id: documentId }] = await dbModule.db
         .insert(documents)
         .values({
+          name: "Test Document",
           typeId: 1,
           entityType: "vehicle",
           entityId: 1,
@@ -192,6 +198,7 @@ describe("Documents service test", () => {
       const [{ id: documentId }] = await dbModule.db
         .insert(documents)
         .values({
+          name: "Test Document",
           typeId: 1,
           entityType: "vehicle",
           entityId: 1,
@@ -201,6 +208,7 @@ describe("Documents service test", () => {
 
       for (let i = 0; i < 2; i++) {
         await dbModule.db.insert(documents).values({
+          name: "Test Document",
           typeId: 1,
           entityType: "vehicle",
           entityId: 1,

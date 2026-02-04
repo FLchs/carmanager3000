@@ -5,6 +5,7 @@ import { documentsTypes } from "./documentsTypes";
 
 export const documents = sqliteTable("documents", {
   id: integer().primaryKey({ autoIncrement: true }),
+  name: text().notNull(),
   date: integer({ mode: "timestamp" }),
   mileage: integer(),
   uri: text(),

@@ -25,6 +25,7 @@ export const listDocuments = async (entityId?: number, entityType?: "vehicle" | 
       },
       columns: {
         id: true,
+        name: true,
         date: true,
         mileage: true,
         uri: true,
@@ -50,6 +51,7 @@ export const getDocument = async (id: number) => {
       },
       columns: {
         id: true,
+        name: true,
         date: true,
         mileage: true,
         uri: true,
