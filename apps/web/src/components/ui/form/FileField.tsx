@@ -3,26 +3,54 @@ import { useStore } from "@tanstack/react-form";
 import { useFieldContext } from "../../../contexts/form-context";
 import FormErrors from "./FormErrors";
 import { FileIcon, X } from "lucide-react";
+import { useMemo } from "react";
 
 export default function FileField({ label }: { label: string }) {
-  const field = useFieldContext<File | null>();
+  const field = useFieldContext<File | undefined>();
 
   const errors = useStore(field.store, (state) => state.meta.errors);
+
+  const previewUrl = useMemo(() => {
+    if (field.state.value == null) return "";
+    return URL.createObjectURL(field.state.value);
+  }, [field]);
 
   return (
     <div>
       <label className="text-text-muted" htmlFor={field.name}>
         {label}:
       </label>
-      <div className="relative flex flex-row rounded-lg bg-bg-light">
-        <label className="relative flex h-8 cursor-pointer flex-row items-center gap-2 rounded-l-lg border-r-2 border-bg-dark bg-bg-light px-1.5 text-text-muted hover:bg-highlight">
+      {previewUrl ? (
+        <Preview
+          onDelete={() => field.setValue(undefined)}
+          name={field.state.value?.name}
+          url={previewUrl}
+        />
+      ) : (
+        <label className="relative flex h-8 cursor-pointer flex-row items-center gap-2 rounded-lg bg-bg-light px-1.5 text-text-muted hover:bg-highlight">
           <FileIcon className="h-4 w-4" />
           <span>Browse...</span>
           <input
             onChange={(e) => {
               const file = e.target.files?.[0];
               if (file) {
-                console.log(file);
+                // TODO: remove it when Tanstack Form is fixed
+                // https://github.com/TanStack/form/issues/1932
+                Object.defineProperties(file, {
+                  name: {
+                    value: file.name,
+                    enumerable: true,
+                  },
+                  size: {
+                    value: file.size,
+                    enumerable: true,
+                  },
+                  type: {
+                    value: file.type,
+                    enumerable: true,
+                  },
+                });
+
                 field.handleChange(file as any);
               }
             }}
@@ -31,15 +59,24 @@ export default function FileField({ label }: { label: string }) {
             className="hidden"
           />
         </label>
-        <button type="button" className="absolute right-0 bottom-0 h-full text-text-muted">
-          <X
-            className="mr-2 h-4.5 w-4.5 cursor-pointer rounded-full p-0.5 hover:bg-highlight"
-            onClick={() => field.setValue(null)}
-          />
-        </button>
-        <span className="m-auto text-text-muted">{field.state.value?.name}</span>
-      </div>
+      )}
       <FormErrors errors={errors} />
+    </div>
+  );
+}
+
+function Preview({ url, onDelete, name }: { url: string; onDelete: () => void; name?: string }) {
+  // TODO: Make dimensions dynamic
+  return (
+    <div className="relative my-2 w-fit rounded-lg bg-bg-light p-4 text-text-muted">
+      <object data={url} className="m-auto max-h-52 max-w-64"></object>
+      <p className="mx-auto max-w-52 text-center">{name}</p>
+      <button type="button" className="absolute top-2 right-2 text-text-muted">
+        <X
+          className="h-4.5 w-4.5 cursor-pointer rounded-full bg-highlight p-0.5 hover:bg-highlight"
+          onClick={onDelete}
+        />
+      </button>
     </div>
   );
 }

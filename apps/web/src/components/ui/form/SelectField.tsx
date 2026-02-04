@@ -2,6 +2,7 @@ import { useStore } from "@tanstack/react-form";
 
 import { useFieldContext } from "../../../contexts/form-context";
 import FormErrors from "./FormErrors";
+import { ChevronsUpDown } from "lucide-react";
 
 export default function SelectField({
   label,
@@ -29,9 +30,9 @@ export default function SelectField({
                 field.handleChange(e.target.value);
               }}
               value={field.state.value}
-              className="block h-8 w-full pl-2 text-text-muted outline-0"
+              className="block h-8 w-full appearance-none pl-2 text-text-muted outline-0"
             >
-              <option value={0}>-</option>
+              <option value={0}></option>
               {options?.map(({ id, name }) => {
                 return (
                   <option value={id} key={id}>
@@ -40,6 +41,12 @@ export default function SelectField({
                 );
               })}
             </select>
+            <button
+              type="button"
+              className="pointer-events-none absolute right-0 bottom-0 h-full text-text-muted"
+            >
+              <ChevronsUpDown className="pointer-events-none mr-2 h-4.5 w-4.5 p-0.5" />
+            </button>
           </div>
         </div>
         <FormErrors errors={errors} />
