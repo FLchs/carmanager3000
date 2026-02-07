@@ -92,8 +92,16 @@ const operations = {
     .route({
       method: "DELETE",
       path: "/{vehicleId}/{id}",
+      inputStructure: "detailed",
     })
-    .input(z.object({ id: z.coerce.number<number>() }))
+    .input(
+      z.object({
+        params: z.object({
+          vehicleId: z.coerce.number<number>(),
+          id: z.coerce.number<number>(),
+        }),
+      }),
+    )
     .output(successSchema),
 };
 

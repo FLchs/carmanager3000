@@ -7,6 +7,18 @@ import { z } from "zod/v4";
 
 import { router } from ".";
 
+const expectDefinedError = async (promise: Promise<unknown>) => {
+  try {
+    await promise;
+  } catch (error) {
+    const resolved = await error;
+    expect(isDefinedError(resolved)).toBe(true);
+    return;
+  }
+
+  throw new Error("Expected promise to reject");
+};
+
 describe("/vehicles", () => {
   describe("GET /{id}/operations", () => {
     let spy: ReturnType<typeof vi.spyOn>;
@@ -24,10 +36,10 @@ describe("/vehicles", () => {
 
     describe("throw with bad arguments", () => {
       it("returns error with invalid vehicleId type", async () => {
-        await expect(
+        await expectDefinedError(
           // @ts-expect-error: intentionally passing invalid type for testing
           call(router.vehicles.vehicles.operations.list, { params: { vehicleId: "invalid" } }),
-        ).rejects.toSatisfy((err) => isDefinedError(err));
+        );
       });
     });
   });
@@ -97,10 +109,10 @@ describe("/vehicles", () => {
       describe("call enpoint with bad arguments", () => {
         it.each(required)("should throw without required property %s", async (a) => {
           const damagedVehicle = { ...mockOperation, [a]: undefined };
-          await expect(
+          await expectDefinedError(
             // @ts-expect-error: intentionally passing invalid type for testing
             call(router.vehicles.vehicles.operations.create, damagedVehicle),
-          ).rejects.toSatisfy((err) => isDefinedError(err));
+          );
         });
       });
     });
@@ -114,17 +126,24 @@ describe("/vehicles", () => {
 
     describe("call endpoint with correct arguments", () => {
       it("calls removeOperation with correct id", async () => {
-        await call(router.vehicles.vehicles.operations.remove, { id: 1 });
+        await call(router.vehicles.vehicles.operations.remove, {
+          params: { vehicleId: 1, id: 1 },
+        });
         expect(spy).toHaveBeenCalledWith(1);
       });
     });
 
     describe("call endpoint with bad arguments", () => {
       it("rejects with invalid id type", async () => {
-        await expect(
-          // @ts-expect-error: intentionally passing invalid type for testing
-          call(router.vehicles.vehicles.operations.remove, { id: "invalid" }),
-        ).rejects.toSatisfy((err) => isDefinedError(err));
+        await expectDefinedError(
+          call(router.vehicles.vehicles.operations.remove, {
+            params: {
+              vehicleId: 1,
+              // @ts-expect-error: intentionally passing invalid type for testing
+              id: "invalid",
+            },
+          }),
+        );
       });
     });
   });

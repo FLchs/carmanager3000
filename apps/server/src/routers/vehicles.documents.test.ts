@@ -7,6 +7,18 @@ import { z } from "zod/v4";
 
 import { router } from ".";
 
+const expectDefinedError = async (promise: Promise<unknown>) => {
+  try {
+    await promise;
+  } catch (error) {
+    const resolved = await error;
+    expect(isDefinedError(resolved)).toBe(true);
+    return;
+  }
+
+  throw new Error("Expected promise to reject");
+};
+
 describe("/vehicles", () => {
   describe("GET /{id}/documents", () => {
     let spy: ReturnType<typeof vi.spyOn>;
@@ -24,10 +36,10 @@ describe("/vehicles", () => {
 
     describe("throw with bad arguments", () => {
       it("returns error with invalid vehicleId type", async () => {
-        await expect(
+        await expectDefinedError(
           // @ts-expect-error: intentionally passing invalid type for testing
           call(router.vehicles.vehicles.documents.list, { params: { vehicleId: "invalid" } }),
-        ).rejects.toSatisfy((err) => isDefinedError(err));
+        );
       });
     });
   });
@@ -110,10 +122,10 @@ describe("/vehicles", () => {
       describe("call endpoint with bad arguments", () => {
         it.each(required)("should throw without required property %s", async (a) => {
           const damagedDocument = { ...mockDocument, [a]: undefined };
-          await expect(
+          await expectDefinedError(
             // @ts-expect-error: intentionally passing invalid type for testing
             call(router.vehicles.vehicles.documents.create, damagedDocument),
-          ).rejects.toSatisfy((err) => isDefinedError(err));
+          );
         });
       });
     });

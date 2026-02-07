@@ -95,7 +95,7 @@ const operations = {
     return result.value;
   }),
   remove: o.vehicles.operations.remove.handler(async ({ input }) => {
-    const result = await removeOperation(input.id);
+    const result = await removeOperation(input.params.id);
     if (result.isErr) {
       throw result.error;
     }

@@ -8,6 +8,18 @@ import * as z from "zod/v4";
 
 import { router } from ".";
 
+const expectDefinedError = async (promise: Promise<unknown>) => {
+  try {
+    await promise;
+  } catch (error) {
+    const resolved = await error;
+    expect(isDefinedError(resolved)).toBe(true);
+    return;
+  }
+
+  throw new Error("Expected promise to reject");
+};
+
 describe("/vehicles", () => {
   describe("GET /", () => {
     let spy: Mocked<typeof vehicleService.listVehicle>;
@@ -50,9 +62,7 @@ describe("/vehicles", () => {
       it("return error with bad argument", async () => {
         // TODO: good place to start typed error checking
         // @ts-expect-error: intentionally passing invalid type for testing
-        await expect(call(router.vehicles.vehicles.get, { id: "hello" })).rejects.toSatisfy((err) =>
-          isDefinedError(err),
-        );
+        await expectDefinedError(call(router.vehicles.vehicles.get, { id: "hello" }));
       });
 
       it("return error with unknown id", async () => {
@@ -61,9 +71,7 @@ describe("/vehicles", () => {
           .spyOn(vehicleService, "getVehicle")
           // @ts-expect-error: intentionally passing invalid type for testing
           .mockResolvedValue(err(new NotFoundError({ data: { message: "error" } })));
-        await expect(call(router.vehicles.vehicles.get, { id: 12 })).rejects.toSatisfy((err) =>
-          isDefinedError(err),
-        );
+        await expectDefinedError(call(router.vehicles.vehicles.get, { id: 12 }));
       });
     });
   });
@@ -110,9 +118,7 @@ describe("/vehicles", () => {
     describe("call enpoint with bad arguments", () => {
       it.each(required)("should throw without required property %s", async (a) => {
         const damagedVehicle = { ...mockVehicle, [a]: undefined };
-        await expect(call(router.vehicles.vehicles.create, damagedVehicle)).rejects.toSatisfy(
-          (err) => isDefinedError(err),
-        );
+        await expectDefinedError(call(router.vehicles.vehicles.create, damagedVehicle));
       });
     });
   });

@@ -25,3 +25,4 @@ Task 7 complete: updated service integration tests to use ISO datetime strings, 
 - 2026-02-07: Added OpenAPI test utility helpers to generate valid/invalid params and request bodies from spec schemas.
 - 2026-02-07: Added OpenAPI route validation tests to exercise every spec path with valid and invalid payloads via OpenAPIHandler.
 - 2026-02-07: Added OpenAPI spec vs router parity test to assert routes match exactly.
+- 2026-02-07: Fixed vehicles operations remove contract to use detailed params and updated server handler/tests; regenerated `apps/server/openapi.json` and ran `bun test` (failures in integration tests and openapi validation logs remain).
