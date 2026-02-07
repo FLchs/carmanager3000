@@ -65,6 +65,10 @@ const HTTP_METHODS = new Set(["get", "post", "put", "patch", "delete", "options"
 const buildPath = (template: string, params: Record<string, string>) =>
   template.replace(/\{([^}]+)\}/g, (_, name) => encodeURIComponent(params[name] ?? "1"));
 
+const normalizePath = (path: string) => (path.length > 1 ? path.replace(/\/+$/, "") : path);
+
+const normalizeMethod = (method: string) => method.toLowerCase();
+
 const buildRequestInit = (method: string, requestBody: BuiltRequestBody | null): RequestInit => {
   if (!requestBody) {
     return { method: method.toUpperCase() };
@@ -160,6 +164,39 @@ const collectOperations = (document: OpenAPIDocument) => {
   }
 
   return operations;
+};
+
+const collectRouterRoutes = (routerNode: unknown) => {
+  const routes: Array<{ path: string; method: string }> = [];
+  const visited = new Set<object>();
+
+  const walk = (node: unknown) => {
+    if (!node || typeof node !== "object") {
+      return;
+    }
+
+    if (visited.has(node as object)) {
+      return;
+    }
+
+    visited.add(node as object);
+
+    const orpc = (node as { "~orpc"?: { route?: { method?: string; path?: string } } })["~orpc"];
+    if (orpc?.route?.method && orpc?.route?.path) {
+      routes.push({
+        method: normalizeMethod(orpc.route.method),
+        path: normalizePath(orpc.route.path),
+      });
+      return;
+    }
+
+    for (const value of Object.values(node as Record<string, unknown>)) {
+      walk(value);
+    }
+  };
+
+  walk(routerNode);
+  return routes;
 };
 
 describe("OpenAPI route validation", () => {
@@ -303,5 +340,25 @@ describe("OpenAPI route validation", () => {
       expect(result.response.status, `${method.toUpperCase()} ${path} should reject`).toBeGreaterThanOrEqual(400);
       expect(result.response.status, `${method.toUpperCase()} ${path} should reject`).toBeLessThan(500);
     }
+  });
+
+  it("matches spec routes to router routes", () => {
+    const routerRoutes = collectRouterRoutes(router).map(({ path, method }) => ({
+      path,
+      method,
+    }));
+    const specRoutes = collectOperations(document).map(({ path, method }) => ({
+      path: normalizePath(path),
+      method: normalizeMethod(method),
+    }));
+
+    const routerSet = new Set(routerRoutes.map(({ path, method }) => `${method} ${path}`));
+    const specSet = new Set(specRoutes.map(({ path, method }) => `${method} ${path}`));
+
+    const missingInSpec = [...routerSet].filter((route) => !specSet.has(route)).sort();
+    const extraInSpec = [...specSet].filter((route) => !routerSet.has(route)).sort();
+
+    expect(missingInSpec, `Spec is missing routes: ${missingInSpec.join(", ")}`).toEqual([]);
+    expect(extraInSpec, `Spec has extra routes: ${extraInSpec.join(", ")}`).toEqual([]);
   });
 });

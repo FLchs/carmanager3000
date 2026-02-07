@@ -24,3 +24,4 @@ Task 7 complete: updated service integration tests to use ISO datetime strings, 
 - 2026-02-07: Added `openapi:generate` script to `apps/server/package.json` to run the OpenAPI generator.
 - 2026-02-07: Added OpenAPI test utility helpers to generate valid/invalid params and request bodies from spec schemas.
 - 2026-02-07: Added OpenAPI route validation tests to exercise every spec path with valid and invalid payloads via OpenAPIHandler.
+- 2026-02-07: Added OpenAPI spec vs router parity test to assert routes match exactly.
