@@ -16,7 +16,7 @@ import {
   buildQueryParams,
   buildRequestBody,
 } from "./openapi-test-utils";
-import { router } from "./routers";
+import { router } from "../routers";
 
 type OpenAPISchema = {
   $ref?: string;

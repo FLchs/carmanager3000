@@ -9,8 +9,8 @@
   },
   "scripts": {
     "dev": "bun run --hot src/index.ts",
-    "openapi": "bun run --hot src/openapi.ts",
-    "openapi:generate": "bun run src/openapi-generate.ts",
+    "openapi": "bun run --hot src/openapi/openapi.ts",
+    "openapi:generate": "bun run src/openapi/openapi-generate.ts",
     "lint": "oxlint",
     "format": "oxfmt",
     "test": "vitest",

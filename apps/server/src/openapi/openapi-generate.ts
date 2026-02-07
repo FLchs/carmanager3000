@@ -3,7 +3,7 @@ import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 import { writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
-import { router } from "./routers";
+import { router } from "../routers";
 
 const outputPath = fileURLToPath(new URL("../openapi.json", import.meta.url));
 

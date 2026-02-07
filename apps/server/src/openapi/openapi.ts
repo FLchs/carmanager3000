@@ -7,7 +7,7 @@ import { serveStatic } from "hono/bun";
 import { logger } from "hono/logger";
 import { absolutePath } from "swagger-ui-dist";
 
-import { router } from "./routers";
+import { router } from "../routers";
 
 const app = new Hono();
 app.use(logger());
