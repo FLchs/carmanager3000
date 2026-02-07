@@ -1,7 +1,7 @@
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 import { timestamps } from "../helpers/timestamps";
-import { documentsTypes } from "./documentsTypes";
+import { documentsTypes } from "./documentTypes";
 
 export const documents = sqliteTable("documents", {
   id: integer().primaryKey({ autoIncrement: true }),

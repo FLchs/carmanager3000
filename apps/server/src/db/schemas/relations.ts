@@ -1,7 +1,7 @@
 import { defineRelations } from "drizzle-orm";
 
 import { documents } from "./documents";
-import { documentsTypes } from "./documentsTypes";
+import { documentsTypes } from "./documentTypes";
 import { operations } from "./operations";
 import { vehicles } from "./vehicle";
 
