@@ -11,3 +11,5 @@ Findings
 Task 3 complete: updated validation schemas to use ISO datetime strings at the wire boundary for document and operation dates.
 
 Task 4 complete: added server adapters to parse ISO date strings into Date for inserts/updates and return ISO strings for document/operation responses.
+
+Task 2 complete: documented explicit wire rules per type in docs/wire-types.md.
