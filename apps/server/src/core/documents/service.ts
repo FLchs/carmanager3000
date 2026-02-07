@@ -16,8 +16,13 @@ const toIsoString = (value: Date | null | undefined) => (value ? value.toISOStri
 
 export const listDocuments = async (entityId?: number, entityType?: "vehicle" | "operation") => {
   try {
+    const whereClause = {
+      deleted: false,
+      ...(entityId !== undefined ? { entityId } : {}),
+      ...(entityType !== undefined ? { entityType } : {}),
+    };
     const documentsList = await db.query.documents.findMany({
-      where: { entityId, entityType, deleted: false },
+      where: whereClause,
       with: {
         type: {
           columns: {
@@ -65,7 +70,7 @@ export const getDocument = async (id: number) => {
         note: true,
       },
     });
-    if (document !== undefined) {
+    if (document) {
       return ok({
         ...document,
         date: toIsoString(document.date),

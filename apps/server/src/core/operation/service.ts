@@ -10,8 +10,12 @@ const toIsoString = (value: Date | null | undefined) => (value ? value.toISOStri
 
 export const listOperations = async (vehicleId?: number) => {
   try {
+    const whereClause = {
+      deleted: false,
+      ...(vehicleId !== undefined ? { vehicleId } : {}),
+    };
     const operationsList = await db.query.operations.findMany({
-      where: { vehicleId, deleted: false },
+      where: whereClause,
       columns: {
         id: true,
         date: true,
@@ -43,7 +47,7 @@ export const getOperation = async (id: number) => {
         type: true,
       },
     });
-    if (operation !== undefined) {
+    if (operation) {
       return ok({
         ...operation,
         date: toIsoString(operation.date),
