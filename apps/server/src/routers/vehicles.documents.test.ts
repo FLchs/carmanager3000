@@ -42,7 +42,7 @@ describe("/vehicles", () => {
         ok({
           id: 1,
           name: "Test Document",
-          date: new Date("2024-03-15"),
+          date: "2024-03-15T00:00:00.000Z",
           type: { name: "THing" },
           mileage: 55000,
           note: "Insurance document",
@@ -54,7 +54,7 @@ describe("/vehicles", () => {
     const mockDocument = {
       name: "Test Document",
       typeId: 1,
-      date: new Date("2024-03-15"),
+      date: "2024-03-15T00:00:00.000Z",
       mileage: 55000,
       note: "Insurance document",
       file: new File([], "testfile.pdf"),

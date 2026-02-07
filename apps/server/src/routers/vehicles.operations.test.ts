@@ -39,7 +39,7 @@ describe("/vehicles", () => {
       spy = vi.spyOn(operationService, "createOperation").mockResolvedValue(ok(1) as Awaited<ReturnType<typeof operationService.createOperation>>);
       getOperationSpy = vi.spyOn(operationService, "getOperation").mockResolvedValue(ok({
         id: 1,
-        date: new Date("2024-03-15"),
+        date: "2024-03-15T00:00:00.000Z",
         type: "maintenance",
         mileage: 55000,
         note: "Regular maintenance",
@@ -48,7 +48,7 @@ describe("/vehicles", () => {
 
     const mockOperation = {
       type: "maintenance",
-      date: new Date("2024-03-15"),
+      date: "2024-03-15T00:00:00.000Z",
       mileage: 55000,
       note: "Regular maintenance",
     };
