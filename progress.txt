@@ -17,3 +17,5 @@ Task 2 complete: documented explicit wire rules per type in docs/wire-types.md.
 Task 5 complete: updated API boundary router tests to use ISO datetime strings for document and operation dates.
 
 Task 6 complete: expanded docs/wire-types.md with wire vs runtime guidance, examples, multipart note, and checklist.
+
+Task 7 complete: updated service integration tests to use ISO datetime strings, ran `bun run typecheck` and `bun run --filter @cm3k/server test`.
