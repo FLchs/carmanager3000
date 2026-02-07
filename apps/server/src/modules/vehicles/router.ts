@@ -3,20 +3,14 @@ import {
   getDocument,
   listDocuments,
   removeDocument,
-} from "#core/documents/service";
+} from "../documents/service";
 import {
   createOperation,
   getOperation,
   listOperations,
   removeOperation,
-} from "#core/operation/service";
-import {
-  createVehicle,
-  getVehicle,
-  listVehicle,
-  removeVehicle,
-  updateVehicle,
-} from "#core/vehicle/service";
+} from "../operations/service";
+import { createVehicle, getVehicle, listVehicle, removeVehicle, updateVehicle } from "./service";
 import { vehiclesContract } from "@cm3k/contract";
 import { implement } from "@orpc/server";
 

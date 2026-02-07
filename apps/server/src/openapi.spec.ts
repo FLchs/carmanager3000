@@ -4,10 +4,10 @@ import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import { ok } from "true-myth/result";
 
-import * as documentService from "#core/documents/service";
-import * as documentTypeService from "#core/documentTypes/service";
-import * as operationService from "#core/operation/service";
-import * as vehicleService from "#core/vehicle/service";
+import * as documentService from "#modules/documents/service";
+import * as documentTypeService from "#modules/document-types/service";
+import * as operationService from "#modules/operations/service";
+import * as vehicleService from "#modules/vehicles/service";
 
 import {
   buildInvalidRequestBody,

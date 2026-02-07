@@ -1,4 +1,4 @@
-import { removeDocument } from "#core/documents/service";
+import { removeDocument } from "./service";
 import { documentsContract } from "@cm3k/contract";
 import { implement } from "@orpc/server";
 

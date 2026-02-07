@@ -1,11 +1,11 @@
-import * as operationService from "#core/operation/service";
+import * as operationService from "../operations/service";
 import { createOperationSchema } from "@cm3k/validation";
 import { call, isDefinedError } from "@orpc/server";
 import { ok } from "true-myth/result";
 import { beforeAll, describe, expect, it, vi, type Mocked } from "vitest";
 import { z } from "zod/v4";
 
-import { router } from ".";
+import { vehiclesRouter } from "./router";
 
 const expectDefinedError = async (promise: Promise<unknown>) => {
   try {
@@ -29,7 +29,7 @@ describe("/vehicles", () => {
     describe("call endpoint with correct arguments", () => {
       it("calls listOperations with correct vehicleId", async () => {
         spy.mockResolvedValue(ok([]));
-        await call(router.vehicles.vehicles.operations.list, { params: { vehicleId: 1 } });
+        await call(vehiclesRouter.vehicles.operations.list, { params: { vehicleId: 1 } });
         expect(spy).toHaveBeenCalledWith(1);
       });
     });
@@ -38,7 +38,7 @@ describe("/vehicles", () => {
       it("returns error with invalid vehicleId type", async () => {
         await expectDefinedError(
           // @ts-expect-error: intentionally passing invalid type for testing
-          call(router.vehicles.vehicles.operations.list, { params: { vehicleId: "invalid" } }),
+          call(vehiclesRouter.vehicles.operations.list, { params: { vehicleId: "invalid" } }),
         );
       });
     });
@@ -67,7 +67,7 @@ describe("/vehicles", () => {
 
     describe("call endpoint with correct arguments", () => {
       it("calls createOperation with vehicleId from params and body data", async () => {
-        await call(router.vehicles.vehicles.operations.create, {
+        await call(vehiclesRouter.vehicles.operations.create, {
           body: mockOperation,
           params: { vehicleId: 1 },
         });
@@ -90,7 +90,7 @@ describe("/vehicles", () => {
       const optional = Object.keys(mockOperation).filter((k) => !required.includes(k));
       describe("call endpoint with correct arguments", () => {
         it("calls createVehicle with correct argument", async () => {
-          await call(router.vehicles.vehicles.operations.create, {
+          await call(vehiclesRouter.vehicles.operations.create, {
             body: mockOperation,
             params: { vehicleId: 1 },
           });
@@ -99,7 +99,7 @@ describe("/vehicles", () => {
 
         it.each(optional)("should not throw without optional property %s", async (a) => {
           const damagedVehicle = { ...mockOperation, [a]: undefined };
-          const result = await call(router.vehicles.vehicles.operations.create, {
+          const result = await call(vehiclesRouter.vehicles.operations.create, {
             body: damagedVehicle,
             params: { vehicleId: 1 },
           });
@@ -111,7 +111,7 @@ describe("/vehicles", () => {
           const damagedVehicle = { ...mockOperation, [a]: undefined };
           await expectDefinedError(
             // @ts-expect-error: intentionally passing invalid type for testing
-            call(router.vehicles.vehicles.operations.create, damagedVehicle),
+            call(vehiclesRouter.vehicles.operations.create, damagedVehicle),
           );
         });
       });
@@ -126,7 +126,7 @@ describe("/vehicles", () => {
 
     describe("call endpoint with correct arguments", () => {
       it("calls removeOperation with correct id", async () => {
-        await call(router.vehicles.vehicles.operations.remove, {
+        await call(vehiclesRouter.vehicles.operations.remove, {
           params: { vehicleId: 1, id: 1 },
         });
         expect(spy).toHaveBeenCalledWith(1);
@@ -136,7 +136,7 @@ describe("/vehicles", () => {
     describe("call endpoint with bad arguments", () => {
       it("rejects with invalid id type", async () => {
         await expectDefinedError(
-          call(router.vehicles.vehicles.operations.remove, {
+          call(vehiclesRouter.vehicles.operations.remove, {
             params: {
               vehicleId: 1,
               // @ts-expect-error: intentionally passing invalid type for testing

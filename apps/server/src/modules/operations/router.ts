@@ -1,4 +1,4 @@
-import { listOperations } from "#core/operation/service";
+import { listOperations } from "./service";
 import { os } from "@orpc/server";
 
 const list = os

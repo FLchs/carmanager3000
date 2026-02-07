@@ -1,4 +1,4 @@
-import { listDocumentTypes } from "#core/documentTypes/service";
+import { listDocumentTypes } from "./service";
 import { documentTypesContract } from "@cm3k/contract";
 import { implement } from "@orpc/server";
 
