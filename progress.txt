@@ -1,0 +1,9 @@
+Task 1 complete: inventoried complex/edge types at API boundaries.
+
+Findings
+- documents schema: documentInSchema has date z.coerce.date().optional(), mileage z.coerce.number().int().optional(), file z.custom<File | undefined>(), typeId z.coerce.number().int(). documentOutSchema has date z.date().nullable(), mileage z.number().int().nullable(), uri/note/type.name nullable.
+- operations schema: operationInSchema has date z.coerce.date().nullable(), mileage z.number().int(); operationOutSchema has date z.date().nullable(), mileage z.number().int().nullable(), note nullable.
+- vehicles schema: power/year z.coerce.number().nullable() in output, z.coerce.number() in input; description/engine/trim nullable in output; no unions or discriminators.
+- documentTypes schema: id z.number().int().
+- No z.bigint, z.custom only in document file upload, no unions/discriminated unions found.
+- Contract exposure: documentsContract remove uses z.coerce.number id; vehiclesContract exposes create/update/list/get for vehicles, operations, documents with the schemas above; documentTypesContract list outputs listDocumentTypesSchema.
