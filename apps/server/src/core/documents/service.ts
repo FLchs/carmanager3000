@@ -12,6 +12,8 @@ const createDocumentServiceSchema = createDocumentSchema.extend({
   entityType: z.enum(["vehicle", "operation"]),
 });
 
+const toIsoString = (value: Date | null | undefined) => (value ? value.toISOString() : null);
+
 export const listDocuments = async (entityId?: number, entityType?: "vehicle" | "operation") => {
   try {
     const documentsList = await db.query.documents.findMany({
@@ -32,7 +34,12 @@ export const listDocuments = async (entityId?: number, entityType?: "vehicle" | 
         note: true,
       },
     });
-    return ok(documentsList);
+    return ok(
+      documentsList.map((document) => ({
+        ...document,
+        date: toIsoString(document.date),
+      })),
+    );
   } catch (error) {
     return err(new DbError(error));
   }
@@ -59,7 +66,10 @@ export const getDocument = async (id: number) => {
       },
     });
     if (document !== undefined) {
-      return ok(document);
+      return ok({
+        ...document,
+        date: toIsoString(document.date),
+      });
     }
     return err(new NotFoundError("Document not found"));
   } catch (eror) {
@@ -69,7 +79,8 @@ export const getDocument = async (id: number) => {
 
 export const createDocument = async (input: z.infer<typeof createDocumentServiceSchema>) => {
   try {
-    const { file, ...docs } = input;
+    const { file, date, ...docs } = input;
+    const dbDate = date ? new Date(date) : undefined;
 
     const result = await saveFile(file);
     if (result.isErr) {
@@ -78,7 +89,7 @@ export const createDocument = async (input: z.infer<typeof createDocumentService
 
     const [document] = await db
       .insert(documents)
-      .values({ ...docs, uri: result.value })
+      .values({ ...docs, date: dbDate, uri: result.value })
       .returning({ id: documents.id });
     return ok(document.id);
   } catch (error) {
@@ -88,7 +99,16 @@ export const createDocument = async (input: z.infer<typeof createDocumentService
 
 export const updateDocument = async (id: number, input: z.infer<typeof updateDocumentSchema>) => {
   try {
-    const result = await db.update(documents).set(input).where(eq(documents.id, id)).returning();
+    const { date, ...rest } = input;
+    const updateData = {
+      ...rest,
+      ...(date !== undefined ? { date: new Date(date) } : {}),
+    };
+    const result = await db
+      .update(documents)
+      .set(updateData)
+      .where(eq(documents.id, id))
+      .returning();
     if (result.length === 0) {
       return err(new NotFoundError("Document not found"));
     }

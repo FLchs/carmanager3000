@@ -6,6 +6,8 @@ import { eq } from "drizzle-orm";
 import { ok, err } from "true-myth/result";
 import * as z from "zod/v4";
 
+const toIsoString = (value: Date | null | undefined) => (value ? value.toISOString() : null);
+
 export const listOperations = async (vehicleId?: number) => {
   try {
     const operationsList = await db.query.operations.findMany({
@@ -18,7 +20,12 @@ export const listOperations = async (vehicleId?: number) => {
         type: true,
       },
     });
-    return ok(operationsList);
+    return ok(
+      operationsList.map((operation) => ({
+        ...operation,
+        date: toIsoString(operation.date),
+      })),
+    );
   } catch (error) {
     return err(new DbError(error));
   }
@@ -37,7 +44,10 @@ export const getOperation = async (id: number) => {
       },
     });
     if (operation !== undefined) {
-      return ok(operation);
+      return ok({
+        ...operation,
+        date: toIsoString(operation.date),
+      });
     }
     return err(new NotFoundError("Operation not found"));
   } catch (eror) {
@@ -47,9 +57,11 @@ export const getOperation = async (id: number) => {
 
 export const createOperation = async (id: number, input: z.infer<typeof createOperationSchema>) => {
   try {
+    const { date, ...rest } = input;
+    const dbDate = date ? new Date(date) : null;
     const [operation] = await db
       .insert(operations)
-      .values({ ...input, vehicleId: id })
+      .values({ ...rest, date: dbDate, vehicleId: id })
       .returning({ id: operations.id });
     return ok(operation.id);
   } catch (error) {
@@ -59,7 +71,16 @@ export const createOperation = async (id: number, input: z.infer<typeof createOp
 
 export const updateOperation = async (id: number, input: z.infer<typeof updateOperationSchema>) => {
   try {
-    const result = await db.update(operations).set(input).where(eq(operations.id, id)).returning();
+    const { date, ...rest } = input;
+    const updateData = {
+      ...rest,
+      ...(date !== undefined ? { date: date ? new Date(date) : null } : {}),
+    };
+    const result = await db
+      .update(operations)
+      .set(updateData)
+      .where(eq(operations.id, id))
+      .returning();
     if (result.length === 0) {
       return err(new NotFoundError("Operation not found"));
     }
