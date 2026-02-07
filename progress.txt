@@ -7,3 +7,5 @@ Findings
 - documentTypes schema: id z.number().int().
 - No z.bigint, z.custom only in document file upload, no unions/discriminated unions found.
 - Contract exposure: documentsContract remove uses z.coerce.number id; vehiclesContract exposes create/update/list/get for vehicles, operations, documents with the schemas above; documentTypesContract list outputs listDocumentTypesSchema.
+
+Task 3 complete: updated validation schemas to use ISO datetime strings at the wire boundary for document and operation dates.
