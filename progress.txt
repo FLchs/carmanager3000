@@ -21,3 +21,4 @@ Task 6 complete: expanded docs/wire-types.md with wire vs runtime guidance, exam
 Task 7 complete: updated service integration tests to use ISO datetime strings, ran `bun run typecheck` and `bun run --filter @cm3k/server test`.
 
 - 2026-02-07: Added OpenAPI generation entrypoint at `apps/server/src/openapi-generate.ts` to generate `apps/server/openapi.json` using OpenAPIGenerator.
+- 2026-02-07: Added `openapi:generate` script to `apps/server/package.json` to run the OpenAPI generator.
