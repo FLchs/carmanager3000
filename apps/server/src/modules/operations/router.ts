@@ -1,20 +1,19 @@
 import { listOperations } from "./service";
-import { os } from "@orpc/server";
+import { operationsContract } from "@cm3k/contract";
+import { implement } from "@orpc/server";
 
-const list = os
-  .route({
-    inputStructure: "detailed",
-    method: "GET",
-    path: "/",
-  })
-  .handler(async () => {
-    const result = await listOperations();
-    if (result.isErr) {
-      throw result.error;
-    }
-    return result.value;
-  });
+const o = implement(operationsContract);
 
-export const operationsRouter = os.prefix("/operations").router({
-  list,
+const list = o.operations.list.handler(async () => {
+  const result = await listOperations();
+  if (result.isErr) {
+    throw result.error;
+  }
+  return result.value;
+});
+
+export const operationsRouter = o.router({
+  operations: {
+    list,
+  },
 });
