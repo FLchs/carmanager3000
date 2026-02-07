@@ -22,3 +22,4 @@ Task 7 complete: updated service integration tests to use ISO datetime strings, 
 
 - 2026-02-07: Added OpenAPI generation entrypoint at `apps/server/src/openapi-generate.ts` to generate `apps/server/openapi.json` using OpenAPIGenerator.
 - 2026-02-07: Added `openapi:generate` script to `apps/server/package.json` to run the OpenAPI generator.
+- 2026-02-07: Added OpenAPI test utility helpers to generate valid/invalid params and request bodies from spec schemas.
