@@ -1,9 +1,4 @@
-import {
-  createDocument,
-  getDocument,
-  listDocuments,
-  removeDocument,
-} from "../documents/service";
+import { createDocument, getDocument, listDocuments } from "../documents/service";
 import {
   createOperation,
   getOperation,

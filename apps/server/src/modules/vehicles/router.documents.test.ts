@@ -5,7 +5,7 @@ import { ok } from "true-myth/result";
 import { beforeAll, describe, expect, it, vi, type Mocked } from "vitest";
 import { z } from "zod/v4";
 
-import { vehiclesRouter } from "./router";
+import { router } from "../../routers";
 
 const expectDefinedError = async (promise: Promise<unknown>) => {
   try {
@@ -19,6 +19,8 @@ const expectDefinedError = async (promise: Promise<unknown>) => {
   throw new Error("Expected promise to reject");
 };
 
+const vehicles = router.vehicles.vehicles;
+
 describe("/vehicles", () => {
   describe("GET /{id}/documents", () => {
     let spy: ReturnType<typeof vi.spyOn>;
@@ -29,7 +31,7 @@ describe("/vehicles", () => {
     describe("call endpoint with correct arguments", () => {
       it("calls listDocuments with correct vehicleId and entityType", async () => {
         spy.mockResolvedValue(ok([]));
-        await call(vehiclesRouter.vehicles.documents.list, { params: { vehicleId: 1 } });
+        await call(vehicles.documents.list, { params: { vehicleId: 1 } });
         expect(spy).toHaveBeenCalledWith(1, "vehicle");
       });
     });
@@ -38,7 +40,7 @@ describe("/vehicles", () => {
       it("returns error with invalid vehicleId type", async () => {
         await expectDefinedError(
           // @ts-expect-error: intentionally passing invalid type for testing
-          call(vehiclesRouter.vehicles.documents.list, { params: { vehicleId: "invalid" } }),
+          call(vehicles.documents.list, { params: { vehicleId: "invalid" } }),
         );
       });
     });
@@ -74,7 +76,7 @@ describe("/vehicles", () => {
 
     describe("call endpoint with correct arguments", () => {
       it("calls createDocument with vehicleId from params and body data", async () => {
-        await call(vehiclesRouter.vehicles.documents.create, {
+        await call(vehicles.documents.create, {
           body: mockDocument,
           params: { vehicleId: 1 },
         });
@@ -99,7 +101,7 @@ describe("/vehicles", () => {
       const optional = Object.keys(mockDocument).filter((k) => !required.includes(k));
       describe("call endpoint with correct arguments", () => {
         it("calls createDocument with correct argument", async () => {
-          await call(vehiclesRouter.vehicles.documents.create, {
+          await call(vehicles.documents.create, {
             body: mockDocument,
             params: { vehicleId: 1 },
           });
@@ -112,7 +114,7 @@ describe("/vehicles", () => {
 
         it.each(optional)("should not throw without optional property %s", async (a) => {
           const damagedDocument = { ...mockDocument, [a]: undefined };
-          const result = await call(vehiclesRouter.vehicles.documents.create, {
+          const result = await call(vehicles.documents.create, {
             body: damagedDocument,
             params: { vehicleId: 1 },
           });
@@ -124,7 +126,7 @@ describe("/vehicles", () => {
           const damagedDocument = { ...mockDocument, [a]: undefined };
           await expectDefinedError(
             // @ts-expect-error: intentionally passing invalid type for testing
-            call(vehiclesRouter.vehicles.documents.create, damagedDocument),
+            call(vehicles.documents.create, damagedDocument),
           );
         });
       });

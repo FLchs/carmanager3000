@@ -6,7 +6,7 @@ import { err, ok } from "true-myth/result";
 import { beforeAll, describe, expect, it, vi, type Mocked } from "vitest";
 import * as z from "zod/v4";
 
-import { vehiclesRouter } from "./router";
+import { router } from "../../routers";
 
 const expectDefinedError = async (promise: Promise<unknown>) => {
   try {
@@ -20,6 +20,8 @@ const expectDefinedError = async (promise: Promise<unknown>) => {
   throw new Error("Expected promise to reject");
 };
 
+const vehicles = router.vehicles.vehicles;
+
 describe("/vehicles", () => {
   describe("GET /", () => {
     let spy: Mocked<typeof vehicleService.listVehicle>;
@@ -30,7 +32,7 @@ describe("/vehicles", () => {
     });
 
     it("calls listVehicle", async () => {
-      await call(vehiclesRouter.vehicles.list, {});
+      await call(vehicles.list, {});
       expect(spy).toHaveBeenCalled();
     });
   });
@@ -53,7 +55,7 @@ describe("/vehicles", () => {
 
     describe("call endpoint with correct arguments", () => {
       it("calls getVehicle with correct argument", async () => {
-        await call(vehiclesRouter.vehicles.get, { id: 12 });
+        await call(vehicles.get, { id: 12 });
         expect(spy).toHaveBeenCalledWith(12);
       });
     });
@@ -62,7 +64,7 @@ describe("/vehicles", () => {
       it("return error with bad argument", async () => {
         // TODO: good place to start typed error checking
         // @ts-expect-error: intentionally passing invalid type for testing
-        await expectDefinedError(call(vehiclesRouter.vehicles.get, { id: "hello" }));
+        await expectDefinedError(call(vehicles.get, { id: "hello" }));
       });
 
       it("return error with unknown id", async () => {
@@ -71,7 +73,7 @@ describe("/vehicles", () => {
           .spyOn(vehicleService, "getVehicle")
           // @ts-expect-error: intentionally passing invalid type for testing
           .mockResolvedValue(err(new NotFoundError({ data: { message: "error" } })));
-        await expectDefinedError(call(vehiclesRouter.vehicles.get, { id: 12 }));
+        await expectDefinedError(call(vehicles.get, { id: 12 }));
       });
     });
   });
@@ -87,38 +89,35 @@ describe("/vehicles", () => {
     };
 
     let spy: Mocked<typeof vehicleService.createVehicle>;
-    let getVehicleSpy: Mocked<typeof vehicleService.getVehicle>;
     beforeAll(() => {
       spy = vi
         .spyOn(vehicleService, "createVehicle")
         .mockResolvedValue(ok(1) as Awaited<ReturnType<typeof vehicleService.createVehicle>>);
-      getVehicleSpy = vi
-        .spyOn(vehicleService, "getVehicle")
-        .mockResolvedValue(
-          ok({ ...mockVehicle, id: 1, operations: [] }) as Awaited<
-            ReturnType<typeof vehicleService.getVehicle>
-          >,
-        );
+      vi.spyOn(vehicleService, "getVehicle").mockResolvedValue(
+        ok({ ...mockVehicle, id: 1, operations: [] }) as Awaited<
+          ReturnType<typeof vehicleService.getVehicle>
+        >,
+      );
     });
 
     const required = z.toJSONSchema(createVehicleSchema).required || [];
     const optional = Object.keys(mockVehicle).filter((k) => !required.includes(k));
     describe("call endpoint with correct arguments", () => {
       it("calls createVehicle with correct argument", async () => {
-        await call(vehiclesRouter.vehicles.create, mockVehicle);
+        await call(vehicles.create, mockVehicle);
         expect(spy).toHaveBeenCalledWith(mockVehicle);
       });
 
       it.each(optional)("should not throw without optional property %s", async (a) => {
         const damagedVehicle = { ...mockVehicle, [a]: undefined };
-        const result = await call(vehiclesRouter.vehicles.create, damagedVehicle);
+        const result = await call(vehicles.create, damagedVehicle);
         expect(result.id).toBe(1);
       });
     });
     describe("call enpoint with bad arguments", () => {
       it.each(required)("should throw without required property %s", async (a) => {
         const damagedVehicle = { ...mockVehicle, [a]: undefined };
-        await expectDefinedError(call(vehiclesRouter.vehicles.create, damagedVehicle));
+        await expectDefinedError(call(vehicles.create, damagedVehicle));
       });
     });
   });
@@ -135,29 +134,26 @@ describe("/vehicles", () => {
     };
 
     let spy: Mocked<typeof vehicleService.updateVehicle>;
-    let getVehicleSpy: Mocked<typeof vehicleService.getVehicle>;
     beforeAll(() => {
       spy = vi.spyOn(vehicleService, "updateVehicle").mockResolvedValue(ok());
-      getVehicleSpy = vi
-        .spyOn(vehicleService, "getVehicle")
-        .mockResolvedValue(
-          ok({ ...mockVehicle, id: 1, operations: [] }) as Awaited<
-            ReturnType<typeof vehicleService.getVehicle>
-          >,
-        );
+      vi.spyOn(vehicleService, "getVehicle").mockResolvedValue(
+        ok({ ...mockVehicle, id: 1, operations: [] }) as Awaited<
+          ReturnType<typeof vehicleService.getVehicle>
+        >,
+      );
     });
 
     const required = z.toJSONSchema(updateVehicleSchema).required || [];
     const optional = Object.keys(mockVehicle).filter((k) => !required.includes(k));
     describe("call endpoint with correct arguments", () => {
       it("calls createVehicle with correct argument", async () => {
-        await call(vehiclesRouter.vehicles.update, { body: mockVehicle, params: { id: 1 } });
+        await call(vehicles.update, { body: mockVehicle, params: { id: 1 } });
         expect(spy).toHaveBeenCalledWith(1, mockVehicle);
       });
 
       it.each(optional)("should not throw without optional property %s", async (a) => {
         const damagedVehicle = { ...mockVehicle, [a]: undefined };
-        const result = await call(vehiclesRouter.vehicles.update, {
+        const result = await call(vehicles.update, {
           body: damagedVehicle,
           params: { id: 1 },
         });
@@ -167,7 +163,7 @@ describe("/vehicles", () => {
     describe("call enpoint with bad arguments", () => {
       it("should throw throw with id change", async () => {
         const damagedVehicle = { ...mockVehicle, id: 2, random: "ishouldnotbehere" };
-        await call(vehiclesRouter.vehicles.update, { body: damagedVehicle, params: { id: 1 } });
+        await call(vehicles.update, { body: damagedVehicle, params: { id: 1 } });
         expect(spy).toHaveBeenCalledWith(1, mockVehicle);
       });
     });
@@ -180,7 +176,7 @@ describe("/vehicles", () => {
     });
     describe("call endpoint with correct arguments", () => {
       it("calls createVehicle with correct argument", async () => {
-        await call(vehiclesRouter.vehicles.remove, { id: 1 });
+        await call(vehicles.remove, { id: 1 });
         expect(spy).toHaveBeenCalledWith(1);
       });
     });

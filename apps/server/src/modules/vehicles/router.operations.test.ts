@@ -5,7 +5,7 @@ import { ok } from "true-myth/result";
 import { beforeAll, describe, expect, it, vi, type Mocked } from "vitest";
 import { z } from "zod/v4";
 
-import { vehiclesRouter } from "./router";
+import { router } from "../../routers";
 
 const expectDefinedError = async (promise: Promise<unknown>) => {
   try {
@@ -19,6 +19,8 @@ const expectDefinedError = async (promise: Promise<unknown>) => {
   throw new Error("Expected promise to reject");
 };
 
+const vehicles = router.vehicles.vehicles;
+
 describe("/vehicles", () => {
   describe("GET /{id}/operations", () => {
     let spy: ReturnType<typeof vi.spyOn>;
@@ -29,7 +31,7 @@ describe("/vehicles", () => {
     describe("call endpoint with correct arguments", () => {
       it("calls listOperations with correct vehicleId", async () => {
         spy.mockResolvedValue(ok([]));
-        await call(vehiclesRouter.vehicles.operations.list, { params: { vehicleId: 1 } });
+        await call(vehicles.operations.list, { params: { vehicleId: 1 } });
         expect(spy).toHaveBeenCalledWith(1);
       });
     });
@@ -38,7 +40,7 @@ describe("/vehicles", () => {
       it("returns error with invalid vehicleId type", async () => {
         await expectDefinedError(
           // @ts-expect-error: intentionally passing invalid type for testing
-          call(vehiclesRouter.vehicles.operations.list, { params: { vehicleId: "invalid" } }),
+          call(vehicles.operations.list, { params: { vehicleId: "invalid" } }),
         );
       });
     });
@@ -46,16 +48,19 @@ describe("/vehicles", () => {
 
   describe("POST /vehicles/{id}/operations/", () => {
     let spy: Mocked<typeof operationService.createOperation>;
-    let getOperationSpy: Mocked<typeof operationService.getOperation>;
     beforeAll(() => {
-      spy = vi.spyOn(operationService, "createOperation").mockResolvedValue(ok(1) as Awaited<ReturnType<typeof operationService.createOperation>>);
-      getOperationSpy = vi.spyOn(operationService, "getOperation").mockResolvedValue(ok({
-        id: 1,
-        date: "2024-03-15T00:00:00.000Z",
-        type: "maintenance",
-        mileage: 55000,
-        note: "Regular maintenance",
-      }) as Awaited<ReturnType<typeof operationService.getOperation>>);
+      spy = vi
+        .spyOn(operationService, "createOperation")
+        .mockResolvedValue(ok(1) as Awaited<ReturnType<typeof operationService.createOperation>>);
+      vi.spyOn(operationService, "getOperation").mockResolvedValue(
+        ok({
+          id: 1,
+          date: "2024-03-15T00:00:00.000Z",
+          type: "maintenance",
+          mileage: 55000,
+          note: "Regular maintenance",
+        }) as Awaited<ReturnType<typeof operationService.getOperation>>,
+      );
     });
 
     const mockOperation = {
@@ -67,7 +72,7 @@ describe("/vehicles", () => {
 
     describe("call endpoint with correct arguments", () => {
       it("calls createOperation with vehicleId from params and body data", async () => {
-        await call(vehiclesRouter.vehicles.operations.create, {
+        await call(vehicles.operations.create, {
           body: mockOperation,
           params: { vehicleId: 1 },
         });
@@ -90,7 +95,7 @@ describe("/vehicles", () => {
       const optional = Object.keys(mockOperation).filter((k) => !required.includes(k));
       describe("call endpoint with correct arguments", () => {
         it("calls createVehicle with correct argument", async () => {
-          await call(vehiclesRouter.vehicles.operations.create, {
+          await call(vehicles.operations.create, {
             body: mockOperation,
             params: { vehicleId: 1 },
           });
@@ -99,7 +104,7 @@ describe("/vehicles", () => {
 
         it.each(optional)("should not throw without optional property %s", async (a) => {
           const damagedVehicle = { ...mockOperation, [a]: undefined };
-          const result = await call(vehiclesRouter.vehicles.operations.create, {
+          const result = await call(vehicles.operations.create, {
             body: damagedVehicle,
             params: { vehicleId: 1 },
           });
@@ -111,7 +116,7 @@ describe("/vehicles", () => {
           const damagedVehicle = { ...mockOperation, [a]: undefined };
           await expectDefinedError(
             // @ts-expect-error: intentionally passing invalid type for testing
-            call(vehiclesRouter.vehicles.operations.create, damagedVehicle),
+            call(vehicles.operations.create, damagedVehicle),
           );
         });
       });
@@ -126,7 +131,7 @@ describe("/vehicles", () => {
 
     describe("call endpoint with correct arguments", () => {
       it("calls removeOperation with correct id", async () => {
-        await call(vehiclesRouter.vehicles.operations.remove, {
+        await call(vehicles.operations.remove, {
           params: { vehicleId: 1, id: 1 },
         });
         expect(spy).toHaveBeenCalledWith(1);
@@ -136,7 +141,7 @@ describe("/vehicles", () => {
     describe("call endpoint with bad arguments", () => {
       it("rejects with invalid id type", async () => {
         await expectDefinedError(
-          call(vehiclesRouter.vehicles.operations.remove, {
+          call(vehicles.operations.remove, {
             params: {
               vehicleId: 1,
               // @ts-expect-error: intentionally passing invalid type for testing
