@@ -19,6 +19,7 @@ export const listOperations = async (vehicleId?: number) => {
       columns: {
         id: true,
         date: true,
+        name: true,
         mileage: true,
         note: true,
         type: true,

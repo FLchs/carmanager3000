@@ -22,13 +22,15 @@ export default function NewOperationModal({
 
   const form = useAppForm({
     defaultValues: {
-      date: new Date(),
-      mileage: 0,
-      note: "",
+      name: "",
+      date: undefined,
+      mileage: undefined,
+      file: undefined,
+      note: undefined,
       type: "",
     } as z.infer<typeof createOperationSchema>,
     validators: {
-      onChange: createOperationSchema,
+      onSubmit: createOperationSchema,
     },
     onSubmit: async ({ value }) => {
       console.log(value);
@@ -53,6 +55,8 @@ export default function NewOperationModal({
           id: 0,
           ...log.body,
           date: format(log.body.date ?? new Date(), "yyyy-MM-dd"),
+          mileage: log.body.mileage ?? null,
+          note: log.body.note ?? "",
         };
         context.client.setQueryData(
           openapi.vehicles.operations.list.queryKey({
@@ -84,6 +88,13 @@ export default function NewOperationModal({
           }}
           className="grid gap-4"
         >
+          <form.AppField name="name">
+            {(field) => (
+              <>
+                <field.TextField label="Name" required />
+              </>
+            )}
+          </form.AppField>
           <form.AppField name="date">
             {(field) => (
               <>
