@@ -6,6 +6,7 @@ import { vehicles } from "./vehicle";
 export const operations = sqliteTable("operations", {
   id: integer().primaryKey({ autoIncrement: true }),
   date: integer({ mode: "timestamp" }),
+  name: text().notNull(),
   mileage: integer(),
   note: text(),
   type: text().notNull(),
