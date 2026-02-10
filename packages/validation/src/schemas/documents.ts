@@ -2,7 +2,7 @@ import * as z from "zod/v4";
 
 export const documentInSchema = z.object({
   name: z.string().min(1, "Name is required").max(255, "Name must be less than 255 characters"),
-  date: z.string().datetime().optional(),
+  date: z.iso.datetime().optional(),
   mileage: z.coerce.number<number>().int().optional(),
   file: z.custom<File | undefined>().refine((file) => file != null, "A file is required"),
   note: z.string().optional(),
@@ -12,7 +12,7 @@ export const documentInSchema = z.object({
 export const documentOutSchema = z.object({
   id: z.number().int(),
   name: z.string(),
-  date: z.string().datetime().nullable(),
+  date: z.iso.datetime().nullable(),
   mileage: z.number().int().nullable(),
   uri: z.string().nullable(),
   note: z.string().nullable(),
