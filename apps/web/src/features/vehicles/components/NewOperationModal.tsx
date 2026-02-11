@@ -3,7 +3,6 @@ import type { z } from "zod/v4";
 import { createOperationSchema } from "@cm3k/validation";
 import { isDefinedError } from "@orpc/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { format } from "date-fns";
 
 import { useAppForm } from "#/hooks/useForm";
 import { openapi } from "#/lib/openapi";
@@ -25,7 +24,6 @@ export default function NewOperationModal({
       name: "",
       date: undefined,
       mileage: undefined,
-      file: undefined,
       note: undefined,
       type: "",
     } as z.infer<typeof createOperationSchema>,
@@ -33,16 +31,14 @@ export default function NewOperationModal({
       onSubmit: createOperationSchema,
     },
     onSubmit: async ({ value }) => {
-      console.log(value);
-      createVehicleMutation.mutate({ body: value, params: { vehicleId: Number(id) } });
+      createOperationMutation.mutate({ body: value, params: { vehicleId: Number(id) } });
     },
   });
 
-  const createVehicleMutation = useMutation(
+  const createOperationMutation = useMutation(
     openapi.vehicles.operations.create.mutationOptions({
       onError: async (error) => {
         if (isDefinedError(error) && error.code === "INPUT_VALIDATION_FAILED") {
-          console.table(error.data.fieldErrors);
           form.setErrorMap({
             onSubmit: {
               fields: error.data.fieldErrors,
@@ -54,9 +50,9 @@ export default function NewOperationModal({
         const tempItem = {
           id: 0,
           ...log.body,
-          date: format(log.body.date ?? new Date(), "yyyy-MM-dd"),
+          date: log.body.date ?? null,
           mileage: log.body.mileage ?? null,
-          note: log.body.note ?? "",
+          note: log.body.note ?? null,
         };
         context.client.setQueryData(
           openapi.vehicles.operations.list.queryKey({
@@ -75,7 +71,7 @@ export default function NewOperationModal({
     }),
   );
 
-  if (!visible) return;
+  if (!visible) return null;
   return (
     <Modal>
       <div className="mb-2 flex flex-col gap-2">
@@ -119,7 +115,7 @@ export default function NewOperationModal({
           <form.AppField name="type">
             {(field) => (
               <>
-                <field.TextField label="Type" />
+                <field.TextField label="Type" required />
               </>
             )}
           </form.AppField>

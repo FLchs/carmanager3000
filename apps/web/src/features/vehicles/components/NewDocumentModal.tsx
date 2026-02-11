@@ -81,7 +81,7 @@ export default function NewDocumentModal({
     }),
   );
 
-  if (!visible) return;
+  if (!visible) return null;
   return (
     <Modal>
       <div className="mb-2 flex w-96 flex-col gap-2">
