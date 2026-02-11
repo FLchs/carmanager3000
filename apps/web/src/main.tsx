@@ -30,6 +30,12 @@ declare module "@tanstack/react-router" {
   }
 }
 
+declare module "@tanstack/react-router" {
+  interface StaticDataRouteOption {
+    getTitle?: () => string;
+  }
+}
+
 createRoot(document.querySelector("#root")!).render(
   <StrictMode>
     <ConfirmProvider>
