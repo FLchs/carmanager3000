@@ -14,13 +14,13 @@ const BasicLinkComponent = ({
     <a
       ref={ref}
       {...props}
-      className="flex flex-row items-center gap-4 rounded-lg px-3 py-2 text-text data-[status=active]:bg-bg-light data-[status=active]:font-bold"
+      className="w-full rounded-lg px-2 py-1 text-text data-[status=active]:bg-bg-light data-[status=active]:font-bold"
     />
   );
 };
 
 const CreatedLinkComponent = createLink(BasicLinkComponent);
 
-export const SidebarItem: LinkComponent<typeof BasicLinkComponent> = (props) => {
+export const SidebarSectionItem: LinkComponent<typeof BasicLinkComponent> = (props) => {
   return <CreatedLinkComponent preload={"intent"} {...props} />;
 };
