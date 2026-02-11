@@ -56,6 +56,7 @@ describe("/vehicles", () => {
         ok({
           id: 1,
           date: "2024-03-15T00:00:00.000Z",
+          name: "Regular maintenance",
           type: "maintenance",
           mileage: 55000,
           note: "Regular maintenance",
@@ -64,6 +65,7 @@ describe("/vehicles", () => {
     });
 
     const mockOperation = {
+      name: "Regular maintenance",
       type: "maintenance",
       date: "2024-03-15T00:00:00.000Z",
       mileage: 55000,

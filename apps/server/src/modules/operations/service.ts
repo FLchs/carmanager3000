@@ -43,6 +43,7 @@ export const getOperation = async (id: number) => {
       columns: {
         id: true,
         date: true,
+        name: true,
         mileage: true,
         note: true,
         type: true,

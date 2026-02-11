@@ -129,6 +129,7 @@ describe("Operations service test", () => {
     it("creates an operation", async () => {
       await seed(dbModule.db, { vehicles }, { count: 1 });
       const result = await createOperation(1, {
+        name: "Oil change",
         date: "2024-01-15T00:00:00.000Z",
         mileage: 50000,
         note: "Oil change",
@@ -142,6 +143,7 @@ describe("Operations service test", () => {
     it("does not create an operation if vehicleId is missing", async () => {
       // @ts-expect-error missing property on purpose
       const result = await createOperation({
+        name: "Oil change",
         date: "2024-01-15T00:00:00.000Z",
         mileage: 50000,
         note: "Oil change",
