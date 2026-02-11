@@ -217,6 +217,7 @@ describe("OpenAPI route validation", () => {
     const mockOperation = {
       id: 1,
       date: "2020-01-01T00:00:00.000Z",
+      name: "Routine service",
       mileage: 1000,
       note: null,
       type: "service",

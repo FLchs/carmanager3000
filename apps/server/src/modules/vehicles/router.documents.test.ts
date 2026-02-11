@@ -1,4 +1,3 @@
-import * as documentService from "../documents/service";
 import { createDocumentSchema } from "@cm3k/validation";
 import { call, isDefinedError } from "@orpc/server";
 import { ok } from "true-myth/result";
@@ -6,6 +5,7 @@ import { beforeAll, describe, expect, it, vi, type Mocked } from "vitest";
 import { z } from "zod/v4";
 
 import { router } from "../../routers";
+import * as documentService from "../documents/service";
 
 const expectDefinedError = async (promise: Promise<unknown>) => {
   try {
@@ -68,7 +68,7 @@ describe("/vehicles", () => {
     const mockDocument = {
       name: "Test Document",
       typeId: 1,
-      date: "2024-03-15T00:00:00.000Z",
+      date: new Date(),
       mileage: 55000,
       note: "Insurance document",
       file: new File([], "testfile.pdf"),

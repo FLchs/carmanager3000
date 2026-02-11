@@ -134,7 +134,7 @@ describe("Documents service test", () => {
       const file = new File([], "testfile.pdf");
       const result = await createDocument({
         name: "Test Document",
-        date: "2024-01-15T00:00:00.000Z",
+        date: new Date(),
         mileage: 50000,
         note: "Insurance document",
         typeId: 1,
@@ -151,7 +151,7 @@ describe("Documents service test", () => {
     it("does not create a document if required fields are missing", async () => {
       // @ts-expect-error missing property on purpose
       const result = await createDocument({
-        date: "2024-01-15T00:00:00.000Z",
+        date: new Date(),
         mileage: 50000,
         note: "Insurance document",
         file: new File([], "testfile.pdf"),
