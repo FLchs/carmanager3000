@@ -6,9 +6,11 @@ import { X } from "lucide-react";
 
 export default function TextField({
   label,
+  placeholder,
   required = false,
 }: {
   label: string;
+  placeholder?: string;
   required?: boolean;
 }) {
   const field = useFieldContext<string>();
@@ -28,6 +30,7 @@ export default function TextField({
             onChange={(e) => {
               field.handleChange(e.target.value);
             }}
+            placeholder={placeholder}
             required={required}
             type="text"
             id={field.name}
