@@ -53,8 +53,8 @@ function RouteComponent() {
   }, [confirm, model, id, deleteMutation]);
 
   return (
-    <div className="text-text w-full">
-      <div className="bg-bg flex w-full flex-row items-center justify-between p-4 align-middle">
+    <div className="w-full text-text">
+      <div className="flex w-full flex-row items-center justify-between bg-bg p-4 align-middle">
         <Link className="block" to="/vehicles">
           <ArrowLeftCircleIcon className="inline" /> vehicles
         </Link>
@@ -74,14 +74,14 @@ function RouteComponent() {
               <div className="mt-4 flex flex-row items-center gap-8">
                 <img className="h-24" src="/kia-logo.png" />
                 <div>
-                  <h1 className="text-text mb-2 text-4xl font-bold">
+                  <h1 className="mb-2 text-4xl font-bold text-text">
                     {brand} {model}
                   </h1>
                 </div>
               </div>
             </header>
             <section>
-              <h2 className="text-text col-span-2 mb-4 text-xl font-bold">Vehicle informations</h2>
+              <h2 className="col-span-2 mb-4 text-xl font-bold text-text">Vehicle informations</h2>
               <div className="grid grid-cols-2 gap-4">
                 <InfoCard>
                   <InfoCardItem name="Registration year" value={year} />
@@ -93,20 +93,20 @@ function RouteComponent() {
               </div>
             </section>
             <section className="hidden">
-              <h2 className="text-text col-span-2 mb-4 text-xl font-bold">Upcoming maintenance</h2>
-              <div className="bg-bg border-border rounded-lg border"></div>
+              <h2 className="col-span-2 mb-4 text-xl font-bold text-text">Upcoming maintenance</h2>
+              <div className="rounded-lg border border-border bg-bg"></div>
             </section>
             <section>
-              <h2 className="text-text col-span-2 mb-4 text-xl font-bold">Maintenance log</h2>
-              <div className="bg-bg border-border rounded-lg border">
+              <h2 className="col-span-2 mb-4 text-xl font-bold text-text">Maintenance log</h2>
+              <div className="rounded-lg border border-border bg-bg">
                 <Suspense fallback={<p>Loading...</p>}>
                   <OperationTable id={id} />
                 </Suspense>
               </div>
             </section>
             <section>
-              <h2 className="text-text col-span-2 mb-4 text-xl font-bold">Documents</h2>
-              <div className="bg-bg border-border rounded-lg border">
+              <h2 className="col-span-2 mb-4 text-xl font-bold text-text">Documents</h2>
+              <div className="rounded-lg border border-border bg-bg">
                 <Suspense fallback={<p>Loading...</p>}>
                   <DocumentTable id={id} />
                 </Suspense>
