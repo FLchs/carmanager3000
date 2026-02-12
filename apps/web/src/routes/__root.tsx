@@ -10,9 +10,11 @@ const RootLayout = () => (
   <>
     <div className="flex flex-row">
       <Sidebar />
-      <Outlet />
+      <div className="p-4 text-text">
+        <Outlet />
+      </div>
     </div>
-    <TanStackRouterDevtools />
+    <TanStackRouterDevtools position="bottom-right" />
     <ReactQueryDevtools />
   </>
 );
