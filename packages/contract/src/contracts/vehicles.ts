@@ -10,14 +10,11 @@ import {
   listDocumentsSchema,
   createDocumentSchema,
   getDocumentSchema,
+  deleteInputSchema,
+  deleteOutputSchema,
 } from "@cm3k/validation";
 import { oc } from "@orpc/contract";
 import { z } from "zod/v4";
-
-// Success response schema for mutations
-const successSchema = z.object({
-  ok: z.literal(true),
-});
 
 const list = oc
   .route({
@@ -60,9 +57,10 @@ const remove = oc
   .route({
     method: "DELETE",
     path: "/{id}",
+    successStatus: 204,
   })
-  .input(z.object({ id: z.coerce.number<number>() }))
-  .output(successSchema);
+  .input(deleteInputSchema)
+  .output(deleteOutputSchema);
 
 const operations = {
   create: oc
@@ -93,16 +91,17 @@ const operations = {
       method: "DELETE",
       path: "/{vehicleId}/{id}",
       inputStructure: "detailed",
+      successStatus: 204,
     })
     .input(
       z.object({
         params: z.object({
-          vehicleId: z.coerce.number<number>(),
-          id: z.coerce.number<number>(),
+          vehicleId: z.number().int(),
+          id: deleteInputSchema.shape.id,
         }),
       }),
     )
-    .output(successSchema),
+    .output(deleteOutputSchema),
 };
 
 const documents = {

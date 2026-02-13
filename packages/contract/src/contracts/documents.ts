@@ -1,13 +1,15 @@
 import { errors } from "#errors";
 import { oc } from "@orpc/contract";
-import { z } from "zod/v4";
+import { deleteInputSchema, deleteOutputSchema } from "@cm3k/validation";
 
 const remove = oc
   .route({
     method: "DELETE",
     path: "/{id}",
+    successStatus: 204,
   })
-  .input(z.object({ id: z.coerce.number<number>() }));
+  .input(deleteInputSchema)
+  .output(deleteOutputSchema);
 
 export const documentsContract = oc.errors(errors).prefix("/documents").router({
   documents: {
