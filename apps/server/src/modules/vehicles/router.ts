@@ -59,9 +59,6 @@ const remove = o.vehicles.remove.handler(async ({ input }) => {
   if (result.isErr) {
     throw result.error;
   }
-  return {
-    ok: true,
-  };
 });
 
 const operations = {
@@ -88,9 +85,6 @@ const operations = {
     if (result.isErr) {
       throw result.error;
     }
-    return {
-      ok: true,
-    };
   }),
 };
 

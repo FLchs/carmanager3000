@@ -10,9 +10,6 @@ const remove = o.documents.remove.handler(async ({ input }) => {
   if (result.isErr) {
     throw result.error;
   }
-  return {
-    ok: true,
-  };
 });
 
 export const documentsRouter = o.router({
