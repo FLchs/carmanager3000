@@ -3,7 +3,7 @@ import * as z from "zod/v4";
 export const operationInSchema = z.object({
   date: z.iso.datetime().optional(),
   name: z.string(),
-  mileage: z.number().int().optional(),
+  mileage: z.coerce.number().int().optional(),
   note: z.string().optional(),
   type: z.string(),
 });
