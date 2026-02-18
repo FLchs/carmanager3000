@@ -7,7 +7,7 @@ import { openapi } from "#/lib/openapi";
 
 import Modal from "#/components/ui/Modal";
 import type { z } from "zod/v4";
-import { format } from "date-fns";
+
 export default function NewDocumentModal({
   vehicleId,
   onClose,
@@ -31,8 +31,9 @@ export default function NewDocumentModal({
     validators: {
       onSubmit: createDocumentSchema,
     },
+
     onSubmit: async ({ value }) => {
-      createDocumentMutation.mutate({
+      await mutateAsync({
         body: value,
         params: { vehicleId: Number(vehicleId) },
       });
@@ -41,7 +42,7 @@ export default function NewDocumentModal({
 
   const { data: documentTypes } = useQuery(openapi.documentTypes.list.queryOptions({}));
 
-  const createDocumentMutation = useMutation(
+  const { mutateAsync, isPending } = useMutation(
     openapi.vehicles.documents.create.mutationOptions({
       onError: async (error) => {
         if (isDefinedError(error) && error.code === "INPUT_VALIDATION_FAILED") {
@@ -51,25 +52,6 @@ export default function NewDocumentModal({
             },
           });
         }
-      },
-      onMutate: async (documentData, context) => {
-        const optimisticDocument = {
-          name: documentData.body.name,
-          id: 0,
-          type: {
-            name: documentTypes?.find((d) => d.id === documentData.body.typeId)?.name ?? null,
-          },
-          note: documentData.body.note ?? "",
-          date: documentData.body.date ? format(documentData.body.date, "dd-MMM-yyyy") : null,
-          mileage: documentData.body.mileage ?? null,
-          uri: "",
-        };
-        context.client.setQueryData(
-          openapi.vehicles.documents.list.queryKey({
-            input: { params: { vehicleId: Number(vehicleId) } },
-          }),
-          (oldDocuments) => oldDocuments && [...oldDocuments, optimisticDocument],
-        );
       },
       onSuccess: async () => {
         onClose();
