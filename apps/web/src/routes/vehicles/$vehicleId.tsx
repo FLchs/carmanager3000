@@ -15,9 +15,20 @@ import { openapi } from "#/lib/openapi";
 export const Route = createFileRoute("/vehicles/$vehicleId")({
   component: RouteComponent,
   loader: async ({ context: { queryClient }, params: { vehicleId } }) => {
-    return queryClient.ensureQueryData(
+    queryClient.ensureQueryData(
       openapi.vehicles.get.queryOptions({ input: { id: Number(vehicleId) } }),
     );
+    queryClient.ensureQueryData(
+      openapi.vehicles.documents.list.queryOptions({
+        input: { params: { vehicleId: Number(vehicleId) } },
+      }),
+    );
+    queryClient.ensureQueryData(
+      openapi.vehicles.operations.list.queryOptions({
+        input: { params: { vehicleId: Number(vehicleId) } },
+      }),
+    );
+    return;
   },
 });
 
