@@ -15,6 +15,11 @@ import { openapi } from "#/lib/openapi";
 import Button from "#/components/ui/Button";
 import NewDocumentModal from "./NewDocumentModal";
 
+import {
+  DocumentPreviewModalProvider,
+  useDocumentPreviewModal,
+} from "#/contexts/DocumentPreviewModal";
+
 function DocumentTable({ id }: { id: number }) {
   const [showAddModal, setShowAddModal] = useState(false);
   return (
@@ -24,7 +29,9 @@ function DocumentTable({ id }: { id: number }) {
         <Button callback={() => setShowAddModal(true)}>Add</Button>
       </div>
       <Suspense fallback={<LoaderCircleIcon className="m-auto mb-4 animate-spin" />}>
-        <Table id={id} />
+        <DocumentPreviewModalProvider>
+          <Table id={id} />
+        </DocumentPreviewModalProvider>
       </Suspense>
       <NewDocumentModal
         vehicleId={id.toString()}
@@ -78,6 +85,8 @@ function Table({ id }: { id: number }) {
     [confirm, deleteDocument],
   );
 
+  const { openModal } = useDocumentPreviewModal();
+
   const columnHelper = createColumnHelper<(typeof data)[number]>();
 
   const columns = useMemo(
@@ -103,8 +112,8 @@ function Table({ id }: { id: number }) {
       }),
       columnHelper.accessor("date", {
         header: "Date",
-        cell: (row) => {
-          const value = row.getValue();
+        cell: ({ row }) => {
+          const value = row.original.date;
           if (!value) return "";
           const date = new Date(value);
           return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
@@ -113,18 +122,14 @@ function Table({ id }: { id: number }) {
       columnHelper.accessor("uri", {
         enableSorting: false,
         header: "Open",
-        cell: (row) => {
-          return (
-            <a href={`http://localhost:3000${row.getValue()}`}>
-              <File />
-            </a>
-          );
+        cell: ({ row }) => {
+          return <File onClick={() => openModal(row.original.uri)} />;
         },
       }),
       columnHelper.accessor("id", {
         id: "delete",
-        cell: (info) => (
-          <span className="cursor-pointer" onClick={() => onDelete(info.getValue())}>
+        cell: ({ row }) => (
+          <span className="cursor-pointer" onClick={() => onDelete(row.original.id)}>
             <X />
           </span>
         ),
@@ -132,7 +137,7 @@ function Table({ id }: { id: number }) {
         header: "",
       }),
     ],
-    [columnHelper, onDelete],
+    [columnHelper, onDelete, openModal],
   );
 
   const table = useReactTable({
