@@ -42,7 +42,7 @@ export default function NewDocumentModal({
 
   const { data: documentTypes } = useQuery(openapi.documentTypes.list.queryOptions({}));
 
-  const { mutateAsync, isPending } = useMutation(
+  const { mutateAsync } = useMutation(
     openapi.vehicles.documents.create.mutationOptions({
       onError: async (error) => {
         if (isDefinedError(error) && error.code === "INPUT_VALIDATION_FAILED") {
