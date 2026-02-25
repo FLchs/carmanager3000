@@ -18,7 +18,7 @@ import NewDocumentModal from "./NewDocumentModal";
 import {
   DocumentPreviewModalProvider,
   useDocumentPreviewModal,
-} from "#/contexts/DocumentPreviewModal";
+} from "#/contexts/modal/DocumentPreviewModal";
 
 function DocumentTable({ id }: { id: number }) {
   const [showAddModal, setShowAddModal] = useState(false);

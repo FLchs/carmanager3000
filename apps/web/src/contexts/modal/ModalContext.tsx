@@ -8,6 +8,7 @@ import {
   type ReactNode,
   useEffect,
 } from "react";
+import { createPortal } from "react-dom";
 
 type Params = ReactNode;
 
@@ -34,7 +35,7 @@ export function ModalContextProvider({ children }: PropsWithChildren) {
   return (
     <ModalContext.Provider value={{ confirmRef }}>
       {children}
-      <ModalWithContext />
+      {createPortal(<ModalWithContext />, document.body)}
     </ModalContext.Provider>
   );
 }
