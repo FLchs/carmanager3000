@@ -1,4 +1,3 @@
-import * as operationService from "../operations/service";
 import { createOperationSchema } from "@cm3k/validation";
 import { call, isDefinedError } from "@orpc/server";
 import { ok } from "true-myth/result";
@@ -6,6 +5,7 @@ import { beforeAll, describe, expect, it, vi, type Mocked } from "vitest";
 import { z } from "zod/v4";
 
 import { router } from "../../routers";
+import * as operationService from "../operations/service";
 
 const expectDefinedError = async (promise: Promise<unknown>) => {
   try {
@@ -128,7 +128,9 @@ describe("/vehicles", () => {
   describe("DELETE /vehicles/operations/{operationId}", () => {
     let spy: Mocked<typeof operationService.removeOperation>;
     beforeAll(() => {
-      spy = vi.spyOn(operationService, "removeOperation").mockResolvedValue(ok() as Awaited<ReturnType<typeof operationService.removeOperation>>);
+      spy = vi
+        .spyOn(operationService, "removeOperation")
+        .mockResolvedValue(ok() as Awaited<ReturnType<typeof operationService.removeOperation>>);
     });
 
     describe("call endpoint with correct arguments", () => {
@@ -146,7 +148,6 @@ describe("/vehicles", () => {
           call(vehicles.operations.remove, {
             params: {
               vehicleId: 1,
-              // @ts-expect-error: intentionally passing invalid type for testing
               id: "invalid",
             },
           }),
