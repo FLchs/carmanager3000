@@ -4,10 +4,7 @@ export const documentInSchema = z.object({
   name: z.string().min(1, "Name is required").max(255, "Name must be less than 255 characters"),
   date: z.coerce.date<Date>().optional(),
   mileage: z.coerce.number<number>().int().optional(),
-  file: z
-    .file()
-    .or(z.undefined())
-    .refine((file) => file != null, "A file is required"),
+  file: z.file(),
   note: z.string().optional(),
   typeId: z.coerce.number<number>().int().min(1),
 });
