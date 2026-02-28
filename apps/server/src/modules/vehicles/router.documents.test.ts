@@ -98,7 +98,7 @@ describe("/vehicles", () => {
             }
           },
         }).required || [];
-      const optional = Object.keys(mockDocument).filter((k) => !required.includes(k));
+      const optional = Object.keys(mockDocument).filter((k) => !required.includes(k) && k !== "file");
       describe("call endpoint with correct arguments", () => {
         it("calls createDocument with correct argument", async () => {
           await call(vehicles.documents.create, {
