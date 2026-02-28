@@ -1,26 +1,34 @@
 import { createLink, type LinkComponent } from "@tanstack/react-router";
-import { type RefObject } from "react";
+import { type ReactNode, type RefObject } from "react";
 
 interface BasicLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   label?: string;
+  icon?: ReactNode;
   // Add any additional props you want to pass to the anchor element
 }
 
 const BasicLinkComponent = ({
   ref,
+  icon,
+  label,
   ...props
 }: BasicLinkProps & { ref?: RefObject<HTMLAnchorElement | null> }) => {
   return (
-    <a
-      ref={ref}
-      {...props}
-      className="w-full rounded-lg px-2 py-1 text-text data-[status=active]:bg-bg-light data-[status=active]:font-bold"
-    />
+    <li>
+      <a
+        ref={ref}
+        {...props}
+        className="flex w-full cursor-pointer flex-row items-center gap-4 rounded-lg p-2 text-left hover:bg-bg data-[status=active]:font-bold data-[status=active]:text-text"
+      >
+        <span className="shrink-0">{icon}</span>
+        {label}
+      </a>
+    </li>
   );
 };
 
 const CreatedLinkComponent = createLink(BasicLinkComponent);
 
-export const SidebarSectionItem: LinkComponent<typeof BasicLinkComponent> = (props) => {
+export const Item: LinkComponent<typeof BasicLinkComponent> = (props) => {
   return <CreatedLinkComponent preload={"intent"} {...props} />;
 };
