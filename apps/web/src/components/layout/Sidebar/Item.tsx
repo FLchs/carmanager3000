@@ -1,10 +1,9 @@
 import { createLink, type LinkComponent } from "@tanstack/react-router";
 import { type ReactNode, type RefObject } from "react";
 
-interface BasicLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+interface ItemLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   label?: string;
   icon?: ReactNode;
-  // Add any additional props you want to pass to the anchor element
 }
 
 const BasicLinkComponent = ({
@@ -12,7 +11,7 @@ const BasicLinkComponent = ({
   icon,
   label,
   ...props
-}: BasicLinkProps & { ref?: RefObject<HTMLAnchorElement | null> }) => {
+}: ItemLinkProps & { ref?: RefObject<HTMLAnchorElement | null> }) => {
   return (
     <li>
       <a
