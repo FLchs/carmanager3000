@@ -17,7 +17,7 @@ function Button({ callback, variant = "primary", ...props }: ComponentProps<"but
   return (
     <button
       {...props}
-      className={`rounded-lg border-1 px-4 py-1.5 hover:cursor-pointer ${variants[variant]} font-semibold ${props.className} `}
+      className={`rounded-lg border px-4 py-1.5 hover:cursor-pointer ${variants[variant]} font-semibold ${props.className} disabled:cursor-default`}
       onClick={callback}
       type={props.type ?? "button"}
     />

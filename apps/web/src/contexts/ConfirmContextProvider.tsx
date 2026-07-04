@@ -1,7 +1,7 @@
 import { type PropsWithChildren, use, useCallback, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
-import Dialog from "@/components/ui/Dialog";
+import Dialog from "#/components/ui/Dialog";
 
 import { ConfirmContext, defaultFunction, type Props } from "./ConfirmContext";
 

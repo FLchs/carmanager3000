@@ -1,0 +1,60 @@
+import { useStore } from "@tanstack/react-form";
+
+import { useFieldContext } from "../../../contexts/form-context";
+import FormErrors from "./FormErrors";
+import { ChevronsUpDown } from "lucide-react";
+
+export default function SelectField({
+  label,
+  required = false,
+  options,
+}: {
+  label: string;
+  required?: boolean;
+  options?: { id: string | number; name: string }[];
+}) {
+  const field = useFieldContext<number | undefined>();
+
+  const errors = useStore(field.store, (state) => state.meta.errors);
+
+  return (
+    <>
+      <div>
+        <label className="text-text-muted" htmlFor={field.name}>
+          {label}
+          {required && <span className="text-primary"> * </span>}:
+        </label>
+        <div className="flex flex-row">
+          <div className="relative w-full rounded-lg bg-bg-light">
+            <select
+              required={required}
+              id={field.name}
+              onBlur={field.handleBlur}
+              onChange={(e) => {
+                field.handleChange(Number(e.target.value));
+              }}
+              value={field.state.value}
+              className="block h-8 w-full appearance-none pl-2 text-text-muted outline-0"
+            >
+              <option value={undefined}></option>
+              {options?.map(({ name, id }) => {
+                return (
+                  <option value={Number(id)} key={id}>
+                    {name}
+                  </option>
+                );
+              })}
+            </select>
+            <button
+              type="button"
+              className="pointer-events-none absolute right-0 bottom-0 h-full text-text-muted"
+            >
+              <ChevronsUpDown className="pointer-events-none mr-2 h-4.5 w-4.5 p-0.5" />
+            </button>
+          </div>
+        </div>
+        <FormErrors errors={errors} />
+      </div>
+    </>
+  );
+}

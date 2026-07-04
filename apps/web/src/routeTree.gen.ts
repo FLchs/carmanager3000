@@ -12,7 +12,12 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as VehiclesIndexRouteImport } from './routes/vehicles/index'
 import { Route as VehiclesVehicleIdRouteImport } from './routes/vehicles/$vehicleId'
+import { Route as AdministrationAdministrationRouteRouteImport } from './routes/administration/_administration/route'
+import { Route as AdministrationAdministrationIndexRouteImport } from './routes/administration/_administration/index'
 import { Route as VehiclesEditIdRouteImport } from './routes/vehicles/edit.$id'
+import { Route as AdministrationAdministrationDocumentTypesRouteRouteImport } from './routes/administration/_administration/document-types/route'
+import { Route as AdministrationAdministrationDocumentTypesIndexRouteImport } from './routes/administration/_administration/document-types/index'
+import { Route as AdministrationAdministrationDocumentTypesAddRouteImport } from './routes/administration/_administration/document-types/add'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -29,46 +34,111 @@ const VehiclesVehicleIdRoute = VehiclesVehicleIdRouteImport.update({
   path: '/vehicles/$vehicleId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdministrationAdministrationRouteRoute =
+  AdministrationAdministrationRouteRouteImport.update({
+    id: '/administration/_administration',
+    path: '/administration',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AdministrationAdministrationIndexRoute =
+  AdministrationAdministrationIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AdministrationAdministrationRouteRoute,
+  } as any)
 const VehiclesEditIdRoute = VehiclesEditIdRouteImport.update({
   id: '/vehicles/edit/$id',
   path: '/vehicles/edit/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdministrationAdministrationDocumentTypesRouteRoute =
+  AdministrationAdministrationDocumentTypesRouteRouteImport.update({
+    id: '/document-types',
+    path: '/document-types',
+    getParentRoute: () => AdministrationAdministrationRouteRoute,
+  } as any)
+const AdministrationAdministrationDocumentTypesIndexRoute =
+  AdministrationAdministrationDocumentTypesIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AdministrationAdministrationDocumentTypesRouteRoute,
+  } as any)
+const AdministrationAdministrationDocumentTypesAddRoute =
+  AdministrationAdministrationDocumentTypesAddRouteImport.update({
+    id: '/add',
+    path: '/add',
+    getParentRoute: () => AdministrationAdministrationDocumentTypesRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/administration': typeof AdministrationAdministrationRouteRouteWithChildren
   '/vehicles/$vehicleId': typeof VehiclesVehicleIdRoute
-  '/vehicles': typeof VehiclesIndexRoute
+  '/vehicles/': typeof VehiclesIndexRoute
+  '/administration/document-types': typeof AdministrationAdministrationDocumentTypesRouteRouteWithChildren
   '/vehicles/edit/$id': typeof VehiclesEditIdRoute
+  '/administration/': typeof AdministrationAdministrationIndexRoute
+  '/administration/document-types/add': typeof AdministrationAdministrationDocumentTypesAddRoute
+  '/administration/document-types/': typeof AdministrationAdministrationDocumentTypesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/vehicles/$vehicleId': typeof VehiclesVehicleIdRoute
   '/vehicles': typeof VehiclesIndexRoute
   '/vehicles/edit/$id': typeof VehiclesEditIdRoute
+  '/administration': typeof AdministrationAdministrationIndexRoute
+  '/administration/document-types/add': typeof AdministrationAdministrationDocumentTypesAddRoute
+  '/administration/document-types': typeof AdministrationAdministrationDocumentTypesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/administration/_administration': typeof AdministrationAdministrationRouteRouteWithChildren
   '/vehicles/$vehicleId': typeof VehiclesVehicleIdRoute
   '/vehicles/': typeof VehiclesIndexRoute
+  '/administration/_administration/document-types': typeof AdministrationAdministrationDocumentTypesRouteRouteWithChildren
   '/vehicles/edit/$id': typeof VehiclesEditIdRoute
+  '/administration/_administration/': typeof AdministrationAdministrationIndexRoute
+  '/administration/_administration/document-types/add': typeof AdministrationAdministrationDocumentTypesAddRoute
+  '/administration/_administration/document-types/': typeof AdministrationAdministrationDocumentTypesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/vehicles/$vehicleId' | '/vehicles' | '/vehicles/edit/$id'
+  fullPaths:
+    | '/'
+    | '/administration'
+    | '/vehicles/$vehicleId'
+    | '/vehicles/'
+    | '/administration/document-types'
+    | '/vehicles/edit/$id'
+    | '/administration/'
+    | '/administration/document-types/add'
+    | '/administration/document-types/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/vehicles/$vehicleId' | '/vehicles' | '/vehicles/edit/$id'
+  to:
+    | '/'
+    | '/vehicles/$vehicleId'
+    | '/vehicles'
+    | '/vehicles/edit/$id'
+    | '/administration'
+    | '/administration/document-types/add'
+    | '/administration/document-types'
   id:
     | '__root__'
     | '/'
+    | '/administration/_administration'
     | '/vehicles/$vehicleId'
     | '/vehicles/'
+    | '/administration/_administration/document-types'
     | '/vehicles/edit/$id'
+    | '/administration/_administration/'
+    | '/administration/_administration/document-types/add'
+    | '/administration/_administration/document-types/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdministrationAdministrationRouteRoute: typeof AdministrationAdministrationRouteRouteWithChildren
   VehiclesVehicleIdRoute: typeof VehiclesVehicleIdRoute
   VehiclesIndexRoute: typeof VehiclesIndexRoute
   VehiclesEditIdRoute: typeof VehiclesEditIdRoute
@@ -86,7 +156,7 @@ declare module '@tanstack/react-router' {
     '/vehicles/': {
       id: '/vehicles/'
       path: '/vehicles'
-      fullPath: '/vehicles'
+      fullPath: '/vehicles/'
       preLoaderRoute: typeof VehiclesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -97,6 +167,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VehiclesVehicleIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/administration/_administration': {
+      id: '/administration/_administration'
+      path: '/administration'
+      fullPath: '/administration'
+      preLoaderRoute: typeof AdministrationAdministrationRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/administration/_administration/': {
+      id: '/administration/_administration/'
+      path: '/'
+      fullPath: '/administration/'
+      preLoaderRoute: typeof AdministrationAdministrationIndexRouteImport
+      parentRoute: typeof AdministrationAdministrationRouteRoute
+    }
     '/vehicles/edit/$id': {
       id: '/vehicles/edit/$id'
       path: '/vehicles/edit/$id'
@@ -104,11 +188,70 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VehiclesEditIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/administration/_administration/document-types': {
+      id: '/administration/_administration/document-types'
+      path: '/document-types'
+      fullPath: '/administration/document-types'
+      preLoaderRoute: typeof AdministrationAdministrationDocumentTypesRouteRouteImport
+      parentRoute: typeof AdministrationAdministrationRouteRoute
+    }
+    '/administration/_administration/document-types/': {
+      id: '/administration/_administration/document-types/'
+      path: '/'
+      fullPath: '/administration/document-types/'
+      preLoaderRoute: typeof AdministrationAdministrationDocumentTypesIndexRouteImport
+      parentRoute: typeof AdministrationAdministrationDocumentTypesRouteRoute
+    }
+    '/administration/_administration/document-types/add': {
+      id: '/administration/_administration/document-types/add'
+      path: '/add'
+      fullPath: '/administration/document-types/add'
+      preLoaderRoute: typeof AdministrationAdministrationDocumentTypesAddRouteImport
+      parentRoute: typeof AdministrationAdministrationDocumentTypesRouteRoute
+    }
   }
 }
 
+interface AdministrationAdministrationDocumentTypesRouteRouteChildren {
+  AdministrationAdministrationDocumentTypesAddRoute: typeof AdministrationAdministrationDocumentTypesAddRoute
+  AdministrationAdministrationDocumentTypesIndexRoute: typeof AdministrationAdministrationDocumentTypesIndexRoute
+}
+
+const AdministrationAdministrationDocumentTypesRouteRouteChildren: AdministrationAdministrationDocumentTypesRouteRouteChildren =
+  {
+    AdministrationAdministrationDocumentTypesAddRoute:
+      AdministrationAdministrationDocumentTypesAddRoute,
+    AdministrationAdministrationDocumentTypesIndexRoute:
+      AdministrationAdministrationDocumentTypesIndexRoute,
+  }
+
+const AdministrationAdministrationDocumentTypesRouteRouteWithChildren =
+  AdministrationAdministrationDocumentTypesRouteRoute._addFileChildren(
+    AdministrationAdministrationDocumentTypesRouteRouteChildren,
+  )
+
+interface AdministrationAdministrationRouteRouteChildren {
+  AdministrationAdministrationDocumentTypesRouteRoute: typeof AdministrationAdministrationDocumentTypesRouteRouteWithChildren
+  AdministrationAdministrationIndexRoute: typeof AdministrationAdministrationIndexRoute
+}
+
+const AdministrationAdministrationRouteRouteChildren: AdministrationAdministrationRouteRouteChildren =
+  {
+    AdministrationAdministrationDocumentTypesRouteRoute:
+      AdministrationAdministrationDocumentTypesRouteRouteWithChildren,
+    AdministrationAdministrationIndexRoute:
+      AdministrationAdministrationIndexRoute,
+  }
+
+const AdministrationAdministrationRouteRouteWithChildren =
+  AdministrationAdministrationRouteRoute._addFileChildren(
+    AdministrationAdministrationRouteRouteChildren,
+  )
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdministrationAdministrationRouteRoute:
+    AdministrationAdministrationRouteRouteWithChildren,
   VehiclesVehicleIdRoute: VehiclesVehicleIdRoute,
   VehiclesIndexRoute: VehiclesIndexRoute,
   VehiclesEditIdRoute: VehiclesEditIdRoute,

@@ -1,0 +1,201 @@
+import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import {
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { ArrowDownWideNarrow, ArrowUpWideNarrow, File, LoaderCircleIcon, X } from "lucide-react";
+import { Suspense, useCallback, useMemo, useState } from "react";
+
+import { useDialog } from "#/hooks/useConfirm";
+import { openapi } from "#/lib/openapi";
+
+import Button from "#/components/ui/Button";
+import NewDocumentModal from "./NewDocumentModal";
+
+import {
+  DocumentPreviewModalProvider,
+  useDocumentPreviewModal,
+} from "#/contexts/modal/DocumentPreviewModal";
+
+function DocumentTable({ id }: { id: number }) {
+  const [showAddModal, setShowAddModal] = useState(false);
+  return (
+    <div className="rounded-lg border border-border bg-bg">
+      <div className="flex flex-row justify-between px-4 pt-2">
+        <h3 className="text-text-muted">Recorded documents</h3>
+        <Button callback={() => setShowAddModal(true)}>Add</Button>
+      </div>
+      <Suspense fallback={<LoaderCircleIcon className="m-auto mb-4 animate-spin" />}>
+        <DocumentPreviewModalProvider>
+          <Table id={id} />
+        </DocumentPreviewModalProvider>
+      </Suspense>
+      <NewDocumentModal
+        vehicleId={id.toString()}
+        onClose={() => setShowAddModal(false)}
+        visible={showAddModal}
+      />
+    </div>
+  );
+}
+
+function Table({ id }: { id: number }) {
+  const client = useQueryClient();
+  const { data } = useSuspenseQuery(
+    openapi.vehicles.documents.list.queryOptions({
+      input: { params: { vehicleId: id } },
+    }),
+  );
+  const { confirm } = useDialog();
+
+  const { mutate: deleteDocument } = useMutation(
+    openapi.documents.remove.mutationOptions({
+      onError: async () => {
+        void client.invalidateQueries({
+          queryKey: openapi.vehicles.get.key(),
+        });
+      },
+      onMutate: async (log, context) => {
+        context.client.setQueryData(
+          openapi.vehicles.documents.list.queryKey({
+            input: { params: { vehicleId: Number(id) } },
+          }),
+          (old) => {
+            return old?.filter((item) => item.id !== log.id);
+          },
+        );
+      },
+      onSuccess: () => {
+        void client.invalidateQueries({
+          queryKey: openapi.vehicles.documents.key(),
+        });
+      },
+    }),
+  );
+
+  const onDelete = useCallback(
+    async (id: number) => {
+      if (await confirm({ title: "Do you really want to delete this document ?" })) {
+        deleteDocument({ id });
+      }
+    },
+    [confirm, deleteDocument],
+  );
+
+  const { openModal } = useDocumentPreviewModal();
+
+  const columnHelper = createColumnHelper<(typeof data)[number]>();
+
+  const columns = useMemo(
+    () => [
+      columnHelper.accessor("name", {
+        cell: (info) => info.renderValue(),
+        header: () => "Name",
+      }),
+      columnHelper.accessor("mileage", {
+        cell: (info) => info.renderValue(),
+        header: () => "Mileage",
+      }),
+      columnHelper.accessor("note", {
+        enableSorting: false,
+        header: () => <span>Notes</span>,
+      }),
+      columnHelper.accessor("type", {
+        enableSorting: true,
+        header: "Type",
+        cell: (row) => {
+          return row.getValue()?.name;
+        },
+      }),
+      columnHelper.accessor("date", {
+        header: "Date",
+        cell: ({ row }) => {
+          const value = row.original.date;
+          if (!value) return "";
+          const date = new Date(value);
+          return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+        },
+      }),
+      columnHelper.accessor("uri", {
+        enableSorting: false,
+        header: "Open",
+        cell: ({ row }) => {
+          return <File onClick={() => openModal(row.original.uri)} />;
+        },
+      }),
+      columnHelper.accessor("id", {
+        id: "delete",
+        cell: ({ row }) => (
+          <span className="cursor-pointer" onClick={() => onDelete(row.original.id)}>
+            <X />
+          </span>
+        ),
+        enableSorting: false,
+        header: "",
+      }),
+    ],
+    [columnHelper, onDelete, openModal],
+  );
+
+  const table = useReactTable({
+    columns,
+    data,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+  });
+
+  return (
+    <div>
+      <table className="w-full text-left">
+        <thead className="border-b border-border font-bold">
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th className="px-4 py-2" key={header.id}>
+                  {header.isPlaceholder ? undefined : (
+                    <div
+                      className={header.column.getCanSort() ? "cursor-pointer select-none" : ""}
+                      title={
+                        header.column.getCanSort()
+                          ? header.column.getNextSortingOrder() === "asc"
+                            ? "Sort ascending"
+                            : // eslint-disable-next-line unicorn/no-nested-ternary
+                              header.column.getNextSortingOrder() === "desc"
+                              ? "Sort descending"
+                              : "Clear sort"
+                          : undefined
+                      }
+                      onClick={header.column.getToggleSortingHandler()}
+                    >
+                      {flexRender(header.column.columnDef.header, header.getContext())}
+                      {{
+                        asc: <ArrowDownWideNarrow className="ml-1 inline" size={18} />,
+                        desc: <ArrowUpWideNarrow className="ml-1 inline" size={18} />,
+                      }[header.column.getIsSorted() as string] ?? undefined}
+                    </div>
+                  )}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.map((row) => (
+            <tr className={`border-b border-border last:border-0 hover:bg-bg-dark`} key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <td className="px-4 py-2" key={cell.id}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+export default DocumentTable;

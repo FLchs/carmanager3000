@@ -9,6 +9,7 @@ import { ConfirmProvider } from "./contexts/ConfirmContextProvider.tsx";
 import { openApiQueryClient } from "./lib/openapi";
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
+import { ToastProvider } from "./contexts/toast/ToastProvider";
 
 // Create a new router instance
 const router = createRouter({
@@ -30,12 +31,20 @@ declare module "@tanstack/react-router" {
   }
 }
 
+declare module "@tanstack/react-router" {
+  interface StaticDataRouteOption {
+    getTitle?: () => string;
+  }
+}
+
 createRoot(document.querySelector("#root")!).render(
   <StrictMode>
-    <ConfirmProvider>
-      <QueryClientProvider client={openApiQueryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    </ConfirmProvider>
+    <ToastProvider>
+      <ConfirmProvider>
+        <QueryClientProvider client={openApiQueryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>
+      </ConfirmProvider>
+    </ToastProvider>
   </StrictMode>,
 );

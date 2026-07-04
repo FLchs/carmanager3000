@@ -19,6 +19,10 @@
   --color-primary: hsl(269, 100%, 56%);
   --color-primary-dark: hsl(269, 100%, 46%);
 
+
+  --color-danger: hsl(346, 98%, 55%);
+  --color-success: hsl(178, 84%, 55%);
+
   /* --color-secondary:  	hsl(181, 79%, 54%); */
   /* --color-secondary-dark:  	hsl(181, 79%, 44%); */
 
@@ -37,6 +41,26 @@
 
   dialog[open]::backdrop {
     background-color: rgba(0, 0, 0, 0.5); /* Fade to semi-transparent black */
+  }
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: .9;
+  }
+}
+
+@keyframes timer-bar {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
   }
 }
 

@@ -1,18 +1,18 @@
+import Main from "#/components/layout/Main";
+import Sidebar from "#/components/layout/Sidebar/Sidebar";
 import type { QueryClient } from "@tanstack/react-query";
 
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
+import { createRootRouteWithContext } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-
-import Sidebar from "../components/ui/sidebar/Sidebar";
 
 const RootLayout = () => (
   <>
     <div className="flex flex-row">
       <Sidebar />
-      <Outlet />
+      <Main />
     </div>
-    <TanStackRouterDevtools />
+    <TanStackRouterDevtools position="bottom-right" />
     <ReactQueryDevtools />
   </>
 );

@@ -1,15 +1,17 @@
 import * as z from "zod/v4";
 
 export const operationInSchema = z.object({
-  date: z.coerce.date<Date>(),
-  mileage: z.number().int(),
-  note: z.string(),
+  date: z.iso.datetime().optional(),
+  name: z.string(),
+  mileage: z.coerce.number().int().optional(),
+  note: z.string().optional(),
   type: z.string(),
 });
 
 export const operationOutSchema = z.object({
   id: z.number().int(),
-  date: z.date().nullable(),
+  date: z.iso.datetime().nullable(),
+  name: z.string(),
   mileage: z.number().int().nullable(),
   note: z.string().nullable(),
   type: z.string(),

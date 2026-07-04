@@ -1,7 +1,5 @@
 import * as z from "zod/v4";
 
-import { listOperationsSchema } from "./operations";
-
 export const vehicleOutSchema = z.object({
   id: z.coerce.number(),
   brand: z.string(),
@@ -27,8 +25,6 @@ export const createVehicleSchema = vehicleInSchema;
 
 export const updateVehicleSchema = vehicleInSchema.partial();
 
-export const getVehicleSchema = vehicleOutSchema.extend({
-  operations: listOperationsSchema,
-});
+export const getVehicleSchema = vehicleOutSchema;
 
 export const listVehiclesSchema = z.array(vehicleOutSchema);

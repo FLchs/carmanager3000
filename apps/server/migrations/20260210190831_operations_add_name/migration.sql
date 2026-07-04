@@ -1,0 +1,1 @@
+ALTER TABLE `operations` ADD `name` text NOT NULL;
