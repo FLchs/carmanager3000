@@ -1,11 +1,18 @@
 
 ![Car manager logo](cm3k.png)
 
-Car Manager brings all your fleet information together: vehicle details, maintenance history, documents, and fuel usage.
-Stay on top of every oil change and tire rotation with smart reminders.
-When it’s time to sell, export professional reports that give buyers confidence.
+Car Manager 3000 tracks your vehicles: details, maintenance history, and documents in one place. Log every oil change, tire rotation, and service as they happen.
 
 ![GitHub top language](https://img.shields.io/github/languages/top/FLchs/carmanager3000) ![GitHub License](https://img.shields.io/github/license/FLchs/carmanager3000) ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/FLchs/carmanager3000/checks.yaml?branch=master)
+
+## Roadmap
+
+Car Manager 3000 is early in development. A few things on the roadmap:
+
+- **Reminders**: get notified about upcoming maintenance based on date or mileage
+- **Report exports**: generate a printable summary of a vehicle's history for buyers
+- **Fuel tracking**: log fill-ups and monitor consumption
+- **Authentication**: per-user accounts and private data
 
 ## Development
 
